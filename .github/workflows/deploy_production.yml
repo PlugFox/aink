@@ -30,12 +30,12 @@ jobs:
           cache-name: cache-pub-modules
         with:
           key: ${{ runner.os }}-pub-${{ env.cache-name }}-${{ hashFiles('**/pubspec.lock') }}
-          path:
-            - $PWD/.pub_cache/
-            - $PWD/.dart_tool/
-            - $PWD/.flutter-plugins
-            - $PWD/.flutter-plugins-dependencies
-            - $PWD/.packages
+          path: |
+            $PWD/.pub_cache/
+            $PWD/.dart_tool/
+            $PWD/.flutter-plugins
+            $PWD/.flutter-plugins-dependencies
+            $PWD/.packages
 
       - name: 👷 Get dependencies
         run: |
