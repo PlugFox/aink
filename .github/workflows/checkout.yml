@@ -63,7 +63,7 @@ jobs:
         run: |
           flutter pub get \
             && flutter pub global activate intl_utils
-        timeout-minutes: 1
+        timeout-minutes: 5
 
       - name: 🏗️ Codegen
         run: |
