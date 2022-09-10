@@ -12,6 +12,9 @@ on:
       - "support/**"
     paths:
       - "lib/**.dart"
+      - "test/**.dart"
+      - "pubspec.yaml"
+      - "pubspec.lock"
   pull_request:
     branches:
       - "master"
@@ -23,6 +26,9 @@ on:
       - "support/**"
     paths:
       - "lib/**.dart"
+      - "test/**.dart"
+      - "pubspec.yaml"
+      - "pubspec.lock"
   workflow_dispatch:
 
 jobs:

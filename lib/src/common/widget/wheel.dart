@@ -31,72 +31,77 @@ class Wheel extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox.square(
-                  dimension: 40,
-                  child: Ink(
-                    padding: EdgeInsets.zero,
-                    decoration: ShapeDecoration(
-                      color: Theme.of(context).primaryColor,
-                      shadows: kElevationToShadow[2],
-                      shape: const CircleBorder(),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.photo_album_outlined),
-                        iconSize: 24,
-                        splashRadius: 18,
+            child: Center(
+              child: SizedBox(
+                width: 1240,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox.square(
+                      dimension: 40,
+                      child: Ink(
                         padding: EdgeInsets.zero,
+                        decoration: ShapeDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shadows: kElevationToShadow[2],
+                          shape: const CircleBorder(),
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.photo_album_outlined),
+                            iconSize: 24,
+                            splashRadius: 18,
+                            padding: EdgeInsets.zero,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox.square(
-                  dimension: 64,
-                  child: Ink(
-                    padding: EdgeInsets.zero,
-                    decoration: ShapeDecoration(
-                      color: Theme.of(context).primaryColor,
-                      shadows: kElevationToShadow[4],
-                      shape: const CircleBorder(),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.photo_outlined),
-                        iconSize: 48,
-                        splashRadius: 30,
+                    SizedBox.square(
+                      dimension: 64,
+                      child: Ink(
                         padding: EdgeInsets.zero,
+                        decoration: ShapeDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shadows: kElevationToShadow[4],
+                          shape: const CircleBorder(),
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.photo_outlined),
+                            iconSize: 48,
+                            splashRadius: 30,
+                            padding: EdgeInsets.zero,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox.square(
-                  dimension: 40,
-                  child: Ink(
-                    padding: EdgeInsets.zero,
-                    decoration: ShapeDecoration(
-                      color: Theme.of(context).primaryColor,
-                      shadows: kElevationToShadow[2],
-                      shape: const CircleBorder(),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.settings_outlined),
-                        iconSize: 24,
-                        splashRadius: 18,
+                    SizedBox.square(
+                      dimension: 40,
+                      child: Ink(
                         padding: EdgeInsets.zero,
+                        decoration: ShapeDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shadows: kElevationToShadow[2],
+                          shape: const CircleBorder(),
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.settings_outlined),
+                            iconSize: 24,
+                            splashRadius: 18,
+                            padding: EdgeInsets.zero,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
