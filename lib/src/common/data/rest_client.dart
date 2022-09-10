@@ -99,11 +99,9 @@ class RestClient {
       ...baseUri.queryParameters,
       ...uri.queryParameters,
     };
-    return baseUri
-        .replace(
-          path: p.normalize(p.join(baseUri.path, uri.path)),
-          queryParameters: queryParameters.isEmpty ? null : queryParameters,
-        )
-        .normalizePath();
+    return baseUri.replace(
+      path: p.normalize(p.join(baseUri.path, uri.path)),
+      queryParameters: queryParameters.isEmpty ? null : queryParameters,
+    );
   }
 }
