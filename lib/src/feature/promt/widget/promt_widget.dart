@@ -1,6 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/constant/assets.gen.dart';
+import '../../../common/initialization/dependencies.dart';
+import '../bloc/promt_bloc.dart';
 
 /// {@template promt_widget}
 /// PromtWidget widget
@@ -100,84 +104,119 @@ class _PromtWidgetState extends State<PromtWidget> with SingleTickerProviderStat
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
                 child: Center(
-                  child: SizedBox(
-                    width: 1240,
-                    height: 48,
-                    child: Card(
-                      margin: EdgeInsets.zero,
-                      elevation: 8,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: SizedBox(
-                              height: 48,
-                              child: Center(
-                                child: TextField(
-                                  enabled: true,
-                                  maxLength: 256,
-                                  maxLines: 1,
-                                  minLines: 1,
-                                  controller: _inputController,
-                                  focusNode: _focusNode,
-                                  //cursorWidth: 1,
-                                  keyboardType: TextInputType.text,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    //labelText: 'Promt',
-                                    //helperText: 'Helper text',
-                                    hintText: 'Type your promt here',
-                                    counterText: '',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          const VerticalDivider(
-                            width: 1,
-                          ),
-                          SizedBox.square(
-                            dimension: 48,
-                            child: ValueListenableBuilder<TextEditingValue>(
-                              valueListenable: _inputController,
-                              builder: (context, value, child) => IconButton(
-                                splashRadius: 36,
-                                onPressed: value.text.length < 3
-                                    ? null
-                                    : () {
-                                        _focusNode.unfocus();
-                                        _inputController.clear();
-                                      },
-                                icon: const Icon(
-                                  Icons.send,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                  child: _PromtTextInput(inputController: _inputController, focusNode: _focusNode),
+                ),
+              ),
+              const Expanded(
+                child: Align(
+                  alignment: Alignment(0, -.25),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: _PromtImageCard(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
+class _PromtTextInput extends StatelessWidget {
+  const _PromtTextInput({
+    required TextEditingController inputController,
+    required FocusNode focusNode,
+    // ignore: unused_element
+    super.key,
+  })  : _inputController = inputController,
+        _focusNode = focusNode;
+
+  final TextEditingController _inputController;
+  final FocusNode _focusNode;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        width: 1240,
+        height: 48,
+        child: Card(
+          margin: EdgeInsets.zero,
+          elevation: 8,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(width: 8),
+              Expanded(
+                child: SizedBox(
+                  height: 48,
+                  child: Center(
+                    child: TextField(
+                      enabled: true,
+                      maxLength: 256,
+                      maxLines: 1,
+                      minLines: 1,
+                      controller: _inputController,
+                      focusNode: _focusNode,
+                      //cursorWidth: 1,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        //labelText: 'Promt',
+                        //helperText: 'Helper text',
+                        hintText: 'Type your promt here',
+                        counterText: '',
                       ),
                     ),
                   ),
                 ),
               ),
-              Expanded(
-                child: Align(
-                  alignment: const Alignment(0, -.25),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: SizedBox.square(
-                      dimension: 512,
-                      child: Card(
-                        margin: EdgeInsets.zero,
-                        elevation: 8,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Stack(
-                          children: <Widget>[
-                            /* const Positioned.fill(
+              const SizedBox(width: 4),
+              const VerticalDivider(
+                width: 1,
+              ),
+              SizedBox.square(
+                dimension: 48,
+                child: ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: _inputController,
+                  builder: (context, value, child) => IconButton(
+                    splashRadius: 36,
+                    onPressed: value.text.length < 3 ? null : _send,
+                    icon: const Icon(
+                      Icons.send,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+
+  void _send() {
+    _focusNode.unfocus();
+    Dependencies.instance.promtBLoC.add(PromtEvent.generate(promt: _inputController.text));
+  }
+}
+
+class _PromtImageCard extends StatelessWidget {
+  // ignore: unused_element
+  const _PromtImageCard({super.key});
+
+  @override
+  Widget build(BuildContext context) => SizedBox.square(
+        dimension: 512,
+        child: Card(
+          margin: EdgeInsets.zero,
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: BlocBuilder<PromtBLoC, PromtState>(
+            bloc: Dependencies.instance.promtBLoC,
+            builder: (context, state) {
+              final image = state.data.images?.firstOrNull;
+              return Stack(
+                children: <Widget>[
+                  /* const Positioned.fill(
                               child: Center(
                                 child: Icon(
                                   Icons.image,
@@ -186,151 +225,179 @@ class _PromtWidgetState extends State<PromtWidget> with SingleTickerProviderStat
                                 ),
                               ),
                             ), */
-                            Positioned.fill(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.asset(
-                                  Assets.image.sunflower512x512.path,
-                                  alignment: Alignment.center,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Positioned.fill(
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    gradient: LinearGradient(
-                                      begin: FractionalOffset.topCenter,
-                                      end: FractionalOffset.bottomCenter,
-                                      stops: const <double>[
-                                        0,
-                                        0.6,
-                                        1,
-                                      ],
-                                      colors: <Color>[
-                                        Colors.black.withOpacity(0.85),
-                                        Colors.black.withOpacity(0.75),
-                                        Colors.black.withOpacity(0),
-                                      ],
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      height: 64,
-                                      child: Text(
-                                        _kPlaceholderText,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.justify,
-                                        style: Theme.of(context).textTheme.caption?.copyWith(color: Colors.white70),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              height: 40,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  gradient: LinearGradient(
-                                    begin: FractionalOffset.topCenter,
-                                    end: FractionalOffset.bottomCenter,
-                                    colors: <Color>[
-                                      Colors.black.withOpacity(0.5),
-                                      Colors.black.withOpacity(0.8),
-                                    ],
-                                    stops: const [0.0, 1.0],
-                                  ),
-                                ),
-                                child: Column(
-                                  children: <Widget>[
-                                    const Divider(
-                                      height: 1,
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        children: <Widget>[
-                                          IconButton(
-                                            onPressed: () {},
-                                            iconSize: 24,
-                                            splashRadius: 18,
-                                            padding: EdgeInsets.zero,
-                                            color: Colors.white,
-                                            icon: const Icon(
-                                              Icons.repeat,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {},
-                                            iconSize: 24,
-                                            splashRadius: 18,
-                                            padding: EdgeInsets.zero,
-                                            color: Colors.white,
-                                            icon: const Icon(
-                                              Icons.open_with,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {},
-                                            iconSize: 24,
-                                            splashRadius: 18,
-                                            padding: EdgeInsets.zero,
-                                            color: Colors.white,
-                                            icon: const Icon(
-                                              Icons.share,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {},
-                                            iconSize: 24,
-                                            splashRadius: 18,
-                                            padding: EdgeInsets.zero,
-                                            color: Colors.white,
-                                            icon: const Icon(
-                                              Icons.save,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {},
-                                            iconSize: 24,
-                                            splashRadius: 18,
-                                            padding: EdgeInsets.zero,
-                                            color: Colors.white,
-                                            icon: const Icon(
-                                              Icons.favorite,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                  Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 500),
+                        crossFadeState: image == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                        firstChild: Image.asset(
+                          Assets.image.sunflower512x512.path,
+                          alignment: Alignment.center,
+                          fit: BoxFit.cover,
+                        ),
+                        secondChild: Image.network(
+                          image.toString(),
+                          alignment: Alignment.center,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ],
+                  if (state.isProcessing)
+                    const Positioned.fill(
+                      child: ColoredBox(
+                        color: Colors.black26,
+                        child: Center(
+                          child: SizedBox.square(
+                            dimension: 128,
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  Positioned.fill(
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 500),
+                      opacity: state.isProcessing || state.data.promt == null ? 0 : 1,
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            gradient: LinearGradient(
+                              begin: FractionalOffset.topCenter,
+                              end: FractionalOffset.bottomCenter,
+                              stops: const <double>[
+                                0,
+                                0.6,
+                                1,
+                              ],
+                              colors: <Color>[
+                                Colors.black.withOpacity(0.85),
+                                Colors.black.withOpacity(0.75),
+                                Colors.black.withOpacity(0),
+                              ],
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 64,
+                              child: Text(
+                                state.data.promt ?? '',
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.justify,
+                                style: Theme.of(context).textTheme.caption?.copyWith(color: Colors.white70),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 40,
+                    child: _PromtImageCardFooter(),
+                  ),
+                ],
+              );
+            },
           ),
+        ),
+      );
+}
+
+class _PromtImageCardFooter extends StatelessWidget {
+  // ignore: unused_element
+  const _PromtImageCardFooter({super.key});
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
+          gradient: LinearGradient(
+            begin: FractionalOffset.topCenter,
+            end: FractionalOffset.bottomCenter,
+            colors: <Color>[
+              Colors.black.withOpacity(0.5),
+              Colors.black.withOpacity(0.8),
+            ],
+            stops: const [0.0, 1.0],
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            const Divider(
+              height: 1,
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () {},
+                    iconSize: 24,
+                    splashRadius: 18,
+                    padding: EdgeInsets.zero,
+                    color: Colors.white,
+                    icon: const Icon(
+                      Icons.repeat,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    iconSize: 24,
+                    splashRadius: 18,
+                    padding: EdgeInsets.zero,
+                    color: Colors.white,
+                    icon: const Icon(
+                      Icons.open_with,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    iconSize: 24,
+                    splashRadius: 18,
+                    padding: EdgeInsets.zero,
+                    color: Colors.white,
+                    icon: const Icon(
+                      Icons.share,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    iconSize: 24,
+                    splashRadius: 18,
+                    padding: EdgeInsets.zero,
+                    color: Colors.white,
+                    icon: const Icon(
+                      Icons.save,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    iconSize: 24,
+                    splashRadius: 18,
+                    padding: EdgeInsets.zero,
+                    color: Colors.white,
+                    icon: const Icon(
+                      Icons.favorite,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       );
 }

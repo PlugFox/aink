@@ -12,6 +12,8 @@ abstract class Dependencies {
 
   static Dependencies get instance => _instance;
   static final Dependencies _instance = _DependenciesProduction();
+
+  abstract final PromtBLoC promtBLoC;
 }
 
 class _DependenciesProduction implements Dependencies {
@@ -21,5 +23,6 @@ class _DependenciesProduction implements Dependencies {
 
   late final IPromtRepository _promtRepository = PromtRepositoryImpl(networkDataProvider: _networkDataProvider);
 
+  @override
   late final PromtBLoC promtBLoC = PromtBLoC(repository: _promtRepository);
 }
