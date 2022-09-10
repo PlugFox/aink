@@ -30,19 +30,22 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
       yield PromtState.processing(
         data: state.data.copyWith(newTask: taskId),
       );
-      final images = await _repository.fetchByTaskId(taskId);
-      yield const PromtState.successful(
-        data: PromtEntity.empty(),
+      final images = await _repository.fetchByTaskId(taskId, loop: true);
+      yield PromtState.successful(
+        data: state.data.copyWith(
+          newImages: images,
+        ),
       );
     } on Object {
       yield const PromtState.error(
         data: PromtEntity.empty(),
         message: 'An error has occurred',
       );
-      yield const PromtState.idle(
-        data: PromtEntity.empty(),
-      );
       rethrow;
+    } finally {
+      yield PromtState.idle(
+        data: state.data,
+      );
     }
   }
 }
