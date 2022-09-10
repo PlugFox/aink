@@ -24,6 +24,9 @@ dependencies:
   #cloud_firestore: any
   #flutterfire_ui: any
 
+  # State manager
+  stream_bloc: ^0.5.1
+
   # Routing
   #go_router: any
 
@@ -32,6 +35,9 @@ dependencies:
   equatable: any
   json_annotation: any
   freezed_annotation: any
+
+  # Network
+  http: ^0.13.5
 
   # Database
   shared_preferences: any

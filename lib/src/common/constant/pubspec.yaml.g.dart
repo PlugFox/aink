@@ -58,7 +58,7 @@ const List<String> pre = <String>[];
 const List<String> build = <String>[r'1'];
 
 /// Build date in Unix Time (in seconds)
-const int timestamp = 1662753157;
+const int timestamp = 1662821932;
 
 /// Name [name]
 const String name = r'aink';
@@ -98,6 +98,7 @@ const Map<String, Object> dependencies = <String, Object>{
   'firebase': r'any',
   'firebase_core': r'any',
   'firebase_analytics': r'any',
+  'stream_bloc': r'^0.5.1',
   'meta': r'any',
   'equatable': r'any',
   'json_annotation': r'any',
@@ -122,8 +123,8 @@ const Map<String, Object> devDependencies = <String, Object>{
   'build_runner': r'any',
   'build_web_compilers': r'any',
   'dart_code_metrics': r'any',
-  'icons_launcher': r'^2.0.0-beta.2',
-  'flutter_native_splash': r'any',
+  'icons_launcher': r'^2.0.5',
+  'flutter_native_splash': r'^2.2.9',
   'pubspec_generator': r'any',
   'theme_tailor': r'any',
   'json_serializable': r'any',
