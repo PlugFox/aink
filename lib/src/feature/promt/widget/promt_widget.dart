@@ -1,9 +1,12 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/constant/assets.gen.dart';
 import '../../../common/initialization/dependencies.dart';
+import '../../../common/util/error_util.dart';
 import '../bloc/promt_bloc.dart';
 
 /// {@template promt_widget}
@@ -95,28 +98,34 @@ class _PromtWidgetState extends State<PromtWidget> with SingleTickerProviderStat
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-        child: FadeTransition(
-          opacity: _animationController,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                child: Center(
-                  child: _PromtTextInput(inputController: _inputController, focusNode: _focusNode),
-                ),
-              ),
-              const Expanded(
-                child: Align(
-                  alignment: Alignment(0, -.25),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: _PromtImageCard(),
+  Widget build(BuildContext context) => BlocListener<PromtBLoC, PromtState>(
+        bloc: Dependencies.instance.promtBLoC,
+        listener: (context, state) => state.mapOrNull(
+          error: (state) => ErrorUtil.showSnackBar(context, state.message),
+        ),
+        child: SafeArea(
+          child: FadeTransition(
+            opacity: _animationController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                  child: Center(
+                    child: _PromtTextInput(inputController: _inputController, focusNode: _focusNode),
                   ),
                 ),
-              ),
-            ],
+                const Expanded(
+                  child: Align(
+                    alignment: Alignment(0, -.25),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: _PromtImageCard(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -141,52 +150,55 @@ class _PromtTextInput extends StatelessWidget {
         child: Card(
           margin: EdgeInsets.zero,
           elevation: 8,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(width: 8),
-              Expanded(
-                child: SizedBox(
-                  height: 48,
-                  child: Center(
-                    child: TextField(
-                      enabled: true,
-                      maxLength: 256,
-                      maxLines: 1,
-                      minLines: 1,
-                      controller: _inputController,
-                      focusNode: _focusNode,
-                      //cursorWidth: 1,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        //labelText: 'Promt',
-                        //helperText: 'Helper text',
-                        hintText: 'Type your promt here',
-                        counterText: '',
+          child: BlocBuilder<PromtBLoC, PromtState>(
+            bloc: Dependencies.instance.promtBLoC,
+            builder: (context, state) => Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(width: 8),
+                Expanded(
+                  child: SizedBox(
+                    height: 48,
+                    child: Center(
+                      child: TextField(
+                        enabled: !state.isProcessing,
+                        maxLength: 256,
+                        maxLines: 1,
+                        minLines: 1,
+                        controller: _inputController,
+                        focusNode: _focusNode,
+                        //cursorWidth: 1,
+                        keyboardType: TextInputType.text,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          //labelText: 'Promt',
+                          //helperText: 'Helper text',
+                          hintText: 'Type your promt here',
+                          counterText: '',
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              const VerticalDivider(
-                width: 1,
-              ),
-              SizedBox.square(
-                dimension: 48,
-                child: ValueListenableBuilder<TextEditingValue>(
-                  valueListenable: _inputController,
-                  builder: (context, value, child) => IconButton(
-                    splashRadius: 36,
-                    onPressed: value.text.length < 3 ? null : _send,
-                    icon: const Icon(
-                      Icons.send,
+                const SizedBox(width: 4),
+                const VerticalDivider(
+                  width: 1,
+                ),
+                SizedBox.square(
+                  dimension: 48,
+                  child: ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: _inputController,
+                    builder: (context, value, child) => IconButton(
+                      splashRadius: 36,
+                      onPressed: value.text.length < 3 || state.isProcessing ? null : _send,
+                      icon: const Icon(
+                        Icons.send,
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       );
@@ -228,34 +240,31 @@ class _PromtImageCard extends StatelessWidget {
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: AnimatedCrossFade(
+                      /* child: Image.asset(
+                        Assets.image.sunflower512x512.path,
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                      ), */
+                      child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 500),
-                        crossFadeState: image == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                        firstChild: Image.asset(
-                          Assets.image.sunflower512x512.path,
-                          alignment: Alignment.center,
-                          fit: BoxFit.cover,
-                        ),
-                        secondChild: Image.network(
-                          image.toString(),
-                          alignment: Alignment.center,
-                          fit: BoxFit.cover,
-                        ),
+                        child: image == null
+                            ? SizedBox.expand(
+                                child: Image.asset(
+                                  Assets.image.sunflower512x512.path,
+                                  alignment: Alignment.center,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : SizedBox.expand(
+                                child: Image.network(
+                                  image.toString(),
+                                  alignment: Alignment.center,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                       ),
                     ),
                   ),
-                  if (state.isProcessing)
-                    const Positioned.fill(
-                      child: ColoredBox(
-                        color: Colors.black26,
-                        child: Center(
-                          child: SizedBox.square(
-                            dimension: 128,
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                      ),
-                    ),
                   Positioned.fill(
                     child: AnimatedOpacity(
                       duration: const Duration(milliseconds: 500),
@@ -305,6 +314,26 @@ class _PromtImageCard extends StatelessWidget {
                     height: 40,
                     child: _PromtImageCardFooter(),
                   ),
+                  if (state.isProcessing)
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade400.withOpacity(0.15),
+                            ),
+                            child: const Center(
+                              child: SizedBox.square(
+                                dimension: 128,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               );
             },

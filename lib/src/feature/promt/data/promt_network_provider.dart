@@ -11,14 +11,16 @@ class PromtNetworkDataProviderImpl implements IPromtNetworkDataProvider {
   final RestClient _client;
 
   @override
-  Future<String> beginGeneration({required String promt}) {
+  Future<String> beginGeneration({required String promt}) async {
     //_client.post(url);
+    await Future<void>.delayed(const Duration(seconds: 5));
     // TODO: implement beginGeneration
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Uri>> fetchByTaskId(String taskId) {
+  Future<List<Uri>> fetchByTaskId(String taskId) async {
+    await Future<void>.delayed(const Duration(seconds: 5));
     // TODO: implement fetchByTaskId
     throw UnimplementedError();
   }

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
+import '../../../common/util/error_util.dart';
 import '../data/promt_repository.dart';
 import '../model/promt_entity.dart';
 
@@ -36,10 +37,10 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
           newImages: images,
         ),
       );
-    } on Object {
-      yield const PromtState.error(
-        data: PromtEntity.empty(),
-        message: 'An error has occurred',
+    } on Object catch (error) {
+      yield PromtState.error(
+        data: const PromtEntity.empty(),
+        message: ErrorUtil.formatMessage(error),
       );
       rethrow;
     } finally {

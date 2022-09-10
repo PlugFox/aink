@@ -1,8 +1,11 @@
 import 'dart:async';
 
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:l/l.dart';
 import 'package:meta/meta.dart';
+
+import '../exception/network_exception.dart';
 
 @sealed
 abstract class ErrorUtil {
@@ -54,4 +57,31 @@ abstract class ErrorUtil {
 
   @alwaysThrows
   static Never throwWithStackTrace(Object error, StackTrace stackTrace) => Error.throwWithStackTrace(error, stackTrace);
+
+  static String formatMessage(Object error, [String fallback = 'An error has occurred']) {
+    if (error is String) {
+      return error;
+    } else if (error is ServerInternalException) {
+      return 'Server error';
+    } else if (error is InternetException) {
+      return 'Problem with internet connection';
+    } else if (error is FormatException) {
+      return 'Invalid data format';
+    } else if (error is TimeoutException) {
+      return 'Timeout exceeded';
+    } else if (error is UnimplementedError) {
+      return 'Not implemented yet';
+    } else if (error is UnsupportedError) {
+      return 'Unsupported operation';
+    } else {
+      return fallback;
+    }
+  }
+
+  static void showSnackBar(BuildContext context, String message) => ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.red,
+        ),
+      );
 }
