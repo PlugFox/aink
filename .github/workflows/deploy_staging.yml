@@ -106,6 +106,7 @@ jobs:
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_AI_INK }}"
-          channelId: live
+          expires: 7d
+          channelId: stg
           projectId: ai-ink
           target: ai-ink
