@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
+import '../exception/network_exception.dart';
+
+@immutable
 class RestClient {
   RestClient({
     required String baseUri,
@@ -83,26 +86,4 @@ class RestClient {
         )
         .normalizePath();
   }
-}
-
-abstract class NetworkException implements Exception {}
-
-@immutable
-class ServerInternalException implements NetworkException {
-  const ServerInternalException({this.statusCode, this.message});
-  final int? statusCode;
-  final String? message;
-}
-
-@immutable
-class ClientRequestException implements NetworkException {
-  const ClientRequestException({this.statusCode, this.message});
-  final int? statusCode;
-  final String? message;
-}
-
-@immutable
-class InternetException implements NetworkException {
-  const InternetException(this.message);
-  final String message;
 }
