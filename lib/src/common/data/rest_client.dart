@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
+import 'package:platform_info/platform_info.dart';
 
 import '../exception/network_exception.dart';
 
@@ -24,17 +25,24 @@ class RestClient {
     Map<String, String>? headers,
   }) async {
     try {
-      final body = _encodeRequestBody(data);
+      final body = await _encodeRequestBody(data);
       final response = await _internalClient.post(
         buildUri(_baseUri, path),
         body: body,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Connection': 'keep-alive',
+          'Content-Length': body.length.toString(),
+          'Date': DateTime.now().toUtc().toIso8601String(),
+          'Max-Forwards': '10',
+          'Pragma': 'no-cache',
+          'User-Agent': Platform.I.version,
+          'DNT': '1',
           ...?headers,
         },
       );
       if (response.statusCode > 199 && response.statusCode < 300) {
-        return _decodeResponse(response);
+        return await _decodeResponse(response);
       } else if (response.statusCode > 499) {
         throw ServerInternalException(statusCode: response.statusCode);
       } else if (response.statusCode > 399) {
@@ -61,7 +69,7 @@ class RestClient {
     }
   }
 
-  static Map<String, Object?> _decodeResponse(http.Response response) {
+  static FutureOr<Map<String, Object?>> _decodeResponse(http.Response response) {
     if (response.headers['Content-Type']?.contains('application/json') ?? false) {
       final body = response.body;
       try {
