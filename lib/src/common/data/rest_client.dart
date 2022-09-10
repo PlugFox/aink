@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as p;
 
 class RestClient {
   RestClient({
@@ -71,12 +72,16 @@ class RestClient {
   static Uri buildUri(Uri baseUri, String path) {
     final uri = Uri.tryParse(path);
     if (uri == null) return baseUri;
-    return uri.resolveUri(baseUri).replace(
-      queryParameters: <String, Object?>{
-        ...baseUri.queryParameters,
-        ...uri.queryParameters,
-      },
-    );
+    final queryParameters = <String, Object?>{
+      ...baseUri.queryParameters,
+      ...uri.queryParameters,
+    };
+    return baseUri
+        .replace(
+          path: p.normalize(p.join(baseUri.path, uri.path)),
+          queryParameters: queryParameters.isEmpty ? null : queryParameters,
+        )
+        .normalizePath();
   }
 }
 
