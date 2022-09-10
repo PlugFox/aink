@@ -12,8 +12,8 @@ class RestClient {
   RestClient({
     required String baseUri,
     http.Client? client,
-  })  : _internalClient = client ?? http.Client(),
-        _baseUri = Uri.parse(baseUri);
+  })  : _baseUri = Uri.parse(baseUri),
+        _internalClient = client ?? http.Client();
 
   final Uri _baseUri;
   final http.Client _internalClient;
@@ -24,7 +24,12 @@ class RestClient {
     Map<String, String>? headers,
   }) async {
     try {
-      final json = utf8.encode(jsonEncode(data));
+      final List<int> json;
+      try {
+        json = utf8.encode(jsonEncode(data));
+      } on Object catch (error, stackTrace) {
+        Error.throwWithStackTrace(RestClientException(message: error.toString()), stackTrace);
+      }
       final response = await _internalClient.post(
         buildUri(_baseUri, path),
         body: json,
@@ -54,15 +59,13 @@ class RestClient {
       } else if (response.statusCode > 499) {
         throw ServerInternalException(statusCode: response.statusCode);
       } else if (response.statusCode > 399) {
-        throw ClientRequestException(statusCode: response.statusCode);
+        throw RestClientException(statusCode: response.statusCode);
       }
       throw UnsupportedError('Unsupported status code: ${response.statusCode}');
     } on NetworkException {
       rethrow;
     } on http.ClientException catch (error, stackTrace) {
       Error.throwWithStackTrace(InternetException(error.message), stackTrace);
-    } on FormatException catch (error, stackTrace) {
-      Error.throwWithStackTrace(UnsupportedError('FormatException: $error'), stackTrace);
     } on Object catch (error, stackTrace) {
       if (error is! NetworkException) {
         Error.throwWithStackTrace(UnsupportedError('Unknown exception: $error'), stackTrace);

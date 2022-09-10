@@ -10,8 +10,8 @@ class ServerInternalException implements NetworkException {
 }
 
 @immutable
-class ClientRequestException implements NetworkException {
-  const ClientRequestException({this.statusCode, this.message});
+class RestClientException implements NetworkException {
+  const RestClientException({this.statusCode, this.message});
   final int? statusCode;
   final String? message;
 }
