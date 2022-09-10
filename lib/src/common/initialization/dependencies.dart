@@ -1,10 +1,9 @@
-import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../../feature/promt/bloc/promt_bloc.dart';
 import '../../feature/promt/data/promt_network_provider.dart';
 import '../../feature/promt/data/promt_repository.dart';
-import '../data/http_client.dart';
+import '../data/rest_client.dart';
 
 @sealed
 abstract class Dependencies {
@@ -17,7 +16,7 @@ abstract class Dependencies {
 }
 
 class _DependenciesProduction implements Dependencies {
-  late final http.Client _httpClient = HttpClient();
+  late final RestClient _httpClient = RestClient(baseUri: 'https://d832-79-139-215-200.ngrok.io');
 
   late final IPromtNetworkDataProvider _networkDataProvider = PromtNetworkDataProviderImpl(client: _httpClient);
 

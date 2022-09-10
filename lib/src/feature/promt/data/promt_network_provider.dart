@@ -1,4 +1,4 @@
-import 'package:http/http.dart' as http;
+import '../../../common/data/rest_client.dart';
 
 abstract class IPromtNetworkDataProvider {
   Future<String> beginGeneration({required String promt});
@@ -6,9 +6,9 @@ abstract class IPromtNetworkDataProvider {
 }
 
 class PromtNetworkDataProviderImpl implements IPromtNetworkDataProvider {
-  PromtNetworkDataProviderImpl({required http.Client client}) : _client = client;
+  PromtNetworkDataProviderImpl({required RestClient client}) : _client = client;
 
-  final http.Client _client;
+  final RestClient _client;
 
   @override
   Future<String> beginGeneration({required String promt}) {
