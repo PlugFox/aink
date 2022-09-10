@@ -13,7 +13,7 @@ jobs:
       options: --user root
     timeout-minutes: 30
     env:
-      working-directory: ./client
+      working-directory: ./
     steps:
       - name: 🚂 Get latest code
         uses: actions/checkout@v2
