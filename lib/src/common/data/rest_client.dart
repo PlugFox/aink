@@ -24,38 +24,17 @@ class RestClient {
     Map<String, String>? headers,
   }) async {
     try {
-      final List<int> json;
-      try {
-        json = utf8.encode(jsonEncode(data));
-      } on Object catch (error, stackTrace) {
-        Error.throwWithStackTrace(RestClientException(message: error.toString()), stackTrace);
-      }
+      final body = _encodeRequestBody(data);
       final response = await _internalClient.post(
         buildUri(_baseUri, path),
-        body: json,
+        body: body,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           ...?headers,
         },
       );
       if (response.statusCode > 199 && response.statusCode < 300) {
-        if (response.headers['Content-Type']?.contains('application/json') ?? false) {
-          try {
-            return jsonDecode(response.body) as Map<String, Object?>;
-          } on Object catch (error, stackTrace) {
-            Error.throwWithStackTrace(
-              ServerInternalException(message: 'Server returned invalid json: $error'),
-              stackTrace,
-            );
-          }
-        } else {
-          Error.throwWithStackTrace(
-            ServerInternalException(
-              message: 'Server returned invalid content type: ${response.headers['Content-Type'] ?? 'null'}',
-            ),
-            StackTrace.fromString('Headers: "${jsonEncode(response.headers)}"'),
-          );
-        }
+        return _decodeResponse(response);
       } else if (response.statusCode > 499) {
         throw ServerInternalException(statusCode: response.statusCode);
       } else if (response.statusCode > 399) {
@@ -71,6 +50,44 @@ class RestClient {
         Error.throwWithStackTrace(UnsupportedError('Unknown exception: $error'), stackTrace);
       }
       rethrow;
+    }
+  }
+
+  static FutureOr<List<int>> _encodeRequestBody(Map<String, Object?> body) {
+    try {
+      return utf8.encode(jsonEncode(body));
+    } on Object catch (error, stackTrace) {
+      Error.throwWithStackTrace(RestClientException(message: error.toString()), stackTrace);
+    }
+  }
+
+  static Map<String, Object?> _decodeResponse(http.Response response) {
+    if (response.headers['Content-Type']?.contains('application/json') ?? false) {
+      final body = response.body;
+      try {
+        final json = jsonDecode(body) as Map<String, Object?>;
+        if (json['error'] != null) {
+          Error.throwWithStackTrace(
+            RestClientException(message: json['error'].toString()),
+            StackTrace.fromString('${StackTrace.current}\n' 'Error: "${jsonEncode(json['error'])}"'),
+          );
+        }
+        return json;
+      } on Object catch (error) {
+        Error.throwWithStackTrace(
+          ServerInternalException(message: 'Server returned invalid json: $error'),
+          StackTrace.fromString(
+            '${StackTrace.current}\n' 'Body: "${body.length > 100 ? '${body.substring(0, 97)}...' : body}"',
+          ),
+        );
+      }
+    } else {
+      Error.throwWithStackTrace(
+        ServerInternalException(
+          message: 'Server returned invalid content type: ${response.headers['Content-Type'] ?? 'null'}',
+        ),
+        StackTrace.fromString('${StackTrace.current}\n' 'Headers: "${jsonEncode(response.headers)}"'),
+      );
     }
   }
 
