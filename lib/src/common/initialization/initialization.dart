@@ -12,7 +12,8 @@ import '../util/screen_util.dart';
 
 Future<void>? _$initializeApp;
 FutureOr<void> initializeApp({
-  void Function(Object error, StackTrace stackTrace)? onError,
+  Future<void> Function()? onSuccess,
+  Future<void> Function(Object error, StackTrace stackTrace)? onError,
 }) =>
     _$initializeApp ??= Future<void>(() async {
       late final WidgetsBinding binding;
@@ -28,10 +29,11 @@ FutureOr<void> initializeApp({
           FirebaseAnalytics.instance.logAppOpen().ignore();
         }
       } on Object catch (error, stackTrace) {
-        onError?.call(error, stackTrace);
+        onError?.call(error, stackTrace).ignore();
         rethrow;
       } finally {
         stopwatch.stop();
+        onSuccess?.call().ignore();
         binding.addPostFrameCallback((_) {
           // Closes splash screen, and show the app layout.
           binding.allowFirstFrame();
