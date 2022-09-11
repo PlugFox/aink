@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'wheel_controller.dart';
-import 'wheel_footer.dart';
 import 'wheel_pages.dart';
 
 /// {@template wheel}
@@ -11,8 +10,8 @@ class Wheel extends StatefulWidget {
   /// {@macro wheel}
   const Wheel({super.key});
 
-  static double getBottomPadding(BuildContext context, [MediaQueryData? mediaQueryData]) =>
-      ((mediaQueryData ?? MediaQuery.of(context)).size.height / 10).clamp(64, 128);
+  /* static double getBottomPadding(BuildContext context, [MediaQueryData? mediaQueryData]) =>
+      ((mediaQueryData ?? MediaQuery.of(context)).size.height / 10).clamp(64, 128); */
 
   @override
   State<Wheel> createState() => _WheelState();
@@ -28,6 +27,9 @@ class _WheelState extends State<Wheel> {
   }
 
   @override
+  Widget build(BuildContext context) => WheelPages(controller: _controller);
+
+  /* @override
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     final bottomPadding = Wheel.getBottomPadding(context, mediaQueryData);
@@ -40,9 +42,6 @@ class _WheelState extends State<Wheel> {
           Positioned.fill(
             child: Center(child: WheelPages(controller: _controller)),
           ),
-          /* Positioned.fill(
-            child: child,
-          ), */
           Positioned(
             left: 0,
             right: 0,
@@ -66,5 +65,5 @@ class _WheelState extends State<Wheel> {
         ],
       ),
     );
-  }
+  } */
 }

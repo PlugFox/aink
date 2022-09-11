@@ -21,56 +21,69 @@ class PromtLayout extends StatelessWidget {
   final List<Widget> previewCards;
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final size = Size(constraints.biggest.width, constraints.biggest.height - 48 - 16);
-                final padding = previewCards.isEmpty ? .0 : 16.0;
-                final previewSize = previewCards.isEmpty
-                    ? .0
-                    : (size.shortestSide - padding * (previewCards.length - 1)) / previewCards.length;
-                final cardSize = math.min(size.shortestSide, size.longestSide - previewSize - padding);
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 48,
-                      width: size.aspectRatio > 1 ? previewSize + padding + cardSize : cardSize,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Expanded(
+  Widget build(BuildContext context) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final size = Size(constraints.biggest.width, constraints.biggest.height - 48 - 16);
+              final padding = previewCards.isEmpty ? .0 : 16.0;
+              final previewSize = previewCards.isEmpty
+                  ? .0
+                  : (size.shortestSide - padding * (previewCards.length - 1)) / previewCards.length;
+              final cardSize = math.min(size.shortestSide, size.longestSide - previewSize - padding);
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 48,
+                    width: size.aspectRatio > 1 ? previewSize + padding + cardSize : cardSize,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Expanded(
+                          child: Hero(
+                            tag: 'Hero#promtInput',
                             child: promtInput,
                           ),
-                          const SizedBox(width: 16),
-                          SizedBox.square(
-                            dimension: 48,
+                        ),
+                        const SizedBox(width: 16),
+                        SizedBox.square(
+                          dimension: 48,
+                          child: Hero(
+                            tag: 'Hero#promtSend',
                             child: promtSend,
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: _PromtLayoutCards(
-                        imageCard: imageCard,
-                        previewCards: previewCards,
-                        size: size,
-                        cardSize: cardSize,
-                        previewSize: previewSize,
-                        padding: padding,
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: _PromtLayoutCards(
+                      imageCard: Hero(
+                        tag: 'Hero#imageCard',
+                        child: imageCard,
                       ),
+                      previewCards: <Widget>[
+                        for (var i = 0; i < previewCards.length; i++)
+                          Hero(
+                            tag: 'Hero#previewCards#$i',
+                            child: previewCards[i],
+                          ),
+                      ],
+                      size: size,
+                      cardSize: cardSize,
+                      previewSize: previewSize,
+                      padding: padding,
                     ),
-                  ],
-                );
-              },
-            ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       );
