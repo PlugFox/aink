@@ -189,6 +189,7 @@ class _PromtTextInput extends StatelessWidget {
                   child: ValueListenableBuilder<TextEditingValue>(
                     valueListenable: _inputController,
                     builder: (context, value, child) => IconButton(
+                      key: const ValueKey<String>('promt_send'),
                       splashRadius: 36,
                       onPressed: value.text.length < 3 || state.isProcessing ? null : _send,
                       icon: const Icon(

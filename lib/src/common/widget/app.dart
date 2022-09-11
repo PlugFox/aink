@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import '../../feature/promt/widget/promt_widget.dart';
 import '../localization/localization.dart';
 import 'wheel.dart';
 
@@ -27,17 +26,23 @@ class App extends StatelessWidget {
           Localization.delegate,
         ],
         supportedLocales: Localization.supportedLocales,
+        /* home: Scaffold(
+          appBar: AppBar(
+            title: const Text('[AI]nk'),
+          ),
+          body: const Placeholder(),
+        ), */
         home: const Scaffold(
           resizeToAvoidBottomInset: false,
-          body: Wheel(child: PromtWidget()),
+          body: Center(child: Wheel()),
         ),
-        builder: (context, child) => MediaQuery(
+        /* builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
           child: Banner(
             message: 'PREVIEW',
             location: BannerLocation.topEnd,
             child: child,
           ),
-        ),
+        ), */
       );
 }

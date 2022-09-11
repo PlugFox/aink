@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:platform_info/platform_info.dart';
 
+import '../constant/firebase_options.g.dart';
 import '../constant/pubspec.yaml.g.dart' as pubspec;
 import '../util/error_util.dart';
 import '../util/screen_util.dart';
@@ -45,7 +46,9 @@ FutureOr<void> initializeApp({
 
 Future<void> _initFirebase() async {
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   } on Object catch (error, stackTrace) {
     await ErrorUtil.logError(error, stackTrace);
     if (kDebugMode) rethrow;
