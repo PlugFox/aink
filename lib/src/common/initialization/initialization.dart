@@ -79,7 +79,7 @@ Future<void> _logInitialized({
       'mobile': Platform.I.isMobile,
       'desktop': Platform.I.isDesktop,
       'web': Platform.I.isWeb,
-      'operating_system': Platform.I.operatingSystem.when(
+      'operating_system': Platform.I.operatingSystem.when<String>(
         android: () => 'Android',
         iOS: () => 'iOS',
         linux: () => 'Linux',

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../wheel/widget/colored_card.dart';
 import '../../wheel/widget/promt_layout.dart';
 
-final GlobalKey promtScreenKey = GlobalKey();
-
 /// {@template promt_screen}
 /// PromtScreen widget
 /// {@endtemplate}
