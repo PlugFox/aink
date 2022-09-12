@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../promt/widget/promt_layout.dart';
 import '../../promt/widget/promt_screen.dart';
 import 'colored_card.dart';
 import 'gallery_layout.dart';
 import 'history_layout.dart';
-import 'promt_layout.dart';
 import 'wheel_controller.dart';
 
 /// {@template wheel_pages}
@@ -26,22 +26,22 @@ class WheelPages extends StatelessWidget {
             onTap: () {},
             child: GalleryLayout(
               children: const <Widget>[
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.red,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.green,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.blue,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.orange,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.pink,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.purple,
                 ),
               ],
@@ -50,24 +50,24 @@ class WheelPages extends StatelessWidget {
           _WheelPageConstraints(
             onTap: () =>
                 Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (context) => const PromtScreen())),
-            child: const PromtLayout(
-              promtInput: ColoredCard(
+            child: const PromtLayout.compact(
+              promtInput: ColoredCard.compact(
                 color: Colors.red,
               ),
-              promtSend: ColoredCard(
+              promtSend: ColoredCard.compact(
                 color: Colors.green,
               ),
-              imageCard: ColoredCard(
+              imageCard: ColoredCard.compact(
                 color: Colors.blue,
               ),
               previewCards: <Widget>[
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.orange,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.pink,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.purple,
                 ),
               ],
@@ -77,22 +77,22 @@ class WheelPages extends StatelessWidget {
             onTap: () {},
             child: HistoryLayout(
               children: const <Widget>[
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.red,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.green,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.blue,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.orange,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.pink,
                 ),
-                ColoredCard(
+                ColoredCard.compact(
                   color: Colors.purple,
                 ),
               ],

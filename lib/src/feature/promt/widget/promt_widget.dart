@@ -147,58 +147,64 @@ class _PromtTextInput extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
         width: 1240,
         height: 48,
-        child: Card(
-          margin: EdgeInsets.zero,
-          elevation: 8,
-          child: BlocBuilder<PromtBLoC, PromtState>(
-            bloc: Dependencies.instance.promtBLoC,
-            builder: (context, state) => Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(width: 8),
-                Expanded(
-                  child: SizedBox(
-                    height: 48,
-                    child: Center(
-                      child: TextField(
-                        enabled: !state.isProcessing,
-                        maxLength: 256,
-                        maxLines: 1,
-                        minLines: 1,
-                        controller: _inputController,
-                        focusNode: _focusNode,
-                        //cursorWidth: 1,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          //labelText: 'Promt',
-                          //helperText: 'Helper text',
-                          hintText: 'Type your promt here',
-                          counterText: '',
+        child: Hero(
+          tag: 'Hero#promtInput',
+          child: Material(
+            color: Colors.transparent,
+            child: Card(
+              margin: EdgeInsets.zero,
+              elevation: 8,
+              child: BlocBuilder<PromtBLoC, PromtState>(
+                bloc: Dependencies.instance.promtBLoC,
+                builder: (context, state) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: SizedBox(
+                        height: 48,
+                        child: Center(
+                          child: TextField(
+                            enabled: !state.isProcessing,
+                            maxLength: 256,
+                            maxLines: 1,
+                            minLines: 1,
+                            controller: _inputController,
+                            focusNode: _focusNode,
+                            //cursorWidth: 1,
+                            keyboardType: TextInputType.text,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              //labelText: 'Promt',
+                              //helperText: 'Helper text',
+                              hintText: 'Type your promt here',
+                              counterText: '',
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                const VerticalDivider(
-                  width: 1,
-                ),
-                SizedBox.square(
-                  dimension: 48,
-                  child: ValueListenableBuilder<TextEditingValue>(
-                    valueListenable: _inputController,
-                    builder: (context, value, child) => IconButton(
-                      key: const ValueKey<String>('promt_send'),
-                      splashRadius: 36,
-                      onPressed: value.text.length < 3 || state.isProcessing ? null : _send,
-                      icon: const Icon(
-                        Icons.send,
+                    const SizedBox(width: 4),
+                    const VerticalDivider(
+                      width: 1,
+                    ),
+                    SizedBox.square(
+                      dimension: 48,
+                      child: ValueListenableBuilder<TextEditingValue>(
+                        valueListenable: _inputController,
+                        builder: (context, value, child) => IconButton(
+                          key: const ValueKey<String>('promt_send'),
+                          splashRadius: 36,
+                          onPressed: value.text.length < 3 || state.isProcessing ? null : _send,
+                          icon: const Icon(
+                            Icons.send,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -215,129 +221,141 @@ class _PromtImageCard extends StatelessWidget {
   const _PromtImageCard({super.key});
 
   @override
-  Widget build(BuildContext context) => SizedBox.square(
-        dimension: 512,
-        child: Card(
-          margin: EdgeInsets.zero,
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: BlocBuilder<PromtBLoC, PromtState>(
-            bloc: Dependencies.instance.promtBLoC,
-            builder: (context, state) {
-              final image = state.data.images?.firstOrNull;
-              return Stack(
-                children: <Widget>[
-                  /* const Positioned.fill(
-                              child: Center(
-                                child: Icon(
-                                  Icons.image,
-                                  size: 128,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ), */
-                  Positioned.fill(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      /* child: Image.asset(
-                        Assets.image.sunflower512x512.path,
-                        alignment: Alignment.center,
-                        fit: BoxFit.cover,
-                      ), */
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 500),
-                        child: image == null
-                            ? SizedBox.expand(
-                                child: Image.asset(
-                                  Assets.image.sunflower512x512.path,
-                                  alignment: Alignment.center,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : SizedBox.expand(
-                                child: Image.network(
-                                  image.toString(),
-                                  alignment: Alignment.center,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                      ),
-                    ),
+  Widget build(BuildContext context) => Hero(
+        tag: 'Hero#imageCard',
+        child: Material(
+          color: Colors.transparent,
+          child: SizedBox.square(
+            dimension: 512,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Card(
+                  margin: EdgeInsets.zero,
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  Positioned.fill(
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 500),
-                      opacity: state.isProcessing || state.data.promt == null ? 0 : 1,
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            gradient: LinearGradient(
-                              begin: FractionalOffset.topCenter,
-                              end: FractionalOffset.bottomCenter,
-                              stops: const <double>[
-                                0,
-                                0.6,
-                                1,
-                              ],
-                              colors: <Color>[
-                                Colors.black.withOpacity(0.85),
-                                Colors.black.withOpacity(0.75),
-                                Colors.black.withOpacity(0),
-                              ],
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 64,
-                              child: Text(
-                                state.data.promt ?? '',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.justify,
-                                style: Theme.of(context).textTheme.caption?.copyWith(color: Colors.white70),
+                  child: BlocBuilder<PromtBLoC, PromtState>(
+                    bloc: Dependencies.instance.promtBLoC,
+                    builder: (context, state) {
+                      final image = state.data.images?.firstOrNull;
+                      return Stack(
+                        children: <Widget>[
+                          /* const Positioned.fill(
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 128,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ), */
+                          Positioned.fill(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              /* child: Image.asset(
+                            Assets.image.sunflower512x512.path,
+                            alignment: Alignment.center,
+                            fit: BoxFit.cover,
+                          ), */
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 500),
+                                child: image == null
+                                    ? SizedBox.expand(
+                                        child: Image.asset(
+                                          Assets.image.sunflower512x512.path,
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : SizedBox.expand(
+                                        child: Image.network(
+                                          image.toString(),
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: 40,
-                    child: _PromtImageCardFooter(),
-                  ),
-                  if (state.isProcessing)
-                    Positioned.fill(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade400.withOpacity(0.15),
-                            ),
-                            child: const Center(
-                              child: SizedBox.square(
-                                dimension: 128,
-                                child: CircularProgressIndicator(),
+                          Positioned.fill(
+                            child: AnimatedOpacity(
+                              duration: const Duration(milliseconds: 500),
+                              opacity: state.isProcessing || state.data.promt == null ? 0 : 1,
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    gradient: LinearGradient(
+                                      begin: FractionalOffset.topCenter,
+                                      end: FractionalOffset.bottomCenter,
+                                      stops: const <double>[
+                                        0,
+                                        0.6,
+                                        1,
+                                      ],
+                                      colors: <Color>[
+                                        Colors.black.withOpacity(0.85),
+                                        Colors.black.withOpacity(0.75),
+                                        Colors.black.withOpacity(0),
+                                      ],
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      height: 64,
+                                      child: Text(
+                                        state.data.promt ?? '',
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.justify,
+                                        style: Theme.of(context).textTheme.caption?.copyWith(color: Colors.white70),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
+                          const Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            height: 40,
+                            child: _PromtImageCardFooter(),
+                          ),
+                          if (state.isProcessing)
+                            Positioned.fill(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade400.withOpacity(0.15),
+                                    ),
+                                    child: const Center(
+                                      child: SizedBox.square(
+                                        dimension: 128,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       );

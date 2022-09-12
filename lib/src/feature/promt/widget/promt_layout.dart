@@ -7,14 +7,23 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class PromtLayout extends StatelessWidget {
   /// {@macro promt_layout}
-  const PromtLayout({
+  const PromtLayout.compact({
     required this.promtInput,
     required this.promtSend,
     required this.imageCard,
     required this.previewCards,
     super.key,
-  });
+  }) : _expanded = false;
 
+  const PromtLayout.expanded({
+    required this.promtInput,
+    required this.promtSend,
+    required this.imageCard,
+    required this.previewCards,
+    super.key,
+  }) : _expanded = true;
+
+  final bool _expanded;
   final Widget promtInput;
   final Widget promtSend;
   final Widget imageCard;
@@ -33,34 +42,31 @@ class PromtLayout extends StatelessWidget {
                   : (size.shortestSide - padding * (previewCards.length - 1)) / previewCards.length;
               final cardSize = math.min(size.shortestSide, size.longestSide - previewSize - padding);
               return Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: _expanded ? MainAxisSize.max : MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
                     height: 48,
                     width: size.aspectRatio > 1 ? previewSize + padding + cardSize : cardSize,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Expanded(
-                          child: Hero(
-                            tag: 'Hero#promtInput',
+                    child: Hero(
+                      tag: 'Hero#promtInput',
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Expanded(
                             child: promtInput,
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        SizedBox.square(
-                          dimension: 48,
-                          child: Hero(
-                            tag: 'Hero#promtSend',
+                          const SizedBox(width: 16),
+                          SizedBox.square(
+                            dimension: 48,
                             child: promtSend,
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  if (_expanded) const Spacer() else const SizedBox(height: 16),
                   Align(
                     alignment: Alignment.topCenter,
                     child: _PromtLayoutCards(
@@ -81,6 +87,7 @@ class PromtLayout extends StatelessWidget {
                       padding: padding,
                     ),
                   ),
+                  if (_expanded) const Spacer(),
                 ],
               );
             },
