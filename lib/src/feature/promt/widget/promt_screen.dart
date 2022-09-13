@@ -83,52 +83,65 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
               error: (state) => ErrorUtil.showSnackBar(context, state.message),
             ),
             child: SafeArea(
-              child: SizedBox(
-                width: 1024,
-                child: Center(
-                  child: PromtLayout.expanded(
-                    promtInput: ColoredCard.expanded(
-                      color: Colors.red,
-                      animation: _animationController,
-                      child: PromtTextInput(
-                        focusNode: _focusNode,
-                        controller: _inputController,
-                      ),
-                    ),
-                    promtSend: ColoredCard.expanded(
-                      color: Colors.green,
-                      animation: _animationController,
-                      child: PromtSendButton(controller: _inputController, focusNode: _focusNode),
-                    ),
-                    imageCard: ColoredCard.compact(
-                      color: Colors.blue,
-                      child: PromtImageCard(
-                        onTap: () => Navigator.push<void>(
-                          context,
-                          MaterialPageRoute(builder: (context) => const PhotoViewScreen()),
+              child: Padding(
+                padding: EdgeInsets.only(bottom: orientation == Orientation.landscape ? 8 : 48),
+                child: SizedBox(
+                  width: 1024,
+                  child: Center(
+                    child: PromtLayout.expanded(
+                      promtInput: ColoredCard.expanded(
+                        color: Colors.red,
+                        animation: _animationController,
+                        child: PromtTextInput(
+                          focusNode: _focusNode,
+                          controller: _inputController,
                         ),
                       ),
-                    ),
-                    previewCards: <Widget>[
-                      ColoredCard.compact(
-                        color: Colors.orange,
+                      promtSend: ColoredCard.expanded(
+                        color: Colors.green,
+                        animation: _animationController,
+                        child: PromtSendButton(controller: _inputController, focusNode: _focusNode),
+                      ),
+                      imageCard: ColoredCard.compact(
+                        color: Colors.blue,
                         child: PromtImageCard(
-                          onTap: () {},
+                          onTap: () => Navigator.push<void>(
+                            context,
+                            PageRouteBuilder<void>(
+                              pageBuilder: (context, _, __) => const PhotoViewScreen(),
+                              transitionsBuilder: (context, animation, secondayAnimation, child) => ScaleTransition(
+                                scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
+                                child: FadeTransition(
+                                  opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
+                                  child: child,
+                                ),
+                              ),
+                              settings: const RouteSettings(name: 'photo_view'),
+                            ),
+                          ),
                         ),
                       ),
-                      ColoredCard.compact(
-                        color: Colors.pink,
-                        child: PromtImageCard(
-                          onTap: () {},
+                      previewCards: <Widget>[
+                        ColoredCard.compact(
+                          color: Colors.orange,
+                          child: PromtImageCard(
+                            onTap: () {},
+                          ),
                         ),
-                      ),
-                      ColoredCard.compact(
-                        color: Colors.purple,
-                        child: PromtImageCard(
-                          onTap: () {},
+                        ColoredCard.compact(
+                          color: Colors.pink,
+                          child: PromtImageCard(
+                            onTap: () {},
+                          ),
                         ),
-                      ),
-                    ],
+                        ColoredCard.compact(
+                          color: Colors.purple,
+                          child: PromtImageCard(
+                            onTap: () {},
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

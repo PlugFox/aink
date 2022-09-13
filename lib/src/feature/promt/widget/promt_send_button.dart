@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/initialization/dependencies.dart';
@@ -33,21 +34,28 @@ class PromtSendButton extends StatelessWidget {
             bloc: Dependencies.instance.promtBLoC,
             builder: (context, state) => ValueListenableBuilder<TextEditingValue>(
               valueListenable: _inputController,
-              builder: (context, value, child) => InkWell(
-                key: const ValueKey<String>('promt_send'),
-                borderRadius: BorderRadius.circular(16),
-                onTap: value.text.length < 3 || state.isProcessing ? null : _send,
-                child: Align(
-                  alignment: const Alignment(0.1, 0),
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 500),
-                    opacity: value.text.length < 3 || state.isProcessing ? 0.3 : 1,
-                    child: const Icon(
-                      Icons.send,
+              builder: (context, value, child) {
+                final enabled = value.text.length > 2 && !state.isProcessing;
+                return InkWell(
+                  key: const ValueKey<String>('promt_send'),
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: enabled ? _send : null,
+                  child: Align(
+                    alignment: const Alignment(0.1, 0),
+                    child: AnimatedScale(
+                      duration: const Duration(milliseconds: 250),
+                      scale: enabled ? 1 : .85,
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        opacity: enabled ? 1 : .3,
+                        child: const Icon(
+                          Icons.send,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),
@@ -56,5 +64,6 @@ class PromtSendButton extends StatelessWidget {
   void _send() {
     _focusNode.unfocus();
     Dependencies.instance.promtBLoC.add(PromtEvent.generate(promt: _inputController.text));
+    HapticFeedback.heavyImpact().ignore();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../promt/widget/promt_layout.dart';
 import '../../promt/widget/promt_screen.dart';
@@ -23,7 +24,9 @@ class WheelPages extends StatelessWidget {
         physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         children: <Widget>[
           _WheelPageConstraints(
-            onTap: () {},
+            onTap: () {
+              HapticFeedback.lightImpact().ignore();
+            },
             child: GalleryLayout(
               children: const <Widget>[
                 ColoredCard.compact(
@@ -48,8 +51,10 @@ class WheelPages extends StatelessWidget {
             ),
           ),
           _WheelPageConstraints(
-            onTap: () =>
-                Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (context) => const PromtScreen())),
+            onTap: () {
+              Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (context) => const PromtScreen()));
+              HapticFeedback.lightImpact().ignore();
+            },
             child: const PromtLayout.compact(
               promtInput: ColoredCard.compact(
                 color: Colors.red,
@@ -74,7 +79,9 @@ class WheelPages extends StatelessWidget {
             ),
           ),
           _WheelPageConstraints(
-            onTap: () {},
+            onTap: () {
+              HapticFeedback.lightImpact().ignore();
+            },
             child: HistoryLayout(
               children: const <Widget>[
                 ColoredCard.compact(

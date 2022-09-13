@@ -19,16 +19,18 @@ class PhotoViewScreen extends StatelessWidget {
               Positioned.fill(
                 child: PhotoView.customChild(
                   basePosition: Alignment.center,
-                  //initialScale: PhotoViewComputedScale.contained,
+                  initialScale: PhotoViewComputedScale.contained,
                   minScale: PhotoViewComputedScale.contained,
                   maxScale: 3.0,
                   enableRotation: false,
                   backgroundDecoration: const BoxDecoration(color: Colors.transparent),
-                  child: Center(
-                    child: Hero(
-                      tag: 'Hero#imageCard',
-                      child: Image(
-                        image: AssetImage(Assets.image.sunflower512x512.path),
+                  child: SafeArea(
+                    child: Center(
+                      child: Hero(
+                        tag: 'Hero#imageCard',
+                        child: Image(
+                          image: AssetImage(Assets.image.sunflower512x512.path),
+                        ),
                       ),
                     ),
                   ),
@@ -62,22 +64,3 @@ class PhotoViewScreen extends StatelessWidget {
         ),
       );
 }
-
-
-/* Ink(
-  padding: EdgeInsets.zero,
-  decoration: ShapeDecoration(
-    color: Theme.of(context).primaryColor,
-    shadows: kElevationToShadow[2],
-    shape: const CircleBorder(),
-  ),
-  child: Material(
-    color: Colors.red,
-    child: Center(
-      child: IconButton(
-        onPressed: () => Navigator.maybePop(context),
-        icon: Icon(Icons.adaptive.arrow_back),
-      ),
-    ),
-  ),
-), */
