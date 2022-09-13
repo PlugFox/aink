@@ -23,7 +23,8 @@ class PhotoViewScreen extends StatelessWidget {
                   minScale: PhotoViewComputedScale.contained,
                   maxScale: 3.0,
                   enableRotation: false,
-                  backgroundDecoration: const BoxDecoration(color: Colors.transparent),
+                  backgroundDecoration:
+                      const BoxDecoration(color: Colors.transparent),
                   child: SafeArea(
                     child: Center(
                       child: Hero(

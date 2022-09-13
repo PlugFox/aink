@@ -35,12 +35,18 @@ class PromtLayout extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final size = Size(constraints.biggest.width, constraints.biggest.height - 48 - 16);
+              final size = Size(
+                constraints.biggest.width,
+                constraints.biggest.height - 48 - 16,
+              );
               final padding = previewCards.isEmpty ? .0 : 16.0;
               final previewSize = previewCards.isEmpty
                   ? .0
                   : (size.shortestSide - padding * (previewCards.length - 1)) / previewCards.length;
-              final cardSize = math.min(size.shortestSide, size.longestSide - previewSize - padding);
+              final cardSize = math.min(
+                size.shortestSide,
+                size.longestSide - previewSize - padding,
+              );
               return Column(
                 mainAxisSize: _expanded ? MainAxisSize.max : MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,

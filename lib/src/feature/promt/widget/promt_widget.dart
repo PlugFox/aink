@@ -112,7 +112,10 @@ class _PromtWidgetState extends State<PromtWidget> with SingleTickerProviderStat
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
                   child: Center(
-                    child: _PromtTextInput(inputController: _inputController, focusNode: _focusNode),
+                    child: _PromtTextInput(
+                      inputController: _inputController,
+                      focusNode: _focusNode,
+                    ),
                   ),
                 ),
                 const Expanded(
@@ -449,7 +452,3 @@ class _PromtImageCardFooter extends StatelessWidget {
         ),
       );
 }
-
-const String _kPlaceholderText = '''
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-''';

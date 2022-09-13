@@ -32,7 +32,8 @@ class PromtSendButton extends StatelessWidget {
           ),
           child: BlocBuilder<PromtBLoC, PromtState>(
             bloc: Dependencies.instance.promtBLoC,
-            builder: (context, state) => ValueListenableBuilder<TextEditingValue>(
+            builder: (context, state) =>
+                ValueListenableBuilder<TextEditingValue>(
               valueListenable: _inputController,
               builder: (context, value, child) {
                 final enabled = value.text.length > 2 && !state.isProcessing;
@@ -63,7 +64,8 @@ class PromtSendButton extends StatelessWidget {
 
   void _send() {
     _focusNode.unfocus();
-    Dependencies.instance.promtBLoC.add(PromtEvent.generate(promt: _inputController.text));
+    Dependencies.instance.promtBLoC
+        .add(PromtEvent.generate(promt: _inputController.text));
     HapticFeedback.heavyImpact().ignore();
   }
 }

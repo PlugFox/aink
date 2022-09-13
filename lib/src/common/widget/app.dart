@@ -18,7 +18,9 @@ class App extends StatelessWidget {
         title: '[AI]nk',
         restorationScopeId: 'app',
         debugShowCheckedModeBanner: false,
-        theme: ui.window.platformBrightness == ui.Brightness.dark ? ThemeData.dark() : ThemeData.light(),
+        theme: ui.window.platformBrightness == ui.Brightness.dark
+            ? ThemeData.dark()
+            : ThemeData.light(),
         localizationsDelegates: const <LocalizationsDelegate<Object?>>[
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

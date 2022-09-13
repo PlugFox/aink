@@ -38,8 +38,9 @@ class PromtImageCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       image: DecorationImage(
-                        image: (image == null ? AssetImage(Assets.image.sunflower512x512.path) : NetworkImage(image!))
-                            as ImageProvider<Object>,
+                        image: (image == null
+                            ? AssetImage(Assets.image.sunflower512x512.path)
+                            : NetworkImage(image!)) as ImageProvider<Object>,
                         alignment: Alignment.center,
                         fit: BoxFit.cover,
                       ),

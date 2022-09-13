@@ -39,7 +39,8 @@ FutureOr<void> initializeApp({
           // Closes splash screen, and show the app layout.
           binding.allowFirstFrame();
           //final context = binding.renderViewElement;
-          _logInitialized(elapsedMilliseconds: stopwatch.elapsedMilliseconds).ignore();
+          _logInitialized(elapsedMilliseconds: stopwatch.elapsedMilliseconds)
+              .ignore();
         });
       }
     });
@@ -61,7 +62,9 @@ Future<void> _logInitialized({
   // Analytics
   final analytics = FirebaseAnalytics.instance;
   final screenSize = ScreenUtil.screenSize();
-  final orientation = ScreenUtil.orientation() == Orientation.landscape ? 'landscape' : 'portrait';
+  final orientation = ScreenUtil.orientation() == Orientation.landscape
+      ? 'landscape'
+      : 'portrait';
   return analytics.logEvent(
     name: 'initialized',
     parameters: <String, Object?>{

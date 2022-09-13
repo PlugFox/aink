@@ -20,7 +20,11 @@ class AppBLoCObserver extends StreamBlocObserver {
   @override
   void onError(ErrorSink errorSink, Object error, StackTrace stackTrace) {
     super.onError(errorSink, error, stackTrace);
-    ErrorUtil.logError(error, stackTrace, hint: 'On BLoC "${errorSink.runtimeType}" error').ignore();
+    ErrorUtil.logError(
+      error,
+      stackTrace,
+      hint: 'On BLoC "${errorSink.runtimeType}" error',
+    ).ignore();
   }
 
   @override

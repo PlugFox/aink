@@ -21,7 +21,9 @@ class WheelPages extends StatelessWidget {
   Widget build(BuildContext context) => PageView(
         controller: controller,
         scrollBehavior: _WheelScrollBehavior(),
-        physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const ClampingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         children: <Widget>[
           _WheelPageConstraints(
             onTap: () {
@@ -52,7 +54,11 @@ class WheelPages extends StatelessWidget {
           ),
           _WheelPageConstraints(
             onTap: () {
-              Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (context) => const PromtScreen()));
+              Navigator.of(context).push<void>(
+                MaterialPageRoute<void>(
+                  builder: (context) => const PromtScreen(),
+                ),
+              );
               HapticFeedback.lightImpact().ignore();
             },
             child: const PromtLayout.compact(
@@ -111,7 +117,12 @@ class WheelPages extends StatelessWidget {
 
 class _WheelScrollBehavior extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) => child;
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) =>
+      child;
 }
 
 class _WheelPageConstraints extends StatelessWidget {
@@ -128,13 +139,19 @@ class _WheelPageConstraints extends StatelessWidget {
           return Center(
             child: ConstrainedBox(
               constraints: orientation == Orientation.landscape
-                  ? BoxConstraints.tightFor(width: constraints.biggest.width / 2)
-                  : BoxConstraints.tightFor(height: constraints.biggest.height / 2),
+                  ? BoxConstraints.tightFor(
+                      width: constraints.biggest.width / 2,
+                    )
+                  : BoxConstraints.tightFor(
+                      height: constraints.biggest.height / 2,
+                    ),
               child: Center(
                 child: Card(
                   elevation: 16,
                   margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
                   child: InkWell(
                     onTap: onTap,
                     borderRadius: BorderRadius.circular(32),

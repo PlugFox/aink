@@ -84,7 +84,9 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
             ),
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(bottom: orientation == Orientation.landscape ? 8 : 48),
+                padding: EdgeInsets.only(
+                  bottom: orientation == Orientation.landscape ? 8 : 48,
+                ),
                 child: SizedBox(
                   width: 1024,
                   child: Center(
@@ -100,7 +102,10 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                       promtSend: ColoredCard.expanded(
                         color: Colors.green,
                         animation: _animationController,
-                        child: PromtSendButton(controller: _inputController, focusNode: _focusNode),
+                        child: PromtSendButton(
+                          controller: _inputController,
+                          focusNode: _focusNode,
+                        ),
                       ),
                       imageCard: ColoredCard.compact(
                         color: Colors.blue,
@@ -109,7 +114,13 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                             context,
                             PageRouteBuilder<void>(
                               pageBuilder: (context, _, __) => const PhotoViewScreen(),
-                              transitionsBuilder: (context, animation, secondayAnimation, child) => ScaleTransition(
+                              transitionsBuilder: (
+                                context,
+                                animation,
+                                secondayAnimation,
+                                child,
+                              ) =>
+                                  ScaleTransition(
                                 scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
                                 child: FadeTransition(
                                   opacity: animation.drive(CurveTween(curve: Curves.easeIn)),

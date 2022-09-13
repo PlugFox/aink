@@ -57,11 +57,12 @@ class PromtTextInput extends StatelessWidget {
                         border: InputBorder.none,
                         //labelText: 'Promt',
                         //helperText: 'Helper text',
-                        hintStyle: Theme.of(context).textTheme.caption?.copyWith(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              letterSpacing: 0.5,
-                            ),
+                        hintStyle:
+                            Theme.of(context).textTheme.caption?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  letterSpacing: 0.5,
+                                ),
                         hintText: 'Type your promt here',
                         counterText: '',
                       ),

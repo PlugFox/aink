@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '830814404281',
     projectId: 'ai-ink',
     storageBucket: 'ai-ink.appspot.com',
-    iosClientId: '830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com',
+    iosClientId:
+        '830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com',
     iosBundleId: 'dev.plugfox.aink',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '830814404281',
     projectId: 'ai-ink',
     storageBucket: 'ai-ink.appspot.com',
-    iosClientId: '830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com',
+    iosClientId:
+        '830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com',
     iosBundleId: 'dev.plugfox.aink',
   );
 }

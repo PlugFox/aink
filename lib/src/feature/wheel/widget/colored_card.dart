@@ -34,23 +34,28 @@ class ColoredCard extends StatelessWidget {
         child: _buildChild(context, animation, child),
       );
 
-  Widget _buildChild(BuildContext context, Animation<double>? animation, Widget? child) => animation == null
-      ? child ??
-          Ink(
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(16),
-            ),
-          )
-      : AnimatedBuilder(
-          animation: animation,
-          builder: (context, child) => Ink(
-            decoration: BoxDecoration(
-              color: Color.lerp(color, Colors.transparent, animation.value),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: child,
-          ),
-          child: child,
-        );
+  Widget _buildChild(
+    BuildContext context,
+    Animation<double>? animation,
+    Widget? child,
+  ) =>
+      animation == null
+          ? child ??
+              Ink(
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              )
+          : AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) => Ink(
+                decoration: BoxDecoration(
+                  color: Color.lerp(color, Colors.transparent, animation.value),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: child,
+              ),
+              child: child,
+            );
 }

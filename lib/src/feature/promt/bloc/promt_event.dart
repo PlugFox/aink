@@ -7,5 +7,6 @@ class PromtEvent with _$PromtEvent {
   const PromtEvent._();
 
   /// Generate a new promt
-  const factory PromtEvent.generate({required String promt}) = GeneratePromtEvent;
+  const factory PromtEvent.generate({required String promt}) =
+      GeneratePromtEvent;
 }

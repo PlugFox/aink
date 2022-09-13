@@ -29,11 +29,13 @@ class PromtState with _$PromtState {
   }) = ErrorPromtState;
 
   // ignore: prefer_constructors_over_static_methods
-  static PromtState initial() => const PromtState.idle(data: PromtEntity.empty());
+  static PromtState initial() =>
+      const PromtState.idle(data: PromtEntity.empty());
 
   /// If an error has occurred
   bool get hasError => maybeMap<bool>(orElse: () => false, error: (_) => true);
 
   /// Is in progress state
-  bool get isProcessing => maybeMap<bool>(orElse: () => false, processing: (_) => true);
+  bool get isProcessing =>
+      maybeMap<bool>(orElse: () => false, processing: (_) => true);
 }

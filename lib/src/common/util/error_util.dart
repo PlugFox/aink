@@ -11,17 +11,30 @@ import '../exception/network_exception.dart';
 abstract class ErrorUtil {
   ErrorUtil._();
 
-  static Future<void> logError(Object exception, StackTrace stackTrace, {String? hint, bool fatal = false}) async {
+  static Future<void> logError(
+    Object exception,
+    StackTrace stackTrace, {
+    String? hint,
+    bool fatal = false,
+  }) async {
     try {
       if (exception is String) {
-        return await logMessage(exception, stackTrace, hint: hint, warning: true);
+        return await logMessage(
+          exception,
+          stackTrace,
+          hint: hint,
+          warning: true,
+        );
       }
       //await Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
       //await FirebaseCrashlytics.instance
       //    .recordError(exception, stackTrace ?? StackTrace.current, reason: hint, fatal: fatal);
       l.e(exception, stackTrace);
     } on Object catch (error, stackTrace) {
-      l.e('Error while logging error "$error" inside ErrorUtil.logError', stackTrace);
+      l.e(
+        'Error while logging error "$error" inside ErrorUtil.logError',
+        stackTrace,
+      );
     }
   }
 
@@ -51,14 +64,20 @@ abstract class ErrorUtil {
       } */
       l.w(message, stackTrace);
     } on Object catch (error, stackTrace) {
-      l.e('Error while logging error "$error" inside ErrorUtil.logMessage', stackTrace);
+      l.e(
+        'Error while logging error "$error" inside ErrorUtil.logMessage',
+        stackTrace,
+      );
     }
   }
 
   @alwaysThrows
   static Never throwWithStackTrace(Object error, StackTrace stackTrace) => Error.throwWithStackTrace(error, stackTrace);
 
-  static String formatMessage(Object error, [String fallback = 'An error has occurred']) {
+  static String formatMessage(
+    Object error, [
+    String fallback = 'An error has occurred',
+  ]) {
     if (error is String) {
       return error;
     } else if (error is ServerInternalException) {

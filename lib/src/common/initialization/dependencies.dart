@@ -16,7 +16,7 @@ abstract class Dependencies {
 }
 
 class _DependenciesProduction implements Dependencies {
-  late final RestClient _httpClient = RestClient(baseUri: 'https://d832-79-139-215-200.ngrok.io');
+  late final RestClient _httpClient = RestClient(uri: 'https://d832-79-139-215-200.ngrok.io');
 
   late final IPromtNetworkDataProvider _networkDataProvider = PromtNetworkDataProviderImpl(client: _httpClient);
 

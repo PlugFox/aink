@@ -1,5 +1,7 @@
 import 'package:meta/meta.dart';
 
+import 'generated_image.dart';
+
 @immutable
 class PromtEntity {
   const PromtEntity({
@@ -20,12 +22,12 @@ class PromtEntity {
 
   final String? promt;
   final String? task;
-  final List<Uri>? images;
+  final List<GeneratedImage>? images;
 
   PromtEntity copyWith({
     String? newPromt,
     String? newTask,
-    List<Uri>? newImages,
+    List<GeneratedImage>? newImages,
   }) =>
       PromtEntity(
         promt: newPromt ?? promt,

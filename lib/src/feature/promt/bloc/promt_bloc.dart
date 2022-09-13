@@ -27,11 +27,12 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
       yield PromtState.processing(
         data: PromtEntity.create(event.promt),
       );
-      final taskId = await _repository.beginGeneration(promt: event.promt);
+      final taskId = await _repository.generateImages(promt: event.promt);
       yield PromtState.processing(
         data: state.data.copyWith(newTask: taskId),
       );
-      final images = await _repository.fetchByTaskId(taskId, loop: true);
+      final operation = _repository.fetchByTaskId(taskId, loop: true);
+      final images = await operation.value;
       yield PromtState.successful(
         data: state.data.copyWith(
           newImages: images,

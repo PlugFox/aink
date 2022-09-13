@@ -1,8 +1,11 @@
+import 'package:async/async.dart';
+
+import '../model/generated_image.dart';
 import 'promt_network_provider.dart';
 
 abstract class IPromtRepository {
-  Future<String> beginGeneration({required String promt});
-  Future<List<Uri>> fetchByTaskId(String taskId, {bool loop = true});
+  Future<String> generateImages({required String promt});
+  CancelableOperation<List<GeneratedImage>> fetchByTaskId(String taskId, {bool loop = true});
 }
 
 class PromtRepositoryImpl implements IPromtRepository {
@@ -12,11 +15,9 @@ class PromtRepositoryImpl implements IPromtRepository {
   final IPromtNetworkDataProvider _networkDataProvider;
 
   @override
-  Future<String> beginGeneration({required String promt}) => _networkDataProvider.beginGeneration(promt: promt);
+  Future<String> generateImages({required String promt}) => _networkDataProvider.generateImages(promt: promt);
 
   @override
-  Future<List<Uri>> fetchByTaskId(String taskId, {bool loop = true}) async {
-    await _networkDataProvider.fetchByTaskId(taskId);
-    return <Uri>[];
-  }
+  CancelableOperation<List<GeneratedImage>> fetchByTaskId(String taskId, {bool loop = true}) =>
+      _networkDataProvider.fetchByTaskId(taskId);
 }
