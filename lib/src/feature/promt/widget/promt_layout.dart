@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../../common/util/screen_util.dart';
+
 /// {@template promt_layout}
 /// PromtLayout widget
 /// {@endtemplate}
@@ -35,26 +37,44 @@ class PromtLayout extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: LayoutBuilder(
             builder: (context, constraints) {
+              const maxImageSize = 512.0;
+              final padding = ScreenUtil.from(constraints.biggest).when<double>(
+                extraSmall: () => 16,
+                small: () => 24,
+                medium: () => 32,
+                large: () => 48,
+                extraLarge: () => 64,
+              );
+              const promtHeight = 48.0;
               final size = Size(
                 constraints.biggest.width,
-                constraints.biggest.height - 48 - 16,
+                constraints.biggest.height - promtHeight - padding,
               );
-              final padding = previewCards.isEmpty ? .0 : 16.0;
-              final previewSize = previewCards.isEmpty
-                  ? .0
-                  : (size.shortestSide - padding * (previewCards.length - 1)) / previewCards.length;
+              final cardsPadding = previewCards.isEmpty ? .0 : padding;
+              final previewSize = math.min(
+                maxImageSize,
+                previewCards.isEmpty
+                    ? .0
+                    : (size.shortestSide - cardsPadding * (previewCards.length - 1)) / previewCards.length,
+              );
               final cardSize = math.min(
-                size.shortestSide,
-                size.longestSide - previewSize - padding,
+                maxImageSize,
+                math.min(
+                  size.shortestSide,
+                  size.longestSide - previewSize - cardsPadding,
+                ),
               );
+              final promtWidth = size.aspectRatio > 1
+                  ? previewSize + cardsPadding + cardSize
+                  : math.max(cardSize, previewSize * previewCards.length + cardsPadding * (previewCards.length - 1));
               return Column(
                 mainAxisSize: _expanded ? MainAxisSize.max : MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-                    height: 48,
-                    width: size.aspectRatio > 1 ? previewSize + padding + cardSize : cardSize,
+                    height: promtHeight,
+                    width: promtWidth,
                     child: Hero(
                       tag: 'Hero#promtInput',
                       child: Row(
@@ -72,7 +92,7 @@ class PromtLayout extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (_expanded) const Spacer() else const SizedBox(height: 16),
+                  if (_expanded) const Spacer() else SizedBox(height: padding),
                   Align(
                     alignment: Alignment.topCenter,
                     child: _PromtLayoutCards(
@@ -90,7 +110,7 @@ class PromtLayout extends StatelessWidget {
                       size: size,
                       cardSize: cardSize,
                       previewSize: previewSize,
-                      padding: padding,
+                      padding: cardsPadding,
                     ),
                   ),
                   if (_expanded) const Spacer(),

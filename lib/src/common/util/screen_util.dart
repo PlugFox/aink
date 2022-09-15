@@ -24,6 +24,8 @@ abstract class ScreenUtil {
     return _screenSizeFromSize(size);
   }
 
+  static ScreenSize from(Size size) => _screenSizeFromSize(size);
+
   /// Get current screen logical size representation
   ///
   /// extra small - ~320..599 dp, 4 column (phone)
@@ -57,9 +59,7 @@ abstract class ScreenUtil {
   /// landscape
   static Orientation orientation() {
     final size = ui.window.physicalSize;
-    return size.height > size.width
-        ? Orientation.portrait
-        : Orientation.landscape;
+    return size.height > size.width ? Orientation.portrait : Orientation.landscape;
   }
 }
 
@@ -80,8 +80,7 @@ class ScreenSize {
   static const ScreenSize small = ScreenSize._('small', 600, 1023);
   static const ScreenSize medium = ScreenSize._('medium', 1024, 1439);
   static const ScreenSize large = ScreenSize._('large', 1440, 1919);
-  static const ScreenSize extraLarge =
-      ScreenSize._('xlarge', 1920, double.infinity);
+  static const ScreenSize extraLarge = ScreenSize._('xlarge', 1920, double.infinity);
 
   @override
   String toString() => '<ScreenSize $representation $min..$max>';
@@ -137,6 +136,5 @@ class ScreenSize {
 
   @override
   bool operator ==(final Object other) =>
-      identical(other, this) ||
-      (other is ScreenSize && representation == other.representation);
+      identical(other, this) || (other is ScreenSize && representation == other.representation);
 }

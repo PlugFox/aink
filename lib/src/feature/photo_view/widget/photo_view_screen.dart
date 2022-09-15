@@ -23,8 +23,7 @@ class PhotoViewScreen extends StatelessWidget {
                   minScale: PhotoViewComputedScale.contained,
                   maxScale: 3.0,
                   enableRotation: false,
-                  backgroundDecoration:
-                      const BoxDecoration(color: Colors.transparent),
+                  backgroundDecoration: const BoxDecoration(color: Colors.transparent),
                   child: SafeArea(
                     child: Center(
                       child: Hero(
@@ -51,9 +50,8 @@ class PhotoViewScreen extends StatelessWidget {
                           elevation: 4,
                           child: InkWell(
                             onTap: () => Navigator.maybePop(context),
-                            //borderRadius: const BorderRadius.all(Radius.circular(24)),
                             customBorder: const CircleBorder(),
-                            child: Icon(Icons.adaptive.arrow_back),
+                            child: const Icon(Icons.arrow_back),
                           ),
                         ),
                       ),

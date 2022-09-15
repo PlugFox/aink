@@ -54,9 +54,24 @@ class WheelPages extends StatelessWidget {
           ),
           _WheelPageConstraints(
             onTap: () {
-              Navigator.of(context).push<void>(
-                MaterialPageRoute<void>(
-                  builder: (context) => const PromtScreen(),
+              Navigator.push<void>(
+                context,
+                PageRouteBuilder<void>(
+                  pageBuilder: (context, _, __) => const PromtScreen(),
+                  transitionsBuilder: (
+                    context,
+                    animation,
+                    secondayAnimation,
+                    child,
+                  ) =>
+                      ScaleTransition(
+                    scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
+                    child: FadeTransition(
+                      opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
+                      child: child,
+                    ),
+                  ),
+                  settings: const RouteSettings(name: 'promt'),
                 ),
               );
               HapticFeedback.lightImpact().ignore();
