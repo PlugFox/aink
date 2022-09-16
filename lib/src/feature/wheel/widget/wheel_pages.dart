@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -157,10 +159,12 @@ class _WheelPageConstraints extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: orientation == Orientation.landscape
                     ? BoxConstraints.tightFor(
-                        width: constraints.biggest.width / 2,
+                        width: math.min(600, constraints.biggest.width / 2),
+                        height: math.min(400, constraints.biggest.height / 1.4),
                       )
                     : BoxConstraints.tightFor(
-                        height: constraints.biggest.height / 2,
+                        width: math.min(400, constraints.biggest.width / 1.4),
+                        height: math.min(600, constraints.biggest.height / 2),
                       ),
                 child: Center(
                   child: Card(
