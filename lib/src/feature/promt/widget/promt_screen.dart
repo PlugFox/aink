@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/initialization/dependencies.dart';
 import '../../../common/util/error_util.dart';
+import '../../../common/util/screen_util.dart';
 import '../../photo_view/widget/photo_view_screen.dart';
 import '../../wheel/widget/colored_card.dart';
 import '../bloc/promt_bloc.dart';
@@ -74,13 +75,23 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
           floatingActionButtonLocation: orientation == Orientation.landscape
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              _focusNode.unfocus();
-              Navigator.pop(context);
-              HapticFeedback.lightImpact().ignore();
-            },
-            child: const Icon(Icons.menu),
+          floatingActionButton: ScreenUtil.screenSizeOf(context).maybeWhen<FloatingActionButton>(
+            extraSmall: () => FloatingActionButton(
+              onPressed: () {
+                _focusNode.unfocus();
+                Navigator.pop(context);
+                HapticFeedback.lightImpact().ignore();
+              },
+              child: const Icon(Icons.menu),
+            ),
+            orElse: () => FloatingActionButton.large(
+              onPressed: () {
+                _focusNode.unfocus();
+                Navigator.pop(context);
+                HapticFeedback.lightImpact().ignore();
+              },
+              child: const Icon(Icons.menu),
+            ),
           ),
           body: BlocListener<PromtBLoC, PromtState>(
             bloc: Dependencies.instance.promtBLoC,

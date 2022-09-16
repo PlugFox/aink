@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 
 import '../../../common/constant/assets.gen.dart';
+import '../../../common/util/screen_util.dart';
 
 /// {@template photo_view_screen}
 /// PhotoViewScreen widget
@@ -38,31 +39,54 @@ class PhotoViewScreen extends StatelessWidget {
                 ),
               ),
               if (Navigator.canPop(context))
-                SafeArea(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: SizedBox.square(
-                        dimension: 48,
-                        child: Material(
-                          color: Theme.of(context).primaryColor,
-                          shape: const CircleBorder(),
-                          elevation: 4,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.maybePop(context);
-                              HapticFeedback.lightImpact().ignore();
-                            },
-                            customBorder: const CircleBorder(),
-                            child: const Icon(Icons.arrow_back),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                ScreenUtil.screenSizeOf(context).maybeWhen(
+                  extraSmall: () => const PhotoViewBackButton(),
+                  orElse: () => const PhotoViewBackButton.large(),
                 ),
             ],
+          ),
+        ),
+      );
+}
+
+/// {@template photo_view_screen}
+/// PhotoViewBackButton widget
+/// {@endtemplate}
+class PhotoViewBackButton extends StatelessWidget {
+  /// {@macro photo_view_screen}
+  const PhotoViewBackButton({super.key}) : _isLarge = false;
+
+  /// {@macro photo_view_screen}
+  const PhotoViewBackButton.large({super.key}) : _isLarge = true;
+
+  final bool _isLarge;
+
+  @override
+  Widget build(BuildContext context) => SafeArea(
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: SizedBox.square(
+              dimension: _isLarge ? 82 : 48,
+              child: Material(
+                color: Theme.of(context).colorScheme.secondary,
+                shape: const CircleBorder(),
+                elevation: 4,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.maybePop(context);
+                    HapticFeedback.lightImpact().ignore();
+                  },
+                  customBorder: const CircleBorder(),
+                  child: Icon(
+                    Icons.arrow_back,
+                    size: _isLarge ? 48 : 32,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       );
