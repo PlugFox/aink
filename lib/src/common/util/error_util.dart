@@ -84,6 +84,8 @@ abstract class ErrorUtil {
       return 'Server error';
     } else if (error is InternetException) {
       return 'Problem with internet connection';
+    } else if (error is RestClientException) {
+      return 'Request exception';
     } else if (error is FormatException) {
       return 'Invalid data format';
     } else if (error is TimeoutException) {
