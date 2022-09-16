@@ -75,7 +75,11 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
               ? FloatingActionButtonLocation.endFloat
               : FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              _focusNode.unfocus();
+              Navigator.pop(context);
+              HapticFeedback.lightImpact().ignore();
+            },
             child: const Icon(Icons.menu),
           ),
           body: BlocListener<PromtBLoC, PromtState>(
@@ -135,6 +139,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                                   settings: const RouteSettings(name: 'photo_view'),
                                 ),
                               );
+                              _focusNode.unfocus();
                               HapticFeedback.lightImpact().ignore();
                             },
                           ),
@@ -143,19 +148,28 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                           ColoredCard.compact(
                             color: Colors.orange,
                             child: PromtImageCard(
-                              onTap: () {},
+                              onTap: () {
+                                _focusNode.unfocus();
+                                HapticFeedback.lightImpact().ignore();
+                              },
                             ),
                           ),
                           ColoredCard.compact(
                             color: Colors.pink,
                             child: PromtImageCard(
-                              onTap: () {},
+                              onTap: () {
+                                _focusNode.unfocus();
+                                HapticFeedback.lightImpact().ignore();
+                              },
                             ),
                           ),
                           ColoredCard.compact(
                             color: Colors.purple,
                             child: PromtImageCard(
-                              onTap: () {},
+                              onTap: () {
+                                _focusNode.unfocus();
+                                HapticFeedback.lightImpact().ignore();
+                              },
                             ),
                           ),
                         ],

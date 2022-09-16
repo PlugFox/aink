@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 
 import '../../../common/constant/assets.gen.dart';
@@ -49,7 +50,10 @@ class PhotoViewScreen extends StatelessWidget {
                           shape: const CircleBorder(),
                           elevation: 4,
                           child: InkWell(
-                            onTap: () => Navigator.maybePop(context),
+                            onTap: () {
+                              Navigator.maybePop(context);
+                              HapticFeedback.lightImpact().ignore();
+                            },
                             customBorder: const CircleBorder(),
                             child: const Icon(Icons.arrow_back),
                           ),

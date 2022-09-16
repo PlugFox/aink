@@ -151,30 +151,33 @@ class _WheelPageConstraints extends StatelessWidget {
         builder: (context, constraints) {
           final orientation =
               constraints.biggest.width > constraints.biggest.height ? Orientation.landscape : Orientation.portrait;
-          return Center(
-            child: ConstrainedBox(
-              constraints: orientation == Orientation.landscape
-                  ? BoxConstraints.tightFor(
-                      width: constraints.biggest.width / 2,
-                    )
-                  : BoxConstraints.tightFor(
-                      height: constraints.biggest.height / 2,
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 85, top: 10),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: orientation == Orientation.landscape
+                    ? BoxConstraints.tightFor(
+                        width: constraints.biggest.width / 2,
+                      )
+                    : BoxConstraints.tightFor(
+                        height: constraints.biggest.height / 2,
+                      ),
+                child: Center(
+                  child: Card(
+                    elevation: 16,
+                    margin: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
                     ),
-              child: Center(
-                child: Card(
-                  elevation: 16,
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  child: InkWell(
-                    onTap: onTap,
-                    borderRadius: BorderRadius.circular(32),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: AspectRatio(
-                        aspectRatio: orientation == Orientation.portrait ? 0.6 : 1.4,
-                        child: child,
+                    child: InkWell(
+                      onTap: onTap,
+                      borderRadius: BorderRadius.circular(32),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: AspectRatio(
+                          aspectRatio: orientation == Orientation.portrait ? 0.7 : 1.4,
+                          child: child,
+                        ),
                       ),
                     ),
                   ),
