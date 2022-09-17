@@ -21,7 +21,8 @@ class WheelScreen extends StatefulWidget {
 }
 
 class _WheelScreenState extends State<WheelScreen> {
-  final WheelController _controller = WheelController(initialPage: 1);
+  static const int _initialPage = 1;
+  final WheelController _controller = WheelController(initialPage: _initialPage);
 
   @override
   void dispose() {
@@ -38,7 +39,7 @@ class _WheelScreenState extends State<WheelScreen> {
               : FloatingActionButtonLocation.centerFloat,
           floatingActionButton: ValueListenableBuilder<int>(
             valueListenable: _controller.select<int>(
-              (controller) => controller.page?.round() ?? 0,
+              (controller) => controller.page.round(),
               (prev, next) => prev != next,
             ),
             builder: (context, value, child) => SizedBox(
