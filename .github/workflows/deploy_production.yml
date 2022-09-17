@@ -67,9 +67,9 @@ jobs:
             .firebaserc
             firebase.json
 
-  # Deploy web on preview / staging channel
+  # Deploy web on live / production channel
   web-deploy:
-    name: "Deploy web on preview channel"
+    name: "Deploy web on live channel"
     timeout-minutes: 5
     runs-on: ubuntu-latest
     defaults:
