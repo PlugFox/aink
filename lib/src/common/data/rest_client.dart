@@ -45,7 +45,7 @@ class RestClient {
       request.headers.addAll(<String, String>{
         if (body != null) ...<String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Content-Length': request.bodyBytes.toString(),
+          'Content-Length': request.bodyBytes.length.toString(),
         },
         'Connection': 'keep-alive',
         'Date': DateTime.now().toUtc().toIso8601String(),
@@ -93,7 +93,7 @@ class RestClient {
   static FutureOr<Map<String, Object?>> _decodeResponse(
     http.Response response,
   ) {
-    if (response.headers['Content-Type']?.contains('application/json') ?? false) {
+    if ((response.headers['content-type'] ?? response.headers['Content-Type'])?.contains('application/json') ?? false) {
       final body = response.body;
       try {
         final json = jsonDecode(body) as Map<String, Object?>;
@@ -119,7 +119,8 @@ class RestClient {
     } else {
       Error.throwWithStackTrace(
         ServerInternalException(
-          message: 'Server returned invalid content type: ${response.headers['Content-Type'] ?? 'null'}',
+          message:
+              'Server returned invalid content type: ${response.headers['content-type'] ?? response.headers['Content-Type'] ?? 'null'}',
         ),
         StackTrace.fromString('${StackTrace.current}\n'
             'Headers: "${jsonEncode(response.headers)}"'),

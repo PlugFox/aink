@@ -31,8 +31,7 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
       yield PromtState.processing(
         data: state.data.copyWith(newTask: taskId),
       );
-      final operation = _repository.fetchByTaskId(taskId, loop: true);
-      final images = await operation.value;
+      final images = await _repository.fetchByTaskId(taskId, loop: true).value;
       yield PromtState.successful(
         data: state.data.copyWith(
           newImages: images,

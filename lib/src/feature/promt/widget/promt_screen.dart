@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,7 +80,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
             extraSmall: () => FloatingActionButton(
               onPressed: () {
                 _focusNode.unfocus();
-                Navigator.pop(context);
+                Navigator.pop<void>(context);
                 HapticFeedback.lightImpact().ignore();
               },
               child: const Icon(Icons.menu),
@@ -87,7 +88,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
             orElse: () => FloatingActionButton.large(
               onPressed: () {
                 _focusNode.unfocus();
-                Navigator.pop(context);
+                Navigator.pop<void>(context);
                 HapticFeedback.lightImpact().ignore();
               },
               child: const Icon(Icons.menu),
@@ -107,83 +108,92 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                   child: SizedBox(
                     width: 1024,
                     child: Center(
-                      child: PromtLayout.expanded(
-                        promtInput: SizedBox.square(
-                          child: ColoredCard.expanded(
-                            color: Colors.red,
+                      child: BlocBuilder<PromtBLoC, PromtState>(
+                        bloc: Dependencies.instance.promtBLoC,
+                        builder: (context, state) => PromtLayout.expanded(
+                          promtInput: SizedBox.square(
+                            child: ColoredCard.expanded(
+                              color: Colors.red,
+                              animation: _animationController,
+                              child: PromtTextInput(
+                                focusNode: _focusNode,
+                                controller: _inputController,
+                              ),
+                            ),
+                          ),
+                          promtSend: ColoredCard.expanded(
+                            color: Colors.green,
                             animation: _animationController,
-                            child: PromtTextInput(
-                              focusNode: _focusNode,
+                            child: PromtSendButton(
                               controller: _inputController,
+                              focusNode: _focusNode,
                             ),
                           ),
-                        ),
-                        promtSend: ColoredCard.expanded(
-                          color: Colors.green,
-                          animation: _animationController,
-                          child: PromtSendButton(
-                            controller: _inputController,
-                            focusNode: _focusNode,
-                          ),
-                        ),
-                        imageCard: ColoredCard.compact(
-                          color: Colors.blue,
-                          child: PromtImageCard(
-                            onTap: () {
-                              Navigator.push<void>(
-                                context,
-                                PageRouteBuilder<void>(
-                                  pageBuilder: (context, _, __) => const PhotoViewScreen(),
-                                  transitionsBuilder: (
-                                    context,
-                                    animation,
-                                    secondayAnimation,
-                                    child,
-                                  ) =>
-                                      ScaleTransition(
-                                    scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
-                                    child: FadeTransition(
-                                      opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
-                                      child: child,
+                          imageCard: ColoredCard.compact(
+                            color: Colors.blue,
+                            child: PromtImageCard(
+                              image: state.data.images?.firstOrNull?.url.toString(),
+                              onTap: () {
+                                Navigator.push<void>(
+                                  context,
+                                  PageRouteBuilder<void>(
+                                    pageBuilder: (context, _, __) => const PhotoViewScreen(),
+                                    transitionsBuilder: (
+                                      context,
+                                      animation,
+                                      secondayAnimation,
+                                      child,
+                                    ) =>
+                                        ScaleTransition(
+                                      scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
+                                      child: FadeTransition(
+                                        opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
+                                        child: child,
+                                      ),
                                     ),
+                                    settings: const RouteSettings(name: 'photo_view'),
                                   ),
-                                  settings: const RouteSettings(name: 'photo_view'),
-                                ),
-                              );
-                              _focusNode.unfocus();
-                              HapticFeedback.lightImpact().ignore();
-                            },
+                                );
+                                _focusNode.unfocus();
+                                HapticFeedback.lightImpact().ignore();
+                              },
+                            ),
                           ),
+                          previewCards: <Widget>[
+                            ColoredCard.expanded(
+                              animation: _animationController,
+                              color: Colors.orange,
+                              child: PromtImageCard(
+                                image: state.data.images?.skip(1).firstOrNull?.url.toString(),
+                                onTap: () {
+                                  _focusNode.unfocus();
+                                  HapticFeedback.lightImpact().ignore();
+                                },
+                              ),
+                            ),
+                            ColoredCard.compact(
+                              color: Colors.pink,
+                              child: PromtImageCard(
+                                image: state.data.images?.skip(2).firstOrNull?.url.toString(),
+                                onTap: () {
+                                  _focusNode.unfocus();
+                                  HapticFeedback.lightImpact().ignore();
+                                },
+                              ),
+                            ),
+                            ColoredCard.expanded(
+                              animation: _animationController,
+                              color: Colors.purple,
+                              child: PromtImageCard(
+                                image: state.data.images?.skip(3).firstOrNull?.url.toString(),
+                                onTap: () {
+                                  _focusNode.unfocus();
+                                  HapticFeedback.lightImpact().ignore();
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        previewCards: <Widget>[
-                          ColoredCard.compact(
-                            color: Colors.orange,
-                            child: PromtImageCard(
-                              onTap: () {
-                                _focusNode.unfocus();
-                                HapticFeedback.lightImpact().ignore();
-                              },
-                            ),
-                          ),
-                          ColoredCard.compact(
-                            color: Colors.pink,
-                            child: PromtImageCard(
-                              onTap: () {
-                                _focusNode.unfocus();
-                                HapticFeedback.lightImpact().ignore();
-                              },
-                            ),
-                          ),
-                          ColoredCard.compact(
-                            color: Colors.purple,
-                            child: PromtImageCard(
-                              onTap: () {
-                                _focusNode.unfocus();
-                                HapticFeedback.lightImpact().ignore();
-                              },
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),

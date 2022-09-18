@@ -45,7 +45,7 @@ class PromtNetworkDataProviderImpl implements IPromtNetworkDataProvider {
           return;
         }
         switch (data['task_status'] as String?) {
-          case 'PENDING':
+          case 'STARTED':
             return;
           case 'SUCCESS':
             timer.cancel();
