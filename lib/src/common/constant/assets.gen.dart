@@ -13,7 +13,8 @@ class $AssetsImageGen {
   const $AssetsImageGen();
 
   /// File path: assets/image/sunflower_512x512.jpg
-  AssetGenImage get sunflower512x512 => const AssetGenImage('assets/image/sunflower_512x512.jpg');
+  AssetGenImage get sunflower512x512 =>
+      const AssetGenImage('assets/image/sunflower_512x512.jpg');
 }
 
 class Assets {

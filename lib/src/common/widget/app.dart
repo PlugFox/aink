@@ -3,9 +3,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import '../../feature/promt/widget/promt_widget.dart';
+import '../../feature/wheel/widget/wheel_screen.dart';
 import '../localization/localization.dart';
-import 'wheel.dart';
 
 /// {@template app}
 /// App widget
@@ -29,7 +28,7 @@ class App extends StatelessWidget {
         supportedLocales: Localization.supportedLocales,
         home: const Scaffold(
           resizeToAvoidBottomInset: false,
-          body: Wheel(child: PromtWidget()),
+          body: Center(child: WheelScreen()),
         ),
         builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1),

@@ -24,8 +24,16 @@ dependencies:
   #cloud_firestore: any
   #flutterfire_ui: any
 
+  # State manager
+  stream_bloc: ^0.5.1
+  flutter_bloc: ^8.1.1
+
   # Routing
   #go_router: any
+
+  # Widgets
+  animations: ^2.0.4
+  photo_view: ^0.14.0
 
   # Models and annotation
   meta: any
@@ -33,16 +41,22 @@ dependencies:
   json_annotation: any
   freezed_annotation: any
 
+  # Network
+  http: ^0.13.5
+
   # Database
   shared_preferences: any
 
   # Utility
   l: any
   intl: any
+  path: ^1.8.2
   url_launcher: any
   theme_tailor_annotation: any
   platform_info: any
   flutter_batteries: ^0.0.6-dev
+  flutter_blurhash: ^0.7.0
+  blobs: ^2.0.0
 
 dev_dependencies:
   flutter_test:
