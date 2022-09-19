@@ -131,66 +131,22 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                           ),
                           imageCard: ColoredCard.compact(
                             color: Colors.blue,
-                            child: PromtImageCard(
-                              image: state.data.images?.firstOrNull?.url.toString(),
-                              onTap: () {
-                                Navigator.push<void>(
-                                  context,
-                                  PageRouteBuilder<void>(
-                                    pageBuilder: (context, _, __) => const PhotoViewScreen(),
-                                    transitionsBuilder: (
-                                      context,
-                                      animation,
-                                      secondayAnimation,
-                                      child,
-                                    ) =>
-                                        ScaleTransition(
-                                      scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
-                                      child: FadeTransition(
-                                        opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
-                                        child: child,
-                                      ),
-                                    ),
-                                    settings: const RouteSettings(name: 'photo_view'),
-                                  ),
-                                );
-                                _focusNode.unfocus();
-                                HapticFeedback.lightImpact().ignore();
-                              },
-                            ),
+                            child: _buildImage(state, 0),
                           ),
                           previewCards: <Widget>[
                             ColoredCard.expanded(
                               animation: _animationController,
                               color: Colors.orange,
-                              child: PromtImageCard(
-                                image: state.data.images?.skip(1).firstOrNull?.url.toString(),
-                                onTap: () {
-                                  _focusNode.unfocus();
-                                  HapticFeedback.lightImpact().ignore();
-                                },
-                              ),
+                              child: _buildImage(state, 1),
                             ),
                             ColoredCard.compact(
                               color: Colors.pink,
-                              child: PromtImageCard(
-                                image: state.data.images?.skip(2).firstOrNull?.url.toString(),
-                                onTap: () {
-                                  _focusNode.unfocus();
-                                  HapticFeedback.lightImpact().ignore();
-                                },
-                              ),
+                              child: _buildImage(state, 2),
                             ),
                             ColoredCard.expanded(
                               animation: _animationController,
                               color: Colors.purple,
-                              child: PromtImageCard(
-                                image: state.data.images?.skip(3).firstOrNull?.url.toString(),
-                                onTap: () {
-                                  _focusNode.unfocus();
-                                  HapticFeedback.lightImpact().ignore();
-                                },
-                              ),
+                              child: _buildImage(state, 3),
                             ),
                           ],
                         ),
@@ -203,4 +159,44 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
           ),
         ),
       );
+
+  Widget _buildImage(PromtState state, int index) {
+    final preview = index != 0;
+    if (state.isProcessing) return PromtImageCard.loading(preview: preview);
+    final image = state.data.images?.skip(index).firstOrNull;
+    if (image == null) return PromtImageCard.empty(preview: preview);
+    return PromtImageCard(
+      image: image,
+      preview: preview,
+      onTap: index == 0
+          ? () {
+              Navigator.push<void>(
+                context,
+                PageRouteBuilder<void>(
+                  pageBuilder: (context, _, __) => PhotoViewScreen(image: image),
+                  transitionsBuilder: (
+                    context,
+                    animation,
+                    secondayAnimation,
+                    child,
+                  ) =>
+                      ScaleTransition(
+                    scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
+                    child: FadeTransition(
+                      opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
+                      child: child,
+                    ),
+                  ),
+                  settings: const RouteSettings(name: 'photo_view'),
+                ),
+              );
+              _focusNode.unfocus();
+              HapticFeedback.lightImpact().ignore();
+            }
+          : () {
+              _focusNode.unfocus();
+              HapticFeedback.lightImpact().ignore();
+            },
+    );
+  }
 }

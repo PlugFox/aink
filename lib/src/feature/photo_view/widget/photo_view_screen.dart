@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 
-import '../../../common/constant/assets.gen.dart';
 import '../../../common/util/screen_util.dart';
+import '../../promt/model/generated_image.dart';
 
 /// {@template photo_view_screen}
 /// PhotoViewScreen widget
 /// {@endtemplate}
 class PhotoViewScreen extends StatelessWidget {
   /// {@macro photo_view_screen}
-  const PhotoViewScreen({super.key});
+  const PhotoViewScreen({required this.image, super.key});
+
+  final GeneratedImage image;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -30,9 +32,7 @@ class PhotoViewScreen extends StatelessWidget {
                     child: Center(
                       child: Hero(
                         tag: 'Hero#imageCard',
-                        child: Image(
-                          image: AssetImage(Assets.image.sunflower512x512.path),
-                        ),
+                        child: _buildImage(image),
                       ),
                     ),
                   ),
@@ -46,6 +46,23 @@ class PhotoViewScreen extends StatelessWidget {
             ],
           ),
         ),
+      );
+
+  static Widget _errorBuilder(BuildContext context, Object error, StackTrace? stackTrace) =>
+      const Center(child: Text('Error'));
+
+  static Widget _buildImage(GeneratedImage image) => Image.network(
+        image.url.toString(),
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) => loadingProgress == null
+            ? child
+            : Center(
+                child: CircularProgressIndicator(
+                  value:
+                      ((loadingProgress.cumulativeBytesLoaded) / (loadingProgress.expectedTotalBytes ?? 1)).clamp(0, 1),
+                ),
+              ),
+        errorBuilder: _errorBuilder,
       );
 }
 

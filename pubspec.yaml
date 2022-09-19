@@ -55,6 +55,8 @@ dependencies:
   theme_tailor_annotation: any
   platform_info: any
   flutter_batteries: ^0.0.6-dev
+  flutter_blurhash: ^0.7.0
+  blobs: ^2.0.0
 
 dev_dependencies:
   flutter_test:
