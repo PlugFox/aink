@@ -45,14 +45,16 @@ class RestClient {
       request.headers.addAll(<String, String>{
         if (body != null) ...<String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Content-Length': request.bodyBytes.length.toString(),
+          if (Platform.I.isIO) 'Content-Length': request.bodyBytes.length.toString(),
         },
-        'Connection': 'keep-alive',
-        'Date': DateTime.now().toUtc().toIso8601String(),
-        'Max-Forwards': '10',
-        'Pragma': 'no-cache',
-        'User-Agent': Platform.I.version,
-        'DNT': '1',
+        if (Platform.I.isIO) ...<String, String>{
+          'Connection': 'keep-alive',
+          'Date': DateTime.now().toUtc().toIso8601String(),
+          'Max-Forwards': '10',
+          'Pragma': 'no-cache',
+          'User-Agent': Platform.I.version,
+          'DNT': '1',
+        },
         ...?headers,
       });
       final response = await _internalClient.send(request).then<http.Response>(http.Response.fromStream);
