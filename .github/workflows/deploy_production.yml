@@ -54,8 +54,9 @@ jobs:
         run: |
           flutter build web --release --no-source-maps \
             --no-tree-shake-icons --pwa-strategy offline-first \
-            --web-renderer auto --base-href / \
-            --dart-define=environment=production --dart-define=prod=true
+            --web-renderer canvaskit --base-href / \
+            --dart-define=environment=production --dart-define=prod=true \
+            --dart-define=ENDPOINT=${PROD_ENDPOINT}
 
       - name: 📁 Upload web build result
         uses: actions/upload-artifact@v2

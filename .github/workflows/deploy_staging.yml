@@ -74,8 +74,9 @@ jobs:
         run: |
           flutter build web --release --no-source-maps \
             --no-tree-shake-icons --pwa-strategy offline-first \
-            --web-renderer auto --base-href / \
-            --dart-define=environment=staging --dart-define=stage=true
+            --web-renderer canvaskit --base-href / \
+            --dart-define=environment=staging --dart-define=stage=true \
+            --dart-define=ENDPOINT=${STAGE_ENDPOINT}
 
       - name: 📁 Upload web build result
         uses: actions/upload-artifact@v2
