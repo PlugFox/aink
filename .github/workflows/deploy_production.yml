@@ -56,7 +56,7 @@ jobs:
             --no-tree-shake-icons --pwa-strategy offline-first \
             --web-renderer canvaskit --base-href / \
             --dart-define=environment=production --dart-define=prod=true \
-            --dart-define=ENDPOINT=${PROD_ENDPOINT}
+            --dart-define=ENDPOINT=${{ secrets.PROD_ENDPOINT }}
 
       - name: 📁 Upload web build result
         uses: actions/upload-artifact@v2

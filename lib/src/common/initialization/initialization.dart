@@ -32,6 +32,7 @@ FutureOr<void> initializeApp({
         }
       } on Object catch (error, stackTrace) {
         onError?.call(error, stackTrace).ignore();
+        // TODO: force log and send crashlytics exception
         rethrow;
       } finally {
         stopwatch.stop();

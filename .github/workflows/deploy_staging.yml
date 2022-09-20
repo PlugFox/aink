@@ -76,7 +76,7 @@ jobs:
             --no-tree-shake-icons --pwa-strategy offline-first \
             --web-renderer canvaskit --base-href / \
             --dart-define=environment=staging --dart-define=stage=true \
-            --dart-define=ENDPOINT=${STAGE_ENDPOINT}
+            --dart-define=ENDPOINT=${{ secrets.STAGE_ENDPOINT }}
 
       - name: 📁 Upload web build result
         uses: actions/upload-artifact@v2
