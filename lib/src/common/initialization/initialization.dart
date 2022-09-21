@@ -10,6 +10,7 @@ import '../constant/firebase_options.g.dart';
 import '../constant/pubspec.yaml.g.dart' as pubspec;
 import '../util/error_util.dart';
 import '../util/screen_util.dart';
+import 'platform/platform_initialization.dart';
 
 Future<void>? _$initializeApp;
 FutureOr<void> initializeApp({
@@ -28,6 +29,7 @@ FutureOr<void> initializeApp({
           ]); */
           await _initFirebase();
           await _catchExceptions();
+          platformInitialization().ignore();
           FirebaseAnalytics.instance.logAppOpen().ignore();
         }
       } on Object catch (error, stackTrace) {
