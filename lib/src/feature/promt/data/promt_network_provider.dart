@@ -45,6 +45,7 @@ class PromtNetworkDataProviderImpl implements IPromtNetworkDataProvider {
           return;
         }
         switch (data['task_status'] as String?) {
+          case 'RECEIVED':
           case 'STARTED':
             return;
           case 'SUCCESS':
