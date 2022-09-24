@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_batteries/flutter_batteries.dart';
 
+import '../../../common/util/screen_util.dart';
 import 'wheel_bottom_bar.dart';
 import 'wheel_controller.dart';
 import 'wheel_pages.dart';
+import 'wheel_title.dart';
 
 /// {@template wheel_screen}
 /// WheelScreen widget
@@ -72,7 +74,40 @@ class _WheelScreenState extends State<WheelScreen> {
             ),
           ),
           body: SafeArea(
-            child: WheelPages(controller: _controller),
+            child: LayoutBuilder(
+              builder: (context, constrains) {
+                final biggest = constrains.biggest;
+                final orientation = biggest.width > biggest.height ? Orientation.landscape : Orientation.portrait;
+                final sidePadding = ScreenUtil.from(biggest).when<double>(
+                  extraSmall: () => 0,
+                  small: () => 16,
+                  medium: () => 16,
+                  large: () => 24,
+                  extraLarge: () => 48,
+                );
+                return Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Positioned.fill(child: WheelPages(controller: _controller)),
+                    AnimatedPositioned(
+                      duration: const Duration(milliseconds: 500),
+                      top: biggest.height / 20,
+                      height: 64,
+                      left: sidePadding,
+                      right: sidePadding,
+                      child: AnimatedAlign(
+                        duration: const Duration(milliseconds: 500),
+                        alignment: orientation == Orientation.landscape ? Alignment.centerLeft : Alignment.center,
+                        child: WheelTitle(
+                          titles: const <String>['Gallery', 'Prompt', 'Settings'],
+                          controller: _controller,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       );
