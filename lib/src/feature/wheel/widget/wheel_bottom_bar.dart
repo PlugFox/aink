@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class WheelBottomBar extends StatelessWidget {
   /// {@macro wheel_bottom_bar}
-
   const WheelBottomBar({
     required this.items,
     this.currentIndex = 0,
