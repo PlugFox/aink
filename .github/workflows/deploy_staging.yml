@@ -1,16 +1,6 @@
 name: DEPLOY STAGING
 
 on:
-  push:
-    branches:
-      - "master"
-      - "develop"
-      - "release/**"
-    paths:
-      - "lib/**.dart"
-      - "test/**.dart"
-      - "pubspec.yaml"
-      - "pubspec.lock"
   pull_request:
     branches:
       - "master"

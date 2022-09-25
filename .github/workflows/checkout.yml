@@ -15,20 +15,6 @@ on:
       - "test/**.dart"
       - "pubspec.yaml"
       - "pubspec.lock"
-  pull_request:
-    branches:
-      - "master"
-      - "develop"
-      - "release/**"
-      - "feature/**"
-      - "bugfix/**"
-      - "hotfix/**"
-      - "support/**"
-    paths:
-      - "lib/**.dart"
-      - "test/**.dart"
-      - "pubspec.yaml"
-      - "pubspec.lock"
   workflow_dispatch:
 
 jobs:

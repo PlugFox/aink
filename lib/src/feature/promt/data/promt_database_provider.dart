@@ -13,20 +13,20 @@ abstract class IPromtDatabaseProvider {
 class PromtDatabaseProviderImpl implements IPromtDatabaseProvider {
   PromtDatabaseProviderImpl({required SharedPreferences sharedPreferences}) : _sharedPreferences = sharedPreferences;
 
-  static const String _promtTextKey = 'promt.text';
+  static const String _promtKey = 'current-promt';
 
   final SharedPreferences _sharedPreferences;
 
   @override
   PromtEntity? getPromt() {
-    final json = _sharedPreferences.getString(_promtTextKey);
+    final json = _sharedPreferences.getString(_promtKey);
     if (json == null) return null;
     return PromtEntity.fromJson(jsonDecode(json) as Map<String, Object?>);
   }
 
   @override
-  Future<void> setPromt(PromtEntity promt) => _sharedPreferences.setString(_promtTextKey, jsonEncode(promt.toJson()));
+  Future<void> setPromt(PromtEntity promt) => _sharedPreferences.setString(_promtKey, jsonEncode(promt.toJson()));
 
   @override
-  Future<void> clearPromt() => _sharedPreferences.remove(_promtTextKey);
+  Future<void> clearPromt() => _sharedPreferences.remove(_promtKey);
 }
