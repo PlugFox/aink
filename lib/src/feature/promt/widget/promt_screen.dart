@@ -98,6 +98,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
             bloc: Dependencies.instance.promtBLoC,
             listener: (context, state) => state.mapOrNull(
               error: (state) => ErrorUtil.showSnackBar(context, state.message),
+              processing: (state) => _inputController.text = state.data.promt ?? '',
             ),
             child: SafeArea(
               child: Padding(
