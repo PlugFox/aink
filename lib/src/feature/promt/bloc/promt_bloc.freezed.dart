@@ -16,42 +16,43 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PromtEvent {
-  String get promt => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() restore,
     required TResult Function(String promt) generate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? restore,
     TResult Function(String promt)? generate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? restore,
     TResult Function(String promt)? generate,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(RestorePromtEvent value) restore,
     required TResult Function(GeneratePromtEvent value) generate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(RestorePromtEvent value)? restore,
     TResult Function(GeneratePromtEvent value)? generate,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(RestorePromtEvent value)? restore,
     TResult Function(GeneratePromtEvent value)? generate,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $PromtEventCopyWith<PromtEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -60,7 +61,6 @@ abstract class $PromtEventCopyWith<$Res> {
   factory $PromtEventCopyWith(
           PromtEvent value, $Res Function(PromtEvent) then) =
       _$PromtEventCopyWithImpl<$Res>;
-  $Res call({String promt});
 }
 
 /// @nodoc
@@ -70,27 +70,119 @@ class _$PromtEventCopyWithImpl<$Res> implements $PromtEventCopyWith<$Res> {
   final PromtEvent _value;
   // ignore: unused_field
   final $Res Function(PromtEvent) _then;
-
-  @override
-  $Res call({
-    Object? promt = freezed,
-  }) {
-    return _then(_value.copyWith(
-      promt: promt == freezed
-          ? _value.promt
-          : promt // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
-abstract class _$$GeneratePromtEventCopyWith<$Res>
-    implements $PromtEventCopyWith<$Res> {
+abstract class _$$RestorePromtEventCopyWith<$Res> {
+  factory _$$RestorePromtEventCopyWith(
+          _$RestorePromtEvent value, $Res Function(_$RestorePromtEvent) then) =
+      __$$RestorePromtEventCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$RestorePromtEventCopyWithImpl<$Res>
+    extends _$PromtEventCopyWithImpl<$Res>
+    implements _$$RestorePromtEventCopyWith<$Res> {
+  __$$RestorePromtEventCopyWithImpl(
+      _$RestorePromtEvent _value, $Res Function(_$RestorePromtEvent) _then)
+      : super(_value, (v) => _then(v as _$RestorePromtEvent));
+
+  @override
+  _$RestorePromtEvent get _value => super._value as _$RestorePromtEvent;
+}
+
+/// @nodoc
+
+class _$RestorePromtEvent extends RestorePromtEvent {
+  const _$RestorePromtEvent() : super._();
+
+  @override
+  String toString() {
+    return 'PromtEvent.restore()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$RestorePromtEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() restore,
+    required TResult Function(String promt) generate,
+  }) {
+    return restore();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? restore,
+    TResult Function(String promt)? generate,
+  }) {
+    return restore?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? restore,
+    TResult Function(String promt)? generate,
+    required TResult orElse(),
+  }) {
+    if (restore != null) {
+      return restore();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(RestorePromtEvent value) restore,
+    required TResult Function(GeneratePromtEvent value) generate,
+  }) {
+    return restore(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(RestorePromtEvent value)? restore,
+    TResult Function(GeneratePromtEvent value)? generate,
+  }) {
+    return restore?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(RestorePromtEvent value)? restore,
+    TResult Function(GeneratePromtEvent value)? generate,
+    required TResult orElse(),
+  }) {
+    if (restore != null) {
+      return restore(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RestorePromtEvent extends PromtEvent {
+  const factory RestorePromtEvent() = _$RestorePromtEvent;
+  const RestorePromtEvent._() : super._();
+}
+
+/// @nodoc
+abstract class _$$GeneratePromtEventCopyWith<$Res> {
   factory _$$GeneratePromtEventCopyWith(_$GeneratePromtEvent value,
           $Res Function(_$GeneratePromtEvent) then) =
       __$$GeneratePromtEventCopyWithImpl<$Res>;
-  @override
   $Res call({String promt});
 }
 
@@ -152,6 +244,7 @@ class _$GeneratePromtEvent extends GeneratePromtEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() restore,
     required TResult Function(String promt) generate,
   }) {
     return generate(promt);
@@ -160,6 +253,7 @@ class _$GeneratePromtEvent extends GeneratePromtEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? restore,
     TResult Function(String promt)? generate,
   }) {
     return generate?.call(promt);
@@ -168,6 +262,7 @@ class _$GeneratePromtEvent extends GeneratePromtEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? restore,
     TResult Function(String promt)? generate,
     required TResult orElse(),
   }) {
@@ -180,6 +275,7 @@ class _$GeneratePromtEvent extends GeneratePromtEvent {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(RestorePromtEvent value) restore,
     required TResult Function(GeneratePromtEvent value) generate,
   }) {
     return generate(this);
@@ -188,6 +284,7 @@ class _$GeneratePromtEvent extends GeneratePromtEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(RestorePromtEvent value)? restore,
     TResult Function(GeneratePromtEvent value)? generate,
   }) {
     return generate?.call(this);
@@ -196,6 +293,7 @@ class _$GeneratePromtEvent extends GeneratePromtEvent {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(RestorePromtEvent value)? restore,
     TResult Function(GeneratePromtEvent value)? generate,
     required TResult orElse(),
   }) {
@@ -211,9 +309,7 @@ abstract class GeneratePromtEvent extends PromtEvent {
       _$GeneratePromtEvent;
   const GeneratePromtEvent._() : super._();
 
-  @override
   String get promt;
-  @override
   @JsonKey(ignore: true)
   _$$GeneratePromtEventCopyWith<_$GeneratePromtEvent> get copyWith =>
       throw _privateConstructorUsedError;

@@ -1,7 +1,7 @@
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 
 /// ***************************************************************************
-/// *                            pubspec_generator                            *
+/// *                            pubspec_generator                            * 
 /// ***************************************************************************
 
 /*
@@ -58,7 +58,7 @@ const List<String> pre = <String>[];
 const List<String> build = <String>[r'1'];
 
 /// Build date in Unix Time (in seconds)
-const int timestamp = 1662821932;
+const int timestamp = 1664063921;
 
 /// Name [name]
 const String name = r'aink';
@@ -99,17 +99,24 @@ const Map<String, Object> dependencies = <String, Object>{
   'firebase_core': r'any',
   'firebase_analytics': r'any',
   'stream_bloc': r'^0.5.1',
+  'flutter_bloc': r'^8.1.1',
+  'animations': r'^2.0.4',
+  'photo_view': r'^0.14.0',
   'meta': r'any',
   'equatable': r'any',
   'json_annotation': r'any',
   'freezed_annotation': r'any',
+  'http': r'^0.13.5',
   'shared_preferences': r'any',
   'l': r'any',
   'intl': r'any',
+  'path': r'^1.8.2',
   'url_launcher': r'any',
   'theme_tailor_annotation': r'any',
   'platform_info': r'any',
   'flutter_batteries': r'^0.0.6-dev',
+  'flutter_blurhash': r'^0.7.0',
+  'blobs': r'^2.0.0',
 };
 
 /// Developer dependencies
