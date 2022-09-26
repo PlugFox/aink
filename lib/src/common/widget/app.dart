@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import '../../feature/authentication/widget/authentication_scope.dart';
 import '../../feature/wheel/widget/wheel_screen.dart';
 import '../localization/localization.dart';
 
@@ -35,7 +36,9 @@ class App extends StatelessWidget {
           child: Banner(
             message: 'PREVIEW',
             location: BannerLocation.topEnd,
-            child: child,
+            child: AuthenticationScope(
+              child: child ?? const SizedBox.shrink(),
+            ),
           ),
         ),
       );
