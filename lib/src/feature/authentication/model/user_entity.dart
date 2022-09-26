@@ -107,7 +107,8 @@ class AuthenticatedUser extends UserEntity with UserDetails {
   bool operator ==(Object other) => identical(this, other) || (other is AuthenticatedUser && uid == other.uid);
 
   @override
-  String toString() => 'AuthenticatedUser{uid: $uid, '
+  String toString() => 'AuthenticatedUser{'
+      'uid: $uid, '
       'name: $name, '
       'email: $email, '
       'phone: $phone, '
