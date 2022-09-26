@@ -58,7 +58,7 @@ const List<String> pre = <String>[];
 const List<String> build = <String>[r'1'];
 
 /// Build date in Unix Time (in seconds)
-const int timestamp = 1664230790;
+const int timestamp = 1664234888;
 
 /// Name [name]
 const String name = r'aink';
@@ -99,6 +99,7 @@ const Map<String, Object> dependencies = <String, Object>{
   'firebase_core': r'any',
   'firebase_analytics': r'any',
   'firebase_auth': r'any',
+  'google_sign_in': r'^5.4.2',
   'stream_bloc': r'^0.5.1',
   'flutter_bloc': r'^8.1.1',
   'google_fonts': r'^3.0.1',

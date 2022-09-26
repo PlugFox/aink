@@ -2,11 +2,25 @@ part of 'authentication_bloc.dart';
 
 @freezed
 class AuthenticationState with _$AuthenticationState {
-  AuthenticationState._();
-  const factory AuthenticationState.notAuthenticated() = _notAuthenticated;
-  const factory AuthenticationState.processing({required UserEntity user}) = _processing;
-  const factory AuthenticationState.error({required UserEntity user}) = _error;
-  const factory AuthenticationState.authenticated({required AuthenticatedUser user}) = _authenticated;
+  const AuthenticationState._();
+  const factory AuthenticationState.notAuthenticated({
+    @Default('Not authenticated') final String message,
+  }) = _notAuthenticated;
+
+  const factory AuthenticationState.processing({
+    required UserEntity user,
+    @Default('Processing...') final String message,
+  }) = _processing;
+
+  const factory AuthenticationState.error({
+    required UserEntity user,
+    @Default('An error occurred during authentication') final String message,
+  }) = _error;
+
+  const factory AuthenticationState.authenticated({
+    required AuthenticatedUser user,
+    @Default('Authenticated') final String message,
+  }) = _authenticated;
 
   // ignore: prefer_constructors_over_static_methods
   static AuthenticationState fromUser(UserEntity user) => user.map<AuthenticationState>(
@@ -21,19 +35,24 @@ class AuthenticationState with _$AuthenticationState {
         authenticated: (state) => state.user,
       );
 
-  AuthenticatedUser? get authenticatedOrNull => mapOrNull<AuthenticatedUser?>(
-        notAuthenticated: (_) => null,
-        processing: (state) => state.authenticatedOrNull,
-        error: (state) => state.authenticatedOrNull,
-        authenticated: (state) => state.user,
+  AuthenticatedUser? get authenticatedOrNull => user.map<AuthenticatedUser?>(
+        authenticated: (user) => user,
+        unauthenticated: (_) => null,
       );
 
-  bool get isAuthenticated => map<bool>(
-        notAuthenticated: (_) => false,
-        processing: (state) => state.user.isAuthenticated,
-        error: (state) => state.user.isAuthenticated,
-        authenticated: (_) => true,
+  bool get isAuthenticated => user.isAuthenticated;
+
+  bool get isNotAuthenticated => user.isNotAuthenticated;
+
+  bool get isProcessing => maybeMap<bool>(
+        processing: (_) => true,
+        orElse: () => false,
       );
 
-  bool get isNotAuthenticated => !isAuthenticated;
+  bool get isError => maybeMap<bool>(
+        error: (_) => true,
+        orElse: () => false,
+      );
+
+  bool get isNotError => !isError;
 }

@@ -8,7 +8,9 @@ import 'authentication_provider_io.dart'
 abstract class IAuthenticationProvider {
   UserEntity get currentUser;
 
-  Future<void> googleSignIn();
+  Stream<UserEntity> get userChanges;
+
+  Future<UserEntity> googleSignIn();
 
   Future<void> logOut();
 }

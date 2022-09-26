@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "830814404281",
+    "project_id": "ai-ink",
+    "storage_bucket": "ai-ink.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830814404281:android:1a3bbb276a310811452568",
+        "android_client_info": {
+          "package_name": "dev.plugfox.aink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830814404281-uv104dmd2hq67pc49jpgrd969r80f2qg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.plugfox.aink",
+            "certificate_hash": "092e8891f361bc0f0af4ca34e8f627a85ec6c748"
+          }
+        },
+        {
+          "client_id": "830814404281-810moh0ft9v7vqb4fosa78f8mfroqilh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGpt5EfTvyNBkvSJtyzPh7J-nX--cQNo8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830814404281-810moh0ft9v7vqb4fosa78f8mfroqilh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.plugfox.aink"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

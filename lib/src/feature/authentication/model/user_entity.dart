@@ -17,7 +17,7 @@ abstract class UserEntity {
     String? photo,
   }) = AuthenticatedUser;
 
-  factory UserEntity.fromFirebase({User? user}) => user != null
+  factory UserEntity.fromFirebase(User? user) => user != null
       ? UserEntity.authenticated(
           uid: user.uid,
           name: user.displayName ?? 'Unknown',

@@ -4,22 +4,27 @@ import 'authentication_provider.dart';
 abstract class IAuthenticationRepository {
   UserEntity get currentUser;
 
-  Future<void> googleSignIn();
+  Stream<UserEntity> get userChanges;
+
+  Future<UserEntity> googleSignIn();
 
   Future<void> logOut();
 }
 
-class AuthenticationRepository implements IAuthenticationRepository {
-  AuthenticationRepository({required IAuthenticationProvider authenticationProvider})
+class AuthenticationRepositoryImpl implements IAuthenticationRepository {
+  AuthenticationRepositoryImpl({required IAuthenticationProvider authenticationProvider})
       : _authenticationProvider = authenticationProvider;
 
   final IAuthenticationProvider _authenticationProvider;
 
   @override
-  UserEntity get currentUser => throw UnimplementedError();
+  UserEntity get currentUser => _authenticationProvider.currentUser;
 
   @override
-  Future<void> googleSignIn() => _authenticationProvider.googleSignIn();
+  Stream<UserEntity> get userChanges => _authenticationProvider.userChanges;
+
+  @override
+  Future<UserEntity> googleSignIn() => _authenticationProvider.googleSignIn();
 
   @override
   Future<void> logOut() => _authenticationProvider.logOut();
