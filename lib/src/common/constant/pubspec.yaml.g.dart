@@ -58,7 +58,7 @@ const List<String> pre = <String>[];
 const List<String> build = <String>[r'1'];
 
 /// Build date in Unix Time (in seconds)
-const int timestamp = 1664234888;
+const int timestamp = 1664312739;
 
 /// Name [name]
 const String name = r'aink';
@@ -144,9 +144,7 @@ const Map<String, Object> devDependencies = <String, Object>{
 };
 
 /// Dependency overrides
-const Map<String, Object> dependencyOverrides = <String, Object>{
-  'analyzer': r'>=4.2.0 <5.0.0',
-};
+const Map<String, Object> dependencyOverrides = <String, Object>{};
 
 /// Executables
 const Map<String, Object> executables = <String, Object>{};

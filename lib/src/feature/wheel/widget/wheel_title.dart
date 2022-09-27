@@ -17,7 +17,7 @@ class WheelTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DefaultTextStyle(
         style: GoogleFonts.sofia(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Theme.of(context).colorScheme.primary,
           fontSize: 64,
           height: 1,
           fontWeight: FontWeight.w600,

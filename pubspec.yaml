@@ -77,8 +77,8 @@ dev_dependencies:
   freezed: any
   flutter_gen_runner: any
 
-dependency_overrides:
-  analyzer: ">=4.2.0 <5.0.0"
+#dependency_overrides:
+#  analyzer: ">=4.2.0 <5.0.0"
 
 flutter:
   uses-material-design: true

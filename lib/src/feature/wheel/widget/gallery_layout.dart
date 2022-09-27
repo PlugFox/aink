@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class GalleryLayout extends StatelessWidget {
   /// {@macro gallery_layout}
-  GalleryLayout({required this.children, super.key}) : assert(children.isNotEmpty, 'children must not be empty');
+  GalleryLayout({
+    required this.children,
+    super.key,
+  }) : assert(children.isNotEmpty, 'children must not be empty');
 
   final List<Widget> children;
 
