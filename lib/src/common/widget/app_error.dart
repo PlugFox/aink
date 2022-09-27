@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'app.dart';
-
 /// {@template app_error}
 /// AppError widget
 /// {@endtemplate}
-class AppError extends App {
+class AppError extends StatelessWidget {
   /// {@macro app_error}
   const AppError({
     Key? key,
