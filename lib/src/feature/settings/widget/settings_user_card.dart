@@ -72,7 +72,7 @@ class SettingsUserCard extends StatelessWidget {
                                   ),
                             ),
                             Text(
-                              'a@a.a',
+                              user.email,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.caption?.copyWith(
@@ -93,9 +93,12 @@ class SettingsUserCard extends StatelessWidget {
             Positioned.fill(
               child: Align(
                 alignment: Alignment.centerRight,
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(photo),
+                child: Tooltip(
+                  message: user.uid,
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: NetworkImage(photo),
+                  ),
                 ),
               ),
             ),
