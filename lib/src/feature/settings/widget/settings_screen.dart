@@ -32,7 +32,7 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 title: const Text('Dark theme'),
                 trailing: Switch(
-                  value: state.data.theme == SettingsTheme.dark,
+                  value: Theme.of(context).brightness == Brightness.dark,
                   onChanged: (value) => Dependencies.instance.settingsBLoC.add(
                     SettingsEvent.mutate(
                       state.data.copyWith(
