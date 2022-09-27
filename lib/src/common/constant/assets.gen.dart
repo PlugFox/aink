@@ -9,6 +9,13 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsFontGen {
+  const $AssetsFontGen();
+
+  /// File path: assets/font/Sofia-Regular.ttf
+  String get sofiaRegular => 'assets/font/Sofia-Regular.ttf';
+}
+
 class $AssetsImageGen {
   const $AssetsImageGen();
 
@@ -19,6 +26,7 @@ class $AssetsImageGen {
 class Assets {
   Assets._();
 
+  static const $AssetsFontGen font = $AssetsFontGen();
   static const $AssetsImageGen image = $AssetsImageGen();
 }
 
