@@ -23,13 +23,16 @@ class AuthenticationScope extends StatefulWidget {
   /// The widget below this widget in the tree.
   final Widget child;
 
+  static AuthenticationState? _stateOf(BuildContext context, bool listen) => listen
+      ? context.dependOnInheritedWidgetOfExactType<_InheritedAuthenticationScope>()?.state
+      : (context.getElementForInheritedWidgetOfExactType<_InheritedAuthenticationScope>()?.widget
+              as _InheritedAuthenticationScope?)
+          ?.state;
+
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
   /// e.g. `AuthenticationScope.maybeUserOf(context)`
-  static UserEntity? maybeUserOf(BuildContext context) {
-    final inhW = context.getElementForInheritedWidgetOfExactType<_InheritedAuthenticationScope>()?.widget;
-    return inhW is _InheritedAuthenticationScope ? inhW.state.user : null;
-  }
+  static UserEntity? maybeUserOf(BuildContext context, {bool listen = true}) => _stateOf(context, listen)?.user;
 
   static Never _notFoundInheritedWidgetOfExactType() => throw ArgumentError(
         'Out of scope, not found inherited widget '
@@ -40,7 +43,11 @@ class AuthenticationScope extends StatefulWidget {
   /// The state from the closest instance of this class
   /// that encloses the given context.
   /// e.g. `AuthenticationScope.userOf(context)`
-  static UserEntity userOf(BuildContext context) => maybeUserOf(context) ?? _notFoundInheritedWidgetOfExactType();
+  static UserEntity userOf(BuildContext context, {bool listen = true}) =>
+      maybeUserOf(context, listen: listen) ?? _notFoundInheritedWidgetOfExactType();
+
+  static void logOut(BuildContext context) =>
+      context.findAncestorStateOfType<_AuthenticationScopeState>()!._bloc.add(const AuthenticationEvent.logOut());
 
   @override
   State<AuthenticationScope> createState() => _AuthenticationScopeState();
@@ -48,7 +55,7 @@ class AuthenticationScope extends StatefulWidget {
 
 /// State for widget AuthenticationScope
 class _AuthenticationScopeState extends State<AuthenticationScope> {
-  final AuthenticationBloc _bloc = AuthenticationBloc(
+  final AuthenticationBLoC _bloc = AuthenticationBLoC(
     repository: AuthenticationRepositoryImpl(
       authenticationProvider: AuthenticationProviderFactory().create(
         firebaseAuth: FirebaseAuth.instance,

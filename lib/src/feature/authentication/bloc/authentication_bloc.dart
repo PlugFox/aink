@@ -13,8 +13,8 @@ part 'authentication_bloc.freezed.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
-class AuthenticationBloc extends StreamBloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({required IAuthenticationRepository repository})
+class AuthenticationBLoC extends StreamBloc<AuthenticationEvent, AuthenticationState> {
+  AuthenticationBLoC({required IAuthenticationRepository repository})
       : _repository = repository,
         super(AuthenticationState.fromUser(repository.currentUser)) {
     _userChangesSubscription = repository.userChanges.listen(_emitUser);

@@ -5,9 +5,10 @@ import 'package:flutter/services.dart';
 
 import '../../promt/widget/promt_layout.dart';
 import '../../promt/widget/promt_screen.dart';
+import '../../settings/widget/settings_screen.dart';
 import 'colored_card.dart';
 import 'gallery_layout.dart';
-import 'history_layout.dart';
+import 'settings_layout.dart';
 import 'wheel_controller.dart';
 
 /// {@template wheel_pages}
@@ -103,9 +104,29 @@ class WheelPages extends StatelessWidget {
           ),
           _WheelPageConstraints(
             onTap: () {
+              Navigator.push<void>(
+                context,
+                PageRouteBuilder<void>(
+                  pageBuilder: (context, _, __) => const SettingsScreen(),
+                  transitionsBuilder: (
+                    context,
+                    animation,
+                    secondayAnimation,
+                    child,
+                  ) =>
+                      ScaleTransition(
+                    scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
+                    child: FadeTransition(
+                      opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
+                      child: child,
+                    ),
+                  ),
+                  settings: const RouteSettings(name: 'settings'),
+                ),
+              );
               HapticFeedback.lightImpact().ignore();
             },
-            child: HistoryLayout(
+            child: SettingsLayout(
               children: const <Widget>[
                 ColoredCard.compact(
                   color: Colors.red,
