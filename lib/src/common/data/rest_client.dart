@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
@@ -70,12 +71,11 @@ class RestClient {
       rethrow;
     } on http.ClientException catch (error, stackTrace) {
       Error.throwWithStackTrace(InternetException(error.message), stackTrace);
+    } on HandshakeException catch (error, stackTrace) {
+      Error.throwWithStackTrace(ServerInternalException(message: error.message), stackTrace);
     } on Object catch (error, stackTrace) {
       if (error is! NetworkException) {
-        Error.throwWithStackTrace(
-          UnsupportedError('Unknown exception: $error'),
-          stackTrace,
-        );
+        Error.throwWithStackTrace(UnsupportedError('Unknown exception: $error'), stackTrace);
       }
       rethrow;
     }
@@ -121,8 +121,8 @@ class RestClient {
     } else {
       Error.throwWithStackTrace(
         ServerInternalException(
-          message:
-              'Server returned invalid content type: ${response.headers['content-type'] ?? response.headers['Content-Type'] ?? 'null'}',
+          message: 'Server returned invalid content type: '
+              '${response.headers['content-type'] ?? response.headers['Content-Type'] ?? 'null'}',
         ),
         StackTrace.fromString('${StackTrace.current}\n'
             'Headers: "${jsonEncode(response.headers)}"'),
