@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/initialization/dependencies.dart';
+import '../../authentication/widget/authentication_scope.dart';
 import '../bloc/settings_bloc.dart';
 import '../model/settings_entity.dart';
 import 'settings_user_card.dart';
@@ -29,6 +31,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             children: <Widget>[
               const SettingsUserCard(),
+              const SizedBox(height: 16),
               ListTile(
                 title: const Text('Dark theme'),
                 trailing: Switch(
@@ -42,8 +45,45 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              //const Divider(),
+              const SizedBox(height: 48),
+              ListTile(
+                title: OutlinedButton.icon(
+                  icon: const Icon(Icons.logout, color: Colors.red),
+                  label: const Text('Logout', style: TextStyle(color: Colors.red)),
+                  onPressed: () => _logOut(context),
+                ),
+              ),
             ],
           ),
         ),
       );
+
+  void _logOut(BuildContext context) {
+    HapticFeedback.lightImpact().ignore();
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        //icon: const Icon(Icons.logout),
+        title: const Text('Sign out'),
+        content: const Text('Do you really want to log out?'),
+        actions: <Widget>[
+          OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              HapticFeedback.lightImpact().ignore();
+            },
+            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              AuthenticationScope.logOut(context);
+              HapticFeedback.mediumImpact().ignore();
+            },
+            child: Text(MaterialLocalizations.of(context).continueButtonLabel),
+          ),
+        ],
+      ),
+    );
+  }
 }

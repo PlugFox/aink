@@ -37,6 +37,7 @@ dependencies:
   animations: ^2.0.4
   animated_text_kit: ^4.2.2
   photo_view: ^0.14.0
+  font_awesome_flutter: ^10.2.1
 
   # Models and annotation
   meta: any

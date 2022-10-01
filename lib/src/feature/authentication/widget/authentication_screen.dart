@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../bloc/authentication_bloc.dart';
 
@@ -22,21 +25,50 @@ class AuthenticationScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Authentication'),
+          centerTitle: true,
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(
+              horizontal: math.max(24, (MediaQuery.of(context).size.width - 600) / 2),
+              vertical: 16,
+            ),
             children: <Widget>[
-              Text('${state.user}'),
               if (state.isNotAuthenticated)
-                ElevatedButton(
+                ElevatedButton.icon(
+                  key: const ValueKey<String>('google_sign_in_button'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffDF4A32),
+                    padding: const EdgeInsets.all(16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                  ),
                   onPressed: state.isProcessing ? null : onGoogleSignIn,
-                  child: const Text('Log in with Google'),
+                  label: const Text('Login with Google'),
+                  icon: const Icon(FontAwesomeIcons.google),
                 ),
               if (state.isAuthenticated)
-                ElevatedButton(
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    padding: const EdgeInsets.all(16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                  ),
                   onPressed: state.isProcessing ? null : onLogOut,
-                  child: const Text('Log out'),
+                  label: const Text('Sign out'),
+                  icon: const Icon(Icons.logout),
                 ),
             ],
           ),
