@@ -35,6 +35,15 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Flutter Version Manager
+.fvm/flutter_sdk
+
+# Flutter codegeneration
+*.freezed.dart
+*.g.dart
+*.gql.dart
+!lib/src/common/constant/firebase_options.g.dart
+
 # Symbolication related
 app.*.symbols
 

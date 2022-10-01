@@ -22,11 +22,15 @@ class SettingsEntity with Comparable<SettingsEntity> {
 
   final DateTime updated;
 
-  factory SettingsEntity.fromJson(Map<String, Object?> json) => SettingsEntity(
-        theme: SettingsTheme.fromString(json['theme'] as String?),
-        //locale: json['locale'] as String?,
-        updated: DateTime.parse((json['updated'] as String?)!).toLocal(),
-      );
+  factory SettingsEntity.fromJson(Map<String, Object?> json) {
+    final updatedRaw = json['updated'] as String?;
+    final updated = (updatedRaw != null ? DateTime.tryParse(updatedRaw) ?? DateTime.now() : DateTime.now()).toUtc();
+    return SettingsEntity(
+      theme: SettingsTheme.fromString(json['theme'] as String?),
+      //locale: json['locale'] as String?,
+      updated: updated,
+    );
+  }
 
   @useResult
   Map<String, Object?> toJson() => <String, Object?>{
@@ -48,7 +52,7 @@ class SettingsEntity with Comparable<SettingsEntity> {
       SettingsEntity(
         theme: newTheme ?? theme,
         //locale: newLocale ?? locale,
-        updated: DateTime.now(),
+        updated: DateTime.now().toUtc(),
       );
 
   @override

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/initialization/dependencies.dart';
@@ -12,14 +11,13 @@ class PromtSendButton extends StatelessWidget {
   /// {@macro promt_send_button}
   const PromtSendButton({
     required TextEditingController controller,
-    required FocusNode focusNode,
-    // ignore: unused_element
+    required VoidCallback onSubmit,
     super.key,
   })  : _inputController = controller,
-        _focusNode = focusNode;
+        _onSubmit = onSubmit;
 
   final TextEditingController _inputController;
-  final FocusNode _focusNode;
+  final VoidCallback _onSubmit;
 
   @override
   Widget build(BuildContext context) => SizedBox.square(
@@ -32,15 +30,14 @@ class PromtSendButton extends StatelessWidget {
           ),
           child: BlocBuilder<PromtBLoC, PromtState>(
             bloc: Dependencies.instance.promtBLoC,
-            builder: (context, state) =>
-                ValueListenableBuilder<TextEditingValue>(
+            builder: (context, state) => ValueListenableBuilder<TextEditingValue>(
               valueListenable: _inputController,
               builder: (context, value, child) {
                 final enabled = value.text.length > 2 && !state.isProcessing;
                 return InkWell(
                   key: const ValueKey<String>('promt_send'),
                   borderRadius: BorderRadius.circular(16),
-                  onTap: enabled ? _send : null,
+                  onTap: enabled ? _onSubmit : null,
                   child: Align(
                     alignment: const Alignment(0.1, 0),
                     child: AnimatedScale(
@@ -61,11 +58,4 @@ class PromtSendButton extends StatelessWidget {
           ),
         ),
       );
-
-  void _send() {
-    _focusNode.unfocus();
-    Dependencies.instance.promtBLoC
-        .add(PromtEvent.generate(promt: _inputController.text));
-    HapticFeedback.heavyImpact().ignore();
-  }
 }

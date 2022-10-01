@@ -66,7 +66,7 @@ class SettingsUserCard extends StatelessWidget {
                               user.name,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.headline4?.copyWith(
+                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -75,7 +75,7 @@ class SettingsUserCard extends StatelessWidget {
                               user.email,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.caption?.copyWith(
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                   ),

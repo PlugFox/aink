@@ -26,4 +26,25 @@
         ]
     },
     "dart.lineLength": 120,
+
+    // Flutter Version Manager
+    "dart.flutterSdkPath": ".fvm/flutter_sdk",
+
+    // Remove .fvm files from search
+    "search.exclude": {
+        "**/.fvm": true,
+        ".firebase": true,
+        ".dart_tool": true,
+        "coverage": true,
+        "build": true,
+    },
+
+    // Remove from file watching
+    "files.watcherExclude": {
+        "**/.fvm": true,
+        ".firebase": true,
+        ".dart_tool": true,
+        "coverage": true,
+        "build": true,
+    }
 }

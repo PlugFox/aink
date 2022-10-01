@@ -1,4 +1,4 @@
-import 'package:blobs/blobs.dart';
+//import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 
@@ -58,6 +58,11 @@ class PromtImageCard extends StatelessWidget {
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 500),
                 child: ClipRRect(
+                  key: ValueKey<int>(
+                    <Object?>[_loading, _preview, _image]
+                        .map<int>((e) => (e != null && e != false) ? 1 : 0)
+                        .fold<int>(0, (r, e) => r * 10 + e),
+                  ),
                   clipBehavior: Clip.antiAlias,
                   borderRadius: BorderRadius.circular(16),
                   child: _buildImage(),
@@ -73,6 +78,17 @@ class PromtImageCard extends StatelessWidget {
     if (_loading) {
       return Center(
         child: LayoutBuilder(
+          builder: (context, constraints) => RepaintBoundary(
+            child: SizedBox.square(
+              dimension: constraints.biggest.shortestSide * 0.3,
+              child: const CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      );
+
+      /* return Center(
+        child: LayoutBuilder(
           builder: (context, constraints) => Blob.animatedRandom(
             duration: const Duration(milliseconds: 1000),
             size: constraints.biggest.shortestSide * 0.75,
@@ -84,8 +100,7 @@ class PromtImageCard extends StatelessWidget {
             loop: true,
           ),
         ),
-      );
-      //return const Center(child: CircularProgressIndicator());
+      ); */
     } else if (image == null) {
       return const Center(child: Text('No image'));
     } else {

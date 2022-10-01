@@ -119,6 +119,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                               child: PromtTextInput(
                                 focusNode: _focusNode,
                                 controller: _inputController,
+                                onSubmit: _onSubmit,
                               ),
                             ),
                           ),
@@ -127,27 +128,39 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                             animation: _animationController,
                             child: PromtSendButton(
                               controller: _inputController,
-                              focusNode: _focusNode,
+                              onSubmit: _onSubmit,
                             ),
                           ),
                           imageCard: ColoredCard.compact(
                             color: Colors.blue,
-                            child: _buildImage(state, 0),
+                            child: RepaintBoundary(
+                              key: const ValueKey('imageCard'),
+                              child: _buildImage(state, 0),
+                            ),
                           ),
                           previewCards: <Widget>[
                             ColoredCard.expanded(
                               animation: _animationController,
                               color: Colors.orange,
-                              child: _buildImage(state, 1),
+                              child: RepaintBoundary(
+                                key: const ValueKey('previewCards#1'),
+                                child: _buildImage(state, 1),
+                              ),
                             ),
                             ColoredCard.compact(
                               color: Colors.pink,
-                              child: _buildImage(state, 2),
+                              child: RepaintBoundary(
+                                key: const ValueKey('previewCards#2'),
+                                child: _buildImage(state, 2),
+                              ),
                             ),
                             ColoredCard.expanded(
                               animation: _animationController,
                               color: Colors.purple,
-                              child: _buildImage(state, 3),
+                              child: RepaintBoundary(
+                                key: const ValueKey('previewCards#3'),
+                                child: _buildImage(state, 3),
+                              ),
                             ),
                           ],
                         ),
@@ -160,6 +173,13 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
           ),
         ),
       );
+
+  void _onSubmit() {
+    if (Dependencies.instance.promtBLoC.state.isProcessing) return;
+    _focusNode.unfocus();
+    Dependencies.instance.promtBLoC.add(PromtEvent.generate(promt: _inputController.text));
+    HapticFeedback.heavyImpact().ignore();
+  }
 
   Widget _buildImage(PromtState state, int index) {
     final preview = index != 0;
@@ -197,6 +217,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
           : () {
               _focusNode.unfocus();
               HapticFeedback.lightImpact().ignore();
+              Dependencies.instance.promtBLoC.add(PromtEvent.focus(index: index));
             },
     );
   }

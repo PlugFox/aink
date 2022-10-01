@@ -12,13 +12,15 @@ class PromtTextInput extends StatelessWidget {
   const PromtTextInput({
     required TextEditingController controller,
     required FocusNode focusNode,
-    // ignore: unused_element
+    required VoidCallback onSubmit,
     super.key,
   })  : _inputController = controller,
-        _focusNode = focusNode;
+        _focusNode = focusNode,
+        _onSubmit = onSubmit;
 
   final TextEditingController _inputController;
   final FocusNode _focusNode;
+  final VoidCallback _onSubmit;
 
   @override
   Widget build(BuildContext context) => SizedBox(
@@ -49,12 +51,14 @@ class PromtTextInput extends StatelessWidget {
                         minLines: 1,
                         controller: _inputController,
                         focusNode: _focusNode,
+                        onSubmitted: (value) => _onSubmit(),
                         //cursorWidth: 1,
                         keyboardType: TextInputType.text,
+                        enableSuggestions: true,
+                        textInputAction: TextInputAction.send,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              letterSpacing: -0.5,
+                              fontSize: 14,
                             ),
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -62,7 +66,7 @@ class PromtTextInput extends StatelessWidget {
                           //helperText: 'Helper text',
                           //suffixIcon: Icon(Icons.manage_search, size: 32, color: Colors.grey.withOpacity(.5)),
                           //suffixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-                          hintStyle: Theme.of(context).textTheme.caption?.copyWith(
+                          hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,
                                 letterSpacing: 0.5,
