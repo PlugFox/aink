@@ -119,6 +119,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                               child: PromtTextInput(
                                 focusNode: _focusNode,
                                 controller: _inputController,
+                                onSubmit: _onSubmit,
                               ),
                             ),
                           ),
@@ -127,7 +128,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                             animation: _animationController,
                             child: PromtSendButton(
                               controller: _inputController,
-                              focusNode: _focusNode,
+                              onSubmit: _onSubmit,
                             ),
                           ),
                           imageCard: ColoredCard.compact(
@@ -160,6 +161,13 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
           ),
         ),
       );
+
+  void _onSubmit() {
+    if (Dependencies.instance.promtBLoC.state.isProcessing) return;
+    _focusNode.unfocus();
+    Dependencies.instance.promtBLoC.add(PromtEvent.generate(promt: _inputController.text));
+    HapticFeedback.heavyImpact().ignore();
+  }
 
   Widget _buildImage(PromtState state, int index) {
     final preview = index != 0;
