@@ -45,6 +45,7 @@ class RestClient with _AuthenticationToken {
       final request = http.Request(method, buildUri(_baseUri, path));
       if (body != null) request.bodyBytes = await _encodeRequestBody(body);
       request.headers.addAll(<String, String>{
+        'Authentication': await _getToken(),
         if (body != null) ...<String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           if (Platform.I.isIO) 'Content-Length': request.bodyBytes.length.toString(),
@@ -56,7 +57,6 @@ class RestClient with _AuthenticationToken {
           'Pragma': 'no-cache',
           'User-Agent': Platform.I.version,
           'DNT': '1',
-          'Authentication': await _getToken(),
         },
         ...?headers,
       });
