@@ -4,6 +4,7 @@ import 'package:stream_bloc/stream_bloc.dart';
 import '../../../common/util/error_util.dart';
 import '../../../common/util/timeouts.dart';
 import '../data/promt_repository.dart';
+import '../model/generated_image.dart';
 import '../model/promt_entity.dart';
 
 part 'promt_bloc.freezed.dart';
@@ -21,9 +22,10 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
   Stream<PromtState> mapEventToStates(PromtEvent event) => event.map<Stream<PromtState>>(
         restore: _restore,
         generate: _generate,
+        focus: _focus,
       );
 
-  Stream<PromtState> _restore(RestorePromtEvent event) async* {
+  Stream<PromtState> _restore(_RestorePromtEvent event) async* {
     try {
       final data = _repository.getPromt();
       if (data == null) return;
@@ -44,7 +46,7 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
     }
   }
 
-  Stream<PromtState> _generate(GeneratePromtEvent event) async* {
+  Stream<PromtState> _generate(_GeneratePromtEvent event) async* {
     try {
       final data = _repository.getPromt() ?? PromtEntity.create(event.promt);
       final promt = data.promt ?? '';
@@ -64,6 +66,29 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
     } finally {
       _repository.clearPromt().ignore();
       yield PromtState.idle(data: state.data);
+    }
+  }
+
+  Stream<PromtState> _focus(_FocusPromtEvent event) async* {
+    var newData = state.data;
+    try {
+      final index = event.index;
+      final images = state.data.images ?? <GeneratedImage>[];
+      if (index < 1 || images.isEmpty || index >= images.length) return;
+      newData = state.data.copyWith(
+        newImages: <GeneratedImage>[
+          images[index],
+          ...images.skip(1),
+        ]..[index] = images.first,
+      );
+    } on Object catch (error) {
+      yield PromtState.error(
+        data: const PromtEntity.empty(),
+        message: ErrorUtil.formatMessage(error),
+      );
+      rethrow;
+    } finally {
+      yield PromtState.idle(data: newData);
     }
   }
 }

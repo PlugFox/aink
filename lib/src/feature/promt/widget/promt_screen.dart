@@ -133,22 +133,34 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                           ),
                           imageCard: ColoredCard.compact(
                             color: Colors.blue,
-                            child: _buildImage(state, 0),
+                            child: RepaintBoundary(
+                              key: const ValueKey('imageCard'),
+                              child: _buildImage(state, 0),
+                            ),
                           ),
                           previewCards: <Widget>[
                             ColoredCard.expanded(
                               animation: _animationController,
                               color: Colors.orange,
-                              child: _buildImage(state, 1),
+                              child: RepaintBoundary(
+                                key: const ValueKey('previewCards#1'),
+                                child: _buildImage(state, 1),
+                              ),
                             ),
                             ColoredCard.compact(
                               color: Colors.pink,
-                              child: _buildImage(state, 2),
+                              child: RepaintBoundary(
+                                key: const ValueKey('previewCards#2'),
+                                child: _buildImage(state, 2),
+                              ),
                             ),
                             ColoredCard.expanded(
                               animation: _animationController,
                               color: Colors.purple,
-                              child: _buildImage(state, 3),
+                              child: RepaintBoundary(
+                                key: const ValueKey('previewCards#3'),
+                                child: _buildImage(state, 3),
+                              ),
                             ),
                           ],
                         ),
@@ -205,6 +217,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
           : () {
               _focusNode.unfocus();
               HapticFeedback.lightImpact().ignore();
+              Dependencies.instance.promtBLoC.add(PromtEvent.focus(index: index));
             },
     );
   }

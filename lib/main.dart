@@ -20,8 +20,10 @@ void main() => runZonedGuarded<void>(
             runApp(const AppError());
             return;
           }
-          stream_bloc.StreamBlocObserverConfig(
+          stream_bloc.StreamBlocObserver.config = stream_bloc.StreamBlocObserverConfig(
             observer: AppBLoCObserver(),
+            prioritizedLocation: stream_bloc.StreamBlocObserverLocation.static,
+            shouldFallback: false,
           );
           runApp(const App());
         },

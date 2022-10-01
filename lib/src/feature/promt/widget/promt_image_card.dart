@@ -78,9 +78,11 @@ class PromtImageCard extends StatelessWidget {
     if (_loading) {
       return Center(
         child: LayoutBuilder(
-          builder: (context, constraints) => SizedBox.square(
-            dimension: constraints.biggest.shortestSide * 0.3,
-            child: const CircularProgressIndicator(),
+          builder: (context, constraints) => RepaintBoundary(
+            child: SizedBox.square(
+              dimension: constraints.biggest.shortestSide * 0.3,
+              child: const CircularProgressIndicator(),
+            ),
           ),
         ),
       );

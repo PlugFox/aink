@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:async/async.dart';
 
@@ -12,8 +13,11 @@ abstract class IPromtNetworkDataProvider {
 }
 
 class PromtNetworkDataProviderImpl implements IPromtNetworkDataProvider {
-  PromtNetworkDataProviderImpl({required RestClient client}) : _client = client;
+  PromtNetworkDataProviderImpl({required RestClient client})
+      : _client = client,
+        _random = math.Random();
 
+  final math.Random _random;
   final RestClient _client;
 
   @override
@@ -23,11 +27,11 @@ class PromtNetworkDataProviderImpl implements IPromtNetworkDataProvider {
           'prompt': promt,
           'generation_image_size': 'square',
           'image_generation_count': 4,
+          'seed': _random.nextInt(10 << 24) + 1,
           //'generation_model': 'stable_diffusion',
           //'style': 'Painting',
           //'model_version': '1',
           //'opts': 'string',
-          //'seed': 0,
         },
       ).then<String>((data) => (data['task']! as Map<String, Object?>)['task_id']!.toString());
 
