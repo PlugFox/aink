@@ -70,10 +70,13 @@ class _AuthenticationScopeState extends State<AuthenticationScope> {
   @override
   void initState() {
     super.initState();
-    _userChangesSubscription = _bloc.stream.listen((state) {
-      if (_state == state) return;
-      setState(() => _state = state);
-    });
+    _userChangesSubscription = _bloc.stream.listen(
+      (state) {
+        if (_state == state) return;
+        setState(() => _state = state);
+      },
+      cancelOnError: false,
+    );
   }
 
   @override
