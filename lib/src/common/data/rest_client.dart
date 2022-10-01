@@ -2,15 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:platform_info/platform_info.dart';
 
+import '../exception/authentication_exception.dart';
 import '../exception/network_exception.dart';
 
-@immutable
-class RestClient {
+class RestClient with _AuthenticationToken {
   RestClient({
     required String uri,
     http.Client? client,
@@ -55,6 +56,7 @@ class RestClient {
           'Pragma': 'no-cache',
           'User-Agent': Platform.I.version,
           'DNT': '1',
+          'Authentication': await _getToken(),
         },
         ...?headers,
       });
@@ -73,10 +75,7 @@ class RestClient {
       Error.throwWithStackTrace(InternetException(error.message), stackTrace);
     } on HandshakeException catch (error, stackTrace) {
       Error.throwWithStackTrace(ServerInternalException(message: error.message), stackTrace);
-    } on Object catch (error, stackTrace) {
-      if (error is! NetworkException) {
-        Error.throwWithStackTrace(UnsupportedError('Unknown exception: $error'), stackTrace);
-      }
+    } on Object {
       rethrow;
     }
   }
@@ -142,5 +141,27 @@ class RestClient {
       path: p.normalize(p.join(baseUri.path, uri.path)),
       queryParameters: queryParameters.isEmpty ? null : queryParameters,
     );
+  }
+}
+
+mixin _AuthenticationToken {
+  late final FirebaseAuth _authService = FirebaseAuth.instance;
+  Future<String>? _future;
+
+  Future<String> _getToken() async {
+    try {
+      final user = _authService.currentUser;
+      if (user == null) throw const AuthenticationException('User is not authenticated');
+      return await (_future ??= user.getIdToken());
+    } on AuthenticationException {
+      rethrow;
+    } on Object catch (error, stackTrace) {
+      Error.throwWithStackTrace(
+        RestClientException(message: 'Problem with retrieving token: $error'),
+        stackTrace,
+      );
+    } finally {
+      _future = null;
+    }
   }
 }
