@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:l/l.dart';
 import 'package:meta/meta.dart';
 
+import '../exception/authentication_exception.dart';
 import '../exception/network_exception.dart';
 
 @sealed
@@ -94,6 +95,8 @@ abstract class ErrorUtil {
       return 'Not implemented yet';
     } else if (error is UnsupportedError) {
       return 'Unsupported operation';
+    } else if (error is AuthenticationException) {
+      return 'Authentication error';
     } else {
       return fallback;
     }
