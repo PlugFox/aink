@@ -17,7 +17,11 @@ class AuthenticationBLoC extends StreamBloc<AuthenticationEvent, AuthenticationS
   AuthenticationBLoC({required IAuthenticationRepository repository})
       : _repository = repository,
         super(AuthenticationState.fromUser(repository.currentUser)) {
-    _userChangesSubscription = repository.userChanges.listen(_emitUser);
+    _userChangesSubscription = repository.userChanges.listen(
+      _emitUser,
+      onError: onError,
+      cancelOnError: false,
+    );
   }
 
   final IAuthenticationRepository _repository;
