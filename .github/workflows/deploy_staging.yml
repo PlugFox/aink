@@ -19,7 +19,7 @@ jobs:
     name: "Build"
     runs-on: ubuntu-latest
     container:
-      image: plugfox/flutter:stable-web
+      image: plugfox/flutter:beta-web
       options: --user root
     timeout-minutes: 30
     env:
