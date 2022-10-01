@@ -62,7 +62,7 @@ class PromtNetworkDataProviderImpl implements IPromtNetworkDataProvider {
             );
             break;
           default:
-            throw _FetchByTaskIdStatusException('Unknown task status: ${data['task_status'].toString()}');
+            throw _FetchByTaskIdStatusException('Unknown task status: ${data['task_status']}');
         }
       } on Object catch (error, stackTrace) {
         timer.cancel();
