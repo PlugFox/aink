@@ -47,6 +47,7 @@ class RestClient with _AuthenticationToken {
       request.headers.addAll(<String, String>{
         if (body != null) ...<String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authentication': await _getToken(),
           if (Platform.I.isIO) 'Content-Length': request.bodyBytes.length.toString(),
         },
         if (Platform.I.isIO) ...<String, String>{
