@@ -66,7 +66,7 @@ class PromtTextInput extends StatelessWidget {
                           //helperText: 'Helper text',
                           //suffixIcon: Icon(Icons.manage_search, size: 32, color: Colors.grey.withOpacity(.5)),
                           //suffixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-                          hintStyle: Theme.of(context).textTheme.caption?.copyWith(
+                          hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,
                                 letterSpacing: 0.5,

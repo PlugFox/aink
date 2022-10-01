@@ -317,7 +317,7 @@ class _PromtImageCard extends StatelessWidget {
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.justify,
-                                        style: Theme.of(context).textTheme.caption?.copyWith(color: Colors.white70),
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70),
                                       ),
                                     ),
                                   ),
