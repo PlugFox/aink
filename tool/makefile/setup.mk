@@ -1,4 +1,4 @@
-.PHONY: setup
+.PHONY: setup update-firebase generate-icons generate-splash
 
 setup:
 	@npm install -g firebase-tools
@@ -13,6 +13,12 @@ setup:
 		-p ai-ink \
 		-e plugfox@gmail.com \
 		-o lib/src/common/constant/firebase_options.dart
+
+generate-icons: get
+	@fvm flutter pub run icons_launcher:create --path icons_launcher.yaml
+
+generate-splash: get
+	@fvm flutter pub run flutter_native_splash:create --path=flutter_native_splash.yaml
 
 update-firebase:
 	@dart pub global activate flutterfire_cli

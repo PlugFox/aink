@@ -3,19 +3,19 @@ icons_launcher:
   platforms:
     ios:
       enable: true
-      image_path: "assets/icon/1x/icon_512.png"
+      image_path: "assets/splash/icon_512.png"
     android:
       enable: true
-      image_path: "assets/icon/1x/icon_512.png"
+      image_path: "assets/splash/icon_512.png"
     macos:
       enable: true
-      image_path: "assets/icon/1x/icon_512.png"
+      image_path: "assets/splash/icon_512.png"
     windows:
       enable: true
-      image_path: "assets/icon/1x/icon_512.png"
+      image_path: "assets/splash/icon_512.png"
     linux:
       enable: true
-      image_path: "assets/icon/1x/icon_512.png"
+      image_path: "assets/splash/icon_512.png"
     web:
       enable: true
-      image_path: "assets/icon/1x/icon_512.png"
+      image_path: "assets/splash/icon_512.png"

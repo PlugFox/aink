@@ -14,7 +14,7 @@ flutter_native_splash:
   color: "#cfd8dc"
 
   #background_image: "assets/background.png"
-  image: assets/splash/icon_512.png
+  image: assets/logo/icon_512.png
 
   # Optional parameters are listed below.  To enable a parameter, uncomment the line by removing
   # the leading # character.
