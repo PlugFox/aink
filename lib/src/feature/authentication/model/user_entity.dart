@@ -13,8 +13,9 @@ abstract class UserEntity {
     required UserID uid,
     required String name,
     required String email,
-    String? phone,
-    String? photo,
+    required String? phone,
+    required String? photo,
+    required List<String> providers,
   }) = AuthenticatedUser;
 
   factory UserEntity.fromFirebase(User? user) => user != null
@@ -24,6 +25,7 @@ abstract class UserEntity {
           email: user.email ?? 'Unknown',
           phone: user.phoneNumber,
           photo: user.photoURL,
+          providers: user.providerData.map((e) => e.providerId).whereType<String>().toList(),
         )
       : const UserEntity.unauthenticated();
 
@@ -42,8 +44,8 @@ abstract class UserEntity {
 
   T maybeMap<T>({
     required T Function() orElse,
-    required T Function(UnauthenticatedUser user)? unauthenticated,
-    required T Function(AuthenticatedUser user)? authenticated,
+    T Function(UnauthenticatedUser user)? unauthenticated,
+    T Function(AuthenticatedUser user)? authenticated,
   }) =>
       map<T>(
         unauthenticated: (user) => unauthenticated?.call(user) ?? orElse(),
@@ -51,8 +53,8 @@ abstract class UserEntity {
       );
 
   T? mapOrNull<T>({
-    required T Function(UnauthenticatedUser user)? unauthenticated,
-    required T Function(AuthenticatedUser user)? authenticated,
+    T Function(UnauthenticatedUser user)? unauthenticated,
+    T Function(AuthenticatedUser user)? authenticated,
   }) =>
       map<T?>(
         unauthenticated: (user) => unauthenticated?.call(user),
@@ -68,8 +70,9 @@ class AuthenticatedUser extends UserEntity with UserDetails {
     required this.uid,
     required this.name,
     required this.email,
-    this.phone,
-    this.photo,
+    required this.phone,
+    required this.photo,
+    required this.providers,
   });
 
   @override
@@ -94,6 +97,9 @@ class AuthenticatedUser extends UserEntity with UserDetails {
   final String? photo;
 
   @override
+  final List<String> providers;
+
+  @override
   T map<T>({
     required T Function(UnauthenticatedUser user) unauthenticated,
     required T Function(AuthenticatedUser user) authenticated,
@@ -112,7 +118,8 @@ class AuthenticatedUser extends UserEntity with UserDetails {
       'name: $name, '
       'email: $email, '
       'phone: $phone, '
-      'photo: $photo'
+      'photo: $photo, '
+      'providers: [${providers.join(', ')}] '
       '}';
 }
 
@@ -171,6 +178,9 @@ mixin UserDetails on UserEntity {
   /// This property will be populated if the user has signed in or been linked
   /// with a 3rd party OAuth provider (such as Google).
   abstract final String? photo;
+
+  /// The federated provider ID.
+  abstract final List<String> providers;
 
   /*
   UserDetails copyWith({

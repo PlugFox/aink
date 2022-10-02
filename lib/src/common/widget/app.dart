@@ -9,6 +9,7 @@ import '../../feature/settings/bloc/settings_bloc.dart';
 import '../../feature/wheel/widget/wheel_screen.dart';
 import '../initialization/dependencies.dart';
 import '../localization/localization.dart';
+import '../router/modal_route_analytics_observer.dart';
 
 /// {@template app}
 /// App widget
@@ -24,6 +25,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final SettingsBLoC _settingsBLoC = Dependencies.instance.settingsBLoC;
   late final StreamSubscription<SettingsState> _settingsSubscription;
+  final ModalRouteAnalyticsObserver _routeObserver = ModalRouteAnalyticsObserver();
 
   @override
   void initState() {
@@ -53,6 +55,9 @@ class _AppState extends State<App> {
           Localization.delegate,
         ],
         supportedLocales: Localization.supportedLocales,
+        navigatorObservers: <NavigatorObserver>[
+          _routeObserver,
+        ],
         home: const Scaffold(
           resizeToAvoidBottomInset: false,
           body: Center(child: WheelScreen()),

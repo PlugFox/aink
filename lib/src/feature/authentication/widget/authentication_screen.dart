@@ -3,12 +3,13 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../common/util/analytics.dart';
 import '../bloc/authentication_bloc.dart';
 
 /// {@template authentication_screen}
 /// AuthenticationScreen widget
 /// {@endtemplate}
-class AuthenticationScreen extends StatelessWidget {
+class AuthenticationScreen extends StatefulWidget {
   /// {@macro authentication_screen}
   const AuthenticationScreen({
     required this.state,
@@ -20,6 +21,17 @@ class AuthenticationScreen extends StatelessWidget {
   final AuthenticationState state;
   final void Function() onGoogleSignIn;
   final void Function() onLogOut;
+
+  @override
+  State<AuthenticationScreen> createState() => _AuthenticationScreenState();
+}
+
+class _AuthenticationScreenState extends State<AuthenticationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Analytics.logScreenScope('authentication');
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -35,7 +47,7 @@ class AuthenticationScreen extends StatelessWidget {
               vertical: 16,
             ),
             children: <Widget>[
-              if (state.isNotAuthenticated)
+              if (widget.state.isNotAuthenticated)
                 ElevatedButton.icon(
                   key: const ValueKey<String>('google_sign_in_button'),
                   style: ElevatedButton.styleFrom(
@@ -49,11 +61,11 @@ class AuthenticationScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                   ),
-                  onPressed: state.isProcessing ? null : onGoogleSignIn,
+                  onPressed: widget.state.isProcessing ? null : widget.onGoogleSignIn,
                   label: const Text('Login with Google'),
                   icon: const Icon(FontAwesomeIcons.google),
                 ),
-              if (state.isAuthenticated)
+              if (widget.state.isAuthenticated)
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -66,7 +78,7 @@ class AuthenticationScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                   ),
-                  onPressed: state.isProcessing ? null : onLogOut,
+                  onPressed: widget.state.isProcessing ? null : widget.onLogOut,
                   label: const Text('Sign out'),
                   icon: const Icon(Icons.logout),
                 ),

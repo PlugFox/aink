@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:l/l.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
+import '../../../common/util/analytics.dart';
 import '../../../common/util/timeouts.dart';
 import '../data/authentication_repository.dart';
 import '../model/user_entity.dart';
@@ -17,6 +18,7 @@ class AuthenticationBLoC extends StreamBloc<AuthenticationEvent, AuthenticationS
   AuthenticationBLoC({required IAuthenticationRepository repository})
       : _repository = repository,
         super(AuthenticationState.fromUser(repository.currentUser)) {
+    _logLogin(state);
     _userChangesSubscription = repository.userChanges.listen(
       _emitUser,
       onError: onError,
@@ -71,7 +73,12 @@ class AuthenticationBLoC extends StreamBloc<AuthenticationEvent, AuthenticationS
     final newState = AuthenticationState.fromUser(user);
     if (state == newState) return;
     emit(newState);
+    _logLogin(newState);
   }
+
+  static void _logLogin(AuthenticationState state) => state.user.mapOrNull<void>(
+        authenticated: Analytics.logLogin,
+      );
 
   @override
   FutureOr<void> close() async {

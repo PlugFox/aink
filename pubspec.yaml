@@ -18,12 +18,12 @@ dependencies:
   firebase_core: any
   firebase_analytics: any
   firebase_auth: any
-  google_sign_in: ^5.4.2
   #firebase_crashlytics: any
   #firebase_messaging: any
   #firebase_remote_config: any
   #cloud_firestore: any
   #flutterfire_ui: any
+  google_sign_in: ^5.4.2
 
   # State manager
   stream_bloc: ^0.5.1
