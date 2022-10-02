@@ -51,7 +51,6 @@ class RestClient with _RestAuthenticationTokenInterceptor, _RestPerformanceInter
       final request = http.Request(method, buildUri(_baseUri, path));
       if (body != null) request.bodyBytes = await _encodeRequestBody(body);
       request.headers.addAll(<String, String>{
-        'Authentication': await _getToken(),
         if (body != null) ...<String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           if (Platform.I.isIO) 'Content-Length': request.bodyBytes.length.toString(),
@@ -65,6 +64,7 @@ class RestClient with _RestAuthenticationTokenInterceptor, _RestPerformanceInter
           'DNT': '1',
         },
         ...?headers,
+        'Authentication': await _getToken(),
       });
       traceContext = _beginTrace(_performance, request);
       final response = await _internalClient.send(request).then<http.Response>(http.Response.fromStream);
@@ -155,8 +155,8 @@ class RestClient with _RestAuthenticationTokenInterceptor, _RestPerformanceInter
 }
 
 mixin _RestAuthenticationTokenInterceptor {
-  late final FirebaseAuth _authService = FirebaseAuth.instance;
-  Future<String>? _future;
+  static final FirebaseAuth _authService = FirebaseAuth.instance;
+  static Future<String>? _future;
 
   @protected
   Future<String> _getToken() async {
