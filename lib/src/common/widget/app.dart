@@ -43,7 +43,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: '[AI]nk',
+        title: 'NeuroStocker',
         restorationScopeId: 'app',
         debugShowCheckedModeBanner: false,
         theme: _settingsBLoC.state.data.theme?.themeData ??
