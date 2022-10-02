@@ -72,6 +72,8 @@ abstract class Analytics {
         FirebaseAnalytics.instance.setCurrentScreen(screenClassOverride: screenClass, screenName: screenName),
       ]).drain<void>().ignore();
 
+  static void logScreenPage(String screenName) => logScreen(screenClass: 'Page', screenName: screenName);
+
   static void logScreenScope(String screenName) => logScreen(screenClass: 'Scope', screenName: screenName);
 
   /*

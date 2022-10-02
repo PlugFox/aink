@@ -23,15 +23,7 @@ class ModalRouteAnalyticsObserver extends RouteObserver<ModalRoute<Object?>> {
       _lastPageRoute = route;
       final settings = route.settings;
       screenName = settings.name ?? _kUnknownScreen;
-      if (settings is MaterialPage) {
-        className = 'MaterialPage';
-      } else if (settings is CupertinoPage) {
-        className = 'CupertinoPage';
-      } else if (settings is Page) {
-        className = settings.runtimeType.toString();
-      } else {
-        className = 'Page';
-      }
+      className = 'Page';
     } else {
       final currentPageName = _lastPageRoute?.settings.name ?? _kUnknownScreen;
       screenName = '$currentPageName:${route.settings.name ?? _kUnknownModal}';
