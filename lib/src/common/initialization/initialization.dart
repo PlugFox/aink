@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-import '../constant/firebase_options.g.dart';
+import '../constant/firebase_options.dart';
 import '../util/analytics.dart';
 import '../util/error_util.dart';
 import 'dependencies.dart';
