@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
+import '../../../common/util/analytics.dart';
 import '../../../common/util/error_util.dart';
 import '../../../common/util/timeouts.dart';
 import '../data/promt_repository.dart';
@@ -34,6 +35,7 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
       if (taskId == null) return;
       final images = await _repository.fetchByTaskId(taskId).value;
       yield PromtState.successful(data: state.data.copyWith(newImages: images));
+      Analytics.logGenerateImagesComplete();
     } on Object catch (error) {
       yield PromtState.error(
         data: const PromtEntity.empty(),
@@ -48,7 +50,14 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
 
   Stream<PromtState> _generate(_GeneratePromtEvent event) async* {
     try {
-      final data = _repository.getPromt() ?? PromtEntity.create(event.promt);
+      final prevPromt = _repository.getPromt();
+      final PromtEntity data;
+      if (prevPromt != null) {
+        data = prevPromt;
+      } else {
+        data = PromtEntity.create(event.promt);
+        Analytics.logGenerateImagesBegin();
+      }
       final promt = data.promt ?? '';
       if (promt.isEmpty) return;
       yield PromtState.processing(data: data);
@@ -57,6 +66,7 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
       await _repository.setPromt(state.data).logicTimeout();
       final images = await _repository.fetchByTaskId(taskId).value;
       yield PromtState.successful(data: state.data.copyWith(newImages: images));
+      Analytics.logGenerateImagesComplete();
     } on Object catch (error) {
       yield PromtState.error(
         data: const PromtEntity.empty(),
