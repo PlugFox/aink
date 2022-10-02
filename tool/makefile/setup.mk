@@ -12,7 +12,11 @@ setup:
 		-a dev.plugfox.aink \
 		-p ai-ink \
 		-e plugfox@gmail.com \
-		-o lib/src/common/constant/firebase_options.g.dart
+		-o lib/src/common/constant/firebase_options.dart
+
+update-firebase:
+	@dart pub global activate flutterfire_cli
+	@flutterfire configure -o lib/src/common/constant/firebase_options.dart
 
 # ! WARNING: DO NOT CALL THIS DIRECTLY !
 keytool-genkey:

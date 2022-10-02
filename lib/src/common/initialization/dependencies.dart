@@ -1,3 +1,4 @@
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,7 +38,7 @@ class _DependenciesProduction implements Dependencies {
 
   final SharedPreferences _sharedPreferences;
 
-  late final RestClient _httpClient = RestClient(uri: kEndpoint);
+  late final RestClient _httpClient = RestClient(uri: kEndpoint, performance: FirebasePerformance.instance);
 
   // --- Promt --- //
 

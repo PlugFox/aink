@@ -17,8 +17,9 @@ dependencies:
   firebase: any
   firebase_core: any
   firebase_analytics: any
+  firebase_performance: any
   firebase_auth: any
-  google_sign_in: ^5.4.2
+  google_sign_in: any
   #firebase_crashlytics: any
   #firebase_messaging: any
   #firebase_remote_config: any

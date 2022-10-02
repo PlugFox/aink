@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options.g.dart';
+/// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -67,8 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '830814404281',
     projectId: 'ai-ink',
     storageBucket: 'ai-ink.appspot.com',
-    iosClientId:
-        '830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com',
+    androidClientId: '830814404281-uv104dmd2hq67pc49jpgrd969r80f2qg.apps.googleusercontent.com',
+    iosClientId: '830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com',
     iosBundleId: 'dev.plugfox.aink',
   );
 
@@ -78,8 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '830814404281',
     projectId: 'ai-ink',
     storageBucket: 'ai-ink.appspot.com',
-    iosClientId:
-        '830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com',
+    androidClientId: '830814404281-uv104dmd2hq67pc49jpgrd969r80f2qg.apps.googleusercontent.com',
+    iosClientId: '830814404281-b8rp325j0gh5b24k955ku0iphp0hoh0i.apps.googleusercontent.com',
     iosBundleId: 'dev.plugfox.aink',
   );
 }

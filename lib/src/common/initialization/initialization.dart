@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:platform_info/platform_info.dart';
 
-import '../constant/firebase_options.g.dart';
+import '../constant/firebase_options.dart';
 import '../constant/pubspec.yaml.g.dart' as pubspec;
 import '../util/error_util.dart';
 import '../util/screen_util.dart';
