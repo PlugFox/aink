@@ -13,23 +13,111 @@
     the `--base-href` argument provided to `flutter build`.
   -->
   <base href="$FLUTTER_BASE_HREF">
+  <title>NeuroStocker</title>
+  <link rel="manifest" href="manifest.json">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="aink">
+  <meta name="description" content="NeuroStocker">
+
+  <meta name="keywords" content="ai, image, processing, generator, dart, flutter, fox, plague, plugfox, pwa, progressive, web, app, cross-platform">
+  <meta name="description" content="Neuro Stocker">
+  <meta name="author" content="@plugfox">
+
+  <!-- Favicon https://realfavicongenerator.net -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#c62828">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="theme-color" content="#2196F3">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="aink">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <meta name="apple-mobile-web-app-title" content="NeuroStocker">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+  <!-- Pinned Sites  -->
+  <meta name="application-name" content="NeuroStocker">
+  <meta name="msapplication-tooltip" content="NeuroStocker">
+  <meta name="msapplication-starturl" content="/">
 
-  <title>aink</title>
-  <link rel="manifest" href="manifest.json">
+  <!-- Tap highlighting  -->
+  <meta name="msapplication-tap-highlight" content="no">
 
+  <!-- UC Mobile Browser  -->
+  <meta name="full-screen" content="yes">
+  <meta name="browsermode" content="application">
+
+  <!-- STYLE -->
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #FFF;
+      overflow: hidden;
+    }
+  
+    .noscript-center {
+      position: absolute;
+      text-align: center;
+      margin: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3vw;
+    }
+  
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 16px solid blue;
+      border-right: 16px solid green;
+      border-bottom: 16px solid red;
+      border-left: 16px solid pink;
+      width: 75px;
+      height: 75px;
+      animation: spin 2s linear infinite;
+      -webkit-animation: spin 2s linear infinite;
+    }
+  
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+  
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+  
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+  
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  
+  <!-- SCRIPTS -->
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
@@ -41,6 +129,9 @@
   <script src="splash/splash.js"></script>
 </head>
 <body>
+  <!-- NOSCRIPT -->
+  <noscript class='noscript-center'>Your browser does not support JavaScript!</noscript>
+
   <picture id="splash" class="splash-loading">
       <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
       <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
