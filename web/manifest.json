@@ -1,11 +1,11 @@
 {
     "name": "NeuroStocker",
     "short_name": "NS",
+    "description": "Neuro Stocker",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#cfd8dc",
-    "theme_color": "#cfd8dc",
-    "description": "NeuroStocker",
+    "background_color": "#2196F3",
+    "theme_color": "#2196F3",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
