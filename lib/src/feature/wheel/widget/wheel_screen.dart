@@ -24,7 +24,7 @@ class WheelScreen extends StatefulWidget {
 
 class _WheelScreenState extends State<WheelScreen> {
   static const int _initialPage = 1;
-  final WheelController _controller = WheelController(initialPage: _initialPage);
+  final WheelController _controller = WheelController(total: 3, initialPage: _initialPage);
 
   @override
   void dispose() {
