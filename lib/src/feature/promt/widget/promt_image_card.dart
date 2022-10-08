@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 
 import '../model/generated_image.dart';
+import 'promt_image_footer.dart';
 
 /// {@template promt_image_card}
 /// PromtImageCard widget
@@ -43,29 +44,31 @@ class PromtImageCard extends StatelessWidget {
   final bool _preview;
 
   @override
-  Widget build(BuildContext context) => SizedBox.square(
-        dimension: 512,
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: Card(
-              margin: EdgeInsets.zero,
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 500),
-                child: ClipRRect(
-                  key: ValueKey<int>(
-                    <Object?>[_loading, _preview, _image]
-                        .map<int>((e) => (e != null && e != false) ? 1 : 0)
-                        .fold<int>(0, (r, e) => r * 10 + e),
-                  ),
-                  clipBehavior: Clip.antiAlias,
+  Widget build(BuildContext context) => RepaintBoundary(
+        child: SizedBox.square(
+          dimension: 512,
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Card(
+                margin: EdgeInsets.zero,
+                elevation: 8,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
-                  child: _buildImage(),
+                ),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: ClipRRect(
+                    key: ValueKey<int>(
+                      <Object?>[_loading, _preview, _image]
+                          .map<int>((e) => (e != null && e != false) ? 1 : 0)
+                          .fold<int>(0, (r, e) => r * 10 + e),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    borderRadius: BorderRadius.circular(16),
+                    child: _buildImage(),
+                  ),
                 ),
               ),
             ),
@@ -118,17 +121,7 @@ class _PromtImageCardImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GridTile(
-        footer: preview
-            ? null
-            : const GridTileBar(
-                title: Text('title'),
-                subtitle: Text('subtitle'),
-                backgroundColor: Colors.black45,
-                trailing: Icon(
-                  Icons.launch,
-                  color: Colors.white,
-                ),
-              ),
+        footer: preview ? null : const PromtImageFooter(),
         child: Stack(
           children: <Widget>[
             if (image.blurhash != null)

@@ -30,6 +30,7 @@ FutureOr<void> initializeApp({
           await _catchExceptions();
           platformInitialization().ignore();
           Analytics.logAppOpen();
+          Analytics.logInitialized(elapsedMilliseconds: stopwatch.elapsedMilliseconds);
         }
       } on Object catch (error, stackTrace) {
         onError?.call(error, stackTrace).ignore();
@@ -42,7 +43,6 @@ FutureOr<void> initializeApp({
           // Closes splash screen, and show the app layout.
           binding.allowFirstFrame();
           //final context = binding.renderViewElement;
-          Analytics.logInitialized(elapsedMilliseconds: stopwatch.elapsedMilliseconds);
         });
       }
     });
@@ -54,6 +54,7 @@ Future<void> _initFirebase() async {
     );
   } on Object catch (error, stackTrace) {
     await ErrorUtil.logError(error, stackTrace);
+    (error as dynamic).details;
     if (kDebugMode) rethrow;
   }
 }

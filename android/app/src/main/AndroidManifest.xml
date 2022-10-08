@@ -2,6 +2,7 @@
     package="dev.plugfox.aink">
     
     <uses-permission android:name="android.permission.INTERNET" />
+    <application android:requestLegacyExternalStorage="true" />
 
     <application
         android:label="aink"

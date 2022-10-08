@@ -19,11 +19,10 @@ dependencies:
   firebase_analytics: any
   firebase_performance: any
   firebase_auth: any
-
-  #firebase_crashlytics: any
-  #firebase_messaging: any
-  #firebase_remote_config: any
-  #cloud_firestore: any
+  firebase_crashlytics: any
+  firebase_messaging: any
+  firebase_remote_config: any
+  cloud_firestore: any
   #flutterfire_ui: any
   google_sign_in: any
 
@@ -63,6 +62,9 @@ dependencies:
   flutter_batteries: ^0.0.6-dev
   flutter_blurhash: ^0.7.0
   blobs: ^2.0.0
+  file_selector: ^0.9.2+1
+  #image_gallery_saver: ^1.7.1
+  permission_handler: ^10.1.0
 
 dev_dependencies:
   flutter_test:
