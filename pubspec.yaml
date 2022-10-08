@@ -63,8 +63,9 @@ dependencies:
   flutter_blurhash: ^0.7.0
   blobs: ^2.0.0
   file_selector: ^0.9.2+1
-  #image_gallery_saver: ^1.7.1
+  image_gallery_saver: ^1.7.1
   permission_handler: ^10.1.0
+  #gallery_saver: ^2.3.2
 
 dev_dependencies:
   flutter_test:

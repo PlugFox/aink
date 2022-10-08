@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -53,8 +54,17 @@ Future<void> _initFirebase() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } on Object catch (error, stackTrace) {
-    await ErrorUtil.logError(error, stackTrace);
-    (error as dynamic).details;
+    Future<void>.delayed(Duration.zero, () {
+      developer.log(
+        'main() => initializeApp() => _initFirebase()\nCan not initialize Firebase: $error',
+        level: 1200,
+        error: error,
+        name: '_initFirebase',
+        stackTrace: stackTrace,
+        time: DateTime.now(),
+      );
+      //return ErrorUtil.logError(error, stackTrace);
+    }).ignore();
     if (kDebugMode) rethrow;
   }
 }
@@ -70,12 +80,16 @@ Future<void> _catchExceptions() async {
       return true;
     };
 
-    //final sourceFlutterError = FlutterError.onError;
-    //FlutterError.onError = (final details) {
-    //  FirebaseCrashlytics.instance.recordFlutterError(details).ignore();
-    //  //FlutterError.presentError(details);
-    //  sourceFlutterError?.call(details);
-    //};
+    final sourceFlutterError = FlutterError.onError;
+    FlutterError.onError = (final details) {
+      ErrorUtil.logError(
+        details.exception,
+        details.stack ?? StackTrace.current,
+        hint: 'FLUTTER ERROR\r\n$details',
+      ).ignore();
+      // FlutterError.presentError(details);
+      sourceFlutterError?.call(details);
+    };
   } on Object catch (error, stackTrace) {
     ErrorUtil.logError(error, stackTrace).ignore();
   }

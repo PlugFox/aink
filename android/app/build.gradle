@@ -35,6 +35,7 @@ if (project.hasProperty('dart-defines')) {
 apply plugin: 'com.android.application'
 // START: FlutterFire Configuration
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
 // END: FlutterFire Configuration
 apply plugin: 'kotlin-android'

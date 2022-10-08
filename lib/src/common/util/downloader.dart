@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 import 'downloader/downloader_platform.dart'
     // ignore: uri_does_not_exist
-    if (dart.library.html) 'downloader/downloader_platform.dart';
+    if (dart.library.html) 'downloader/downloader_browser.dart';
 
 @sealed
 abstract class Downloader {

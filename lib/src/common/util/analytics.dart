@@ -32,6 +32,8 @@ abstract class Analytics {
 
   static void logGenerateImagesComplete() => logEvent('generate_images_complete');
 
+  static void logGenerateImagesDownloaded() => logEvent('generate_images_downloaded');
+
   static void logSignUp({required String signUpMethod}) =>
       FirebaseAnalytics.instance.logSignUp(signUpMethod: signUpMethod).ignore();
 

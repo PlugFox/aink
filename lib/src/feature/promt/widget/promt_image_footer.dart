@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
 
 import '../../../common/initialization/dependencies.dart';
+import '../../../common/util/analytics.dart';
 import '../../../common/util/downloader.dart';
 import '../../../common/util/error_util.dart';
 
@@ -73,19 +75,57 @@ class _PromtImageFooterButtons extends StatelessWidget {
             onPressed: null,
             icon: Icon(Icons.favorite),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.share),
+          const IconButton(
+            onPressed: null,
+            icon: Icon(Icons.share),
           ),
           IconButton(
-            onPressed: () {
-              final url = Dependencies.instance.promtBLoC.state.data.images?.firstOrNull?.url;
-              if (url == null) return;
-              // ignore: argument_type_not_assignable_to_error_handler
-              Downloader.downloadUrl(url).then<void>((_) => HapticFeedback.mediumImpact(), onError: ErrorUtil.logError);
-            },
+            onPressed: () => _saveImage(context),
             icon: const Icon(Icons.download),
           ),
         ],
       );
+
+  void _saveImage(BuildContext context) {
+    final data = Dependencies.instance.promtBLoC.state.data;
+    final url = data.images?.firstOrNull?.url;
+    if (url == null) return;
+    var name = data.promt?.replaceAll(RegExp('[^a-zA-Z0-9_-]'), '_') ?? 'image';
+    while (name.contains('__')) {
+      name = name.replaceAll('__', '_');
+    }
+    if (name.startsWith('_')) name = name.substring(1);
+    if (name.length < 3) {
+      name = 'image';
+    } else if (name.length > 10) {
+      name = name.substring(0, 10);
+    }
+    if (name.endsWith('_')) name = name.substring(0, name.length - 1);
+    final timestamp = DateTime.now().difference(DateTime(2022)).inSeconds.toRadixString(36);
+    final ext = p.extension(url.pathSegments.lastOrNull ?? 'image.jpg');
+    final filename = '$name-$timestamp$ext';
+    Downloader.downloadUrl(url, filename: filename).then<void>(
+      (_) {
+        HapticFeedback.mediumImpact().ignore();
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          SnackBar(
+            content: Text('Image "$filename" successfully saved'),
+            duration: const Duration(seconds: 5),
+          ),
+        );
+        Analytics.logGenerateImagesDownloaded();
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        ErrorUtil.logError(error, stackTrace).ignore();
+        HapticFeedback.lightImpact().ignore();
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          SnackBar(
+            content: Text('Image "$filename" failed to save'),
+            duration: const Duration(seconds: 5),
+            backgroundColor: Colors.red,
+          ),
+        );
+      },
+    );
+  }
 }

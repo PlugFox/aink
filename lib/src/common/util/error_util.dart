@@ -7,6 +7,9 @@ import 'package:meta/meta.dart';
 
 import '../exception/authentication_exception.dart';
 import '../exception/network_exception.dart';
+import 'error_util/error_util_platform.dart'
+    // ignore: uri_does_not_exist
+    if (dart.library.html) 'error_util/error_util_browser.dart';
 
 @sealed
 abstract class ErrorUtil {
@@ -22,14 +25,12 @@ abstract class ErrorUtil {
       if (exception is String) {
         return await logMessage(
           exception,
-          stackTrace,
+          stackTrace: stackTrace,
           hint: hint,
           warning: true,
         );
       }
-      //await Sentry.captureException(exception, stackTrace: stackTrace, hint: hint);
-      //await FirebaseCrashlytics.instance
-      //    .recordError(exception, stackTrace ?? StackTrace.current, reason: hint, fatal: fatal);
+      $captureException(exception, stackTrace, hint, fatal).ignore();
       l.e(exception, stackTrace);
     } on Object catch (error, stackTrace) {
       l.e(
@@ -40,30 +41,15 @@ abstract class ErrorUtil {
   }
 
   static Future<void> logMessage(
-    String message,
-    StackTrace stackTrace, {
+    String message, {
+    StackTrace? stackTrace,
     String? hint,
-    bool warning = false,
     List<String>? params,
+    bool warning = false,
   }) async {
     try {
-      /* 
-      await Sentry.captureMessage(
-        message,
-        level: warning ? SentryLevel.warning : SentryLevel.info,
-        hint: hint,
-        params: <String>[
-          ...?params,
-          if (stackTrace != null) 'StackTrace: $stackTrace',
-        ],
-      );
-      */
-      /* if (warning || stackTrace != null) {
-        await FirebaseCrashlytics.instance.recordError(message, stackTrace ?? StackTrace.current);
-      } else {
-        await FirebaseCrashlytics.instance.log('$message${hint != null ? '\r\n$hint' : ''}');
-      } */
       l.w(message, stackTrace);
+      $captureMessage(message, stackTrace, hint, params, warning).ignore();
     } on Object catch (error, stackTrace) {
       l.e(
         'Error while logging error "$error" inside ErrorUtil.logMessage',

@@ -5,7 +5,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal
 
 import 'package:flutter/widgets.dart';
 
@@ -14,6 +14,9 @@ class $AssetsFontGen {
 
   /// File path: assets/font/Sofia-Regular.ttf
   String get sofiaRegular => 'assets/font/Sofia-Regular.ttf';
+
+  /// List of all assets
+  List<String> get values => [sofiaRegular];
 }
 
 class $AssetsImageGen {
@@ -21,6 +24,9 @@ class $AssetsImageGen {
 
   /// File path: assets/image/sunflower_512x512.jpg
   AssetGenImage get sunflower512x512 => const AssetGenImage('assets/image/sunflower_512x512.jpg');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [sunflower512x512];
 }
 
 class Assets {
@@ -87,6 +93,8 @@ class AssetGenImage {
       cacheHeight: cacheHeight,
     );
   }
+
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 
