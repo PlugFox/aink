@@ -29,11 +29,22 @@ class $AssetsImageGen {
   List<AssetGenImage> get values => [sunflower512x512];
 }
 
+class $AssetsLogoGen {
+  const $AssetsLogoGen();
+
+  /// File path: assets/logo/icon_alfa_512.png
+  AssetGenImage get iconAlfa512 => const AssetGenImage('assets/logo/icon_alfa_512.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [iconAlfa512];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsFontGen font = $AssetsFontGen();
   static const $AssetsImageGen image = $AssetsImageGen();
+  static const $AssetsLogoGen logo = $AssetsLogoGen();
 }
 
 class AssetGenImage {

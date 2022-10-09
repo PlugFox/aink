@@ -46,6 +46,16 @@ class AuthenticationScope extends StatefulWidget {
   static UserEntity userOf(BuildContext context, {bool listen = true}) =>
       maybeUserOf(context, listen: listen) ?? _notFoundInheritedWidgetOfExactType();
 
+  static void signInWithGoogle(BuildContext context) => context
+      .findAncestorStateOfType<_AuthenticationScopeState>()!
+      ._bloc
+      .add(const AuthenticationEvent.signInWithGoogle());
+
+  static void signInWithGitHub(BuildContext context) => context
+      .findAncestorStateOfType<_AuthenticationScopeState>()!
+      ._bloc
+      .add(const AuthenticationEvent.signInWithGitHub());
+
   static void logOut(BuildContext context) =>
       context.findAncestorStateOfType<_AuthenticationScopeState>()!._bloc.add(const AuthenticationEvent.logOut());
 
@@ -101,11 +111,7 @@ class _AuthenticationScopeState extends State<AuthenticationScope> {
   Widget build(BuildContext context) => _InheritedAuthenticationScope(
         state: _state,
         child: _state.maybeMap<Widget>(
-          orElse: () => AuthenticationScreen(
-            state: _state,
-            onGoogleSignIn: () => _bloc.add(const AuthenticationEvent.googleSignIn()),
-            onLogOut: () => _bloc.add(const AuthenticationEvent.logOut()),
-          ),
+          orElse: () => AuthenticationScreen(state: _state),
           authenticated: (state) => widget.child,
         ),
       );

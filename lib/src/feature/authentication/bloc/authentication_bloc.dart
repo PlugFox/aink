@@ -31,21 +31,42 @@ class AuthenticationBLoC extends StreamBloc<AuthenticationEvent, AuthenticationS
 
   @override
   Stream<AuthenticationState> mapEventToStates(AuthenticationEvent event) => event.map<Stream<AuthenticationState>>(
-        googleSignIn: _googleSignIn,
+        signInWithGoogle: _signInWithGoogle,
+        signInWithGitHub: _signInWithGitHub,
         logOut: _logOut,
       );
 
-  Stream<AuthenticationState> _googleSignIn(_GoogleSignIn event) async* {
+  Stream<AuthenticationState> _signInWithGoogle(_GoogleSignIn event) async* {
     var user = state.user;
     try {
       yield AuthenticationState.processing(user: user);
-      user = await _repository.googleSignIn();
+      user = await _repository.signInWithGoogle();
     } on FirebaseAuthException catch (error) {
       if (error.code == 'popup-closed-by-user') {
         l.i('The user closed the authentication window');
         return;
       }
       emit(AuthenticationState.error(user: user, message: 'Firebase exception occurred during Google authentication'));
+      rethrow;
+    } on Object {
+      yield AuthenticationState.error(user: user);
+      rethrow;
+    } finally {
+      _emitUser(user);
+    }
+  }
+
+  Stream<AuthenticationState> _signInWithGitHub(_GitHubSignIn event) async* {
+    var user = state.user;
+    try {
+      yield AuthenticationState.processing(user: user);
+      user = await _repository.signInWithGitHub();
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'popup-closed-by-user') {
+        l.i('The user closed the authentication window');
+        return;
+      }
+      emit(AuthenticationState.error(user: user, message: 'Firebase exception occurred during GitHub authentication'));
       rethrow;
     } on Object {
       yield AuthenticationState.error(user: user);

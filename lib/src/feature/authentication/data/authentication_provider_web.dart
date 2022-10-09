@@ -25,7 +25,7 @@ class AuthenticationProviderWeb implements IAuthenticationProvider {
   Stream<UserEntity> get userChanges => _firebaseAuth.userChanges().map<UserEntity>(UserEntity.fromFirebase);
 
   @override
-  Future<UserEntity> googleSignIn() async {
+  Future<UserEntity> signInWithGoogle() async {
     // Create a new provider
     final googleProvider = GoogleAuthProvider()..scopes.addAll(_kGoogleSignInScopes);
 
@@ -36,6 +36,19 @@ class AuthenticationProviderWeb implements IAuthenticationProvider {
     // Redirect
     //await _firebaseAuth.signInWithRedirect(googleProvider);
     //final userCredential = await _firebaseAuth.getRedirectResult();
+
+    return UserEntity.fromFirebase(userCredential.user);
+  }
+
+  @override
+  Future<UserEntity> signInWithGitHub() async {
+    // Create a new provider
+    final githubProvider = GithubAuthProvider();
+
+    // Once signed in, return the UserCredential
+    final userCredential = await FirebaseAuth.instance.signInWithPopup(githubProvider);
+    // Or use signInWithRedirect
+    // return await FirebaseAuth.instance.signInWithRedirect(githubProvider);
 
     return UserEntity.fromFirebase(userCredential.user);
   }

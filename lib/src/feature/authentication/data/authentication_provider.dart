@@ -10,7 +10,9 @@ abstract class IAuthenticationProvider {
 
   Stream<UserEntity> get userChanges;
 
-  Future<UserEntity> googleSignIn();
+  Future<UserEntity> signInWithGoogle();
+
+  Future<UserEntity> signInWithGitHub();
 
   Future<void> logOut();
 }

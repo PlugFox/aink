@@ -26,7 +26,7 @@ class AuthenticationProviderIO implements IAuthenticationProvider {
   Stream<UserEntity> get userChanges => _firebaseAuth.userChanges().map<UserEntity>(UserEntity.fromFirebase);
 
   @override
-  Future<UserEntity> googleSignIn() async {
+  Future<UserEntity> signInWithGoogle() async {
     final googleSignIn = GoogleSignIn(
       scopes: _kGoogleSignInScopes,
       signInOption: SignInOption.standard,
@@ -55,6 +55,28 @@ class AuthenticationProviderIO implements IAuthenticationProvider {
     final userCredential = await _firebaseAuth.signInWithCredential(credential);
 
     return UserEntity.fromFirebase(userCredential.user);
+  }
+
+  @override
+  Future<UserEntity> signInWithGitHub() async {
+    throw UnimplementedError();
+    /* // Create a GitHubSignIn instance
+    final gitHubSignIn = GitHubSignIn(
+      clientId: clientId,
+      clientSecret: clientSecret,
+      redirectUrl: 'https://my-project.firebaseapp.com/__/auth/handler',
+    );
+
+    // Trigger the sign-in flow
+    final result = await gitHubSignIn.signIn(context);
+
+    // Create a credential from the access token
+    final githubAuthCredential = GithubAuthProvider.credential(result.token);
+
+    // Once signed in, return the UserCredential
+    final userCredential = await FirebaseAuth.instance.signInWithCredential(githubAuthCredential);
+
+    return UserEntity.fromFirebase(userCredential.user); */
   }
 
   @override
