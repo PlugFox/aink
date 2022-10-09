@@ -6,6 +6,7 @@ import 'package:l/l.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
 import '../../../common/util/analytics.dart';
+import '../../../common/util/error_util.dart';
 import '../../../common/util/timeouts.dart';
 import '../data/authentication_repository.dart';
 import '../model/user_entity.dart';
@@ -31,21 +32,42 @@ class AuthenticationBLoC extends StreamBloc<AuthenticationEvent, AuthenticationS
 
   @override
   Stream<AuthenticationState> mapEventToStates(AuthenticationEvent event) => event.map<Stream<AuthenticationState>>(
-        googleSignIn: _googleSignIn,
+        signInWithGoogle: _signInWithGoogle,
+        signInWithGitHub: _signInWithGitHub,
         logOut: _logOut,
       );
 
-  Stream<AuthenticationState> _googleSignIn(_GoogleSignIn event) async* {
+  Stream<AuthenticationState> _signInWithGoogle(_GoogleSignIn event) async* {
     var user = state.user;
     try {
       yield AuthenticationState.processing(user: user);
-      user = await _repository.googleSignIn();
-    } on FirebaseAuthException catch (error) {
-      if (error.code == 'popup-closed-by-user') {
+      user = await _repository.signInWithGoogle();
+    } on FirebaseException catch (error) {
+      if (error.code.contains('popup-closed-by-user')) {
         l.i('The user closed the authentication window');
         return;
       }
-      emit(AuthenticationState.error(user: user, message: 'Firebase exception occurred during Google authentication'));
+      emit(AuthenticationState.error(user: user, message: ErrorUtil.formatMessage(error)));
+      rethrow;
+    } on Object {
+      yield AuthenticationState.error(user: user);
+      rethrow;
+    } finally {
+      _emitUser(user);
+    }
+  }
+
+  Stream<AuthenticationState> _signInWithGitHub(_GitHubSignIn event) async* {
+    var user = state.user;
+    try {
+      yield AuthenticationState.processing(user: user);
+      user = await _repository.signInWithGitHub();
+    } on FirebaseException catch (error) {
+      if (error.code.contains('popup-closed-by-user')) {
+        l.i('The user closed the authentication window');
+        return;
+      }
+      emit(AuthenticationState.error(user: user, message: ErrorUtil.formatMessage(error)));
       rethrow;
     } on Object {
       yield AuthenticationState.error(user: user);
@@ -61,6 +83,9 @@ class AuthenticationBLoC extends StreamBloc<AuthenticationEvent, AuthenticationS
       yield AuthenticationState.processing(user: user);
       await _repository.logOut().logicTimeout();
       user = const UserEntity.unauthenticated();
+    } on FirebaseException {
+      emit(AuthenticationState.error(user: user, message: 'An firebase exception occurred during log out'));
+      rethrow;
     } on Object {
       yield AuthenticationState.error(user: user, message: 'An error occurred during log out');
       rethrow;

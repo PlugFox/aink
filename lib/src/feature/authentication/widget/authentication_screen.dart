@@ -1,10 +1,18 @@
 import 'dart:math' as math;
+import 'dart:ui';
 
+import 'package:blobs/blobs.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../../common/constant/assets.gen.dart';
 import '../../../common/util/analytics.dart';
 import '../bloc/authentication_bloc.dart';
+import 'authentication_scope.dart';
+import 'social_login_button.dart';
 
 /// {@template authentication_screen}
 /// AuthenticationScreen widget
@@ -13,14 +21,10 @@ class AuthenticationScreen extends StatefulWidget {
   /// {@macro authentication_screen}
   const AuthenticationScreen({
     required this.state,
-    required this.onGoogleSignIn,
-    required this.onLogOut,
     super.key,
   });
 
   final AuthenticationState state;
-  final void Function() onGoogleSignIn;
-  final void Function() onLogOut;
 
   @override
   State<AuthenticationScreen> createState() => _AuthenticationScreenState();
@@ -35,55 +39,181 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
+        /* appBar: AppBar(
           title: const Text('Authentication'),
           centerTitle: true,
+        ), */
+        body: Align(
+          alignment: const Alignment(0, -.3),
+          child: _AuthenticationScreenBody(state: widget.state),
         ),
-        body: Center(
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.symmetric(
-              horizontal: math.max(24, (MediaQuery.of(context).size.width - 600) / 2),
-              vertical: 16,
+      );
+}
+
+class _AuthenticationScreenBody extends StatelessWidget {
+  const _AuthenticationScreenBody({required this.state});
+
+  final AuthenticationState state;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final logoDimension = math.min<double>(
+              math.min<double>(
+                constraints.maxHeight - 48 - 48,
+                constraints.maxWidth,
+              ),
+              512,
+            );
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                if (logoDimension > 95) ...<Widget>[
+                  SizedBox.square(
+                    key: const Key('authentication_logo'),
+                    dimension: logoDimension,
+                    child: _AuthenticationLogoWidget(size: logoDimension),
+                  ),
+                  SizedBox(width: (48 * 4 + 24 * 3 + logoDimension) / 2, child: const Divider(height: 48)),
+                ],
+                SizedBox(
+                  key: const Key('authentication_social_buttons'),
+                  height: 48,
+                  child: Center(
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        SocialLoginButton(
+                          key: const ValueKey<String>('social_login_button_google'),
+                          icon: const Icon(FontAwesomeIcons.google),
+                          onPressed: state.isProcessing || state.isAuthenticated
+                              ? null
+                              : () {
+                                  AuthenticationScope.signInWithGoogle(context);
+                                  HapticFeedback.lightImpact().ignore();
+                                },
+                        ),
+                        const VerticalDivider(width: 24),
+                        SocialLoginButton(
+                          key: const ValueKey<String>('social_login_button_github'),
+                          icon: const Icon(FontAwesomeIcons.github),
+                          onPressed: state.isProcessing || state.isAuthenticated || !kIsWeb
+                              ? null
+                              : () {
+                                  AuthenticationScope.signInWithGitHub(context);
+                                  HapticFeedback.lightImpact().ignore();
+                                },
+                        ),
+                        const VerticalDivider(width: 24),
+                        const SocialLoginButton(
+                          key: ValueKey<String>('social_login_button_twitter'),
+                          icon: Icon(FontAwesomeIcons.twitter),
+                          onPressed: null,
+                        ),
+                        const VerticalDivider(width: 24),
+                        const SocialLoginButton(
+                          key: ValueKey<String>('social_login_button_facebook'),
+                          icon: Icon(FontAwesomeIcons.facebookF),
+                          onPressed: null,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      );
+}
+
+/// {@template authentication_logo_widget}
+/// _AuthenticationLogoWidget widget
+/// {@endtemplate}
+class _AuthenticationLogoWidget extends StatelessWidget {
+  /// {@macro authentication_logo_widget}
+  const _AuthenticationLogoWidget({required this.size});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Stack(
+        children: <Widget>[
+          Positioned.fill(
+            key: ValueKey('authentication_logo_blob#${size.truncate()}'),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Blob.fromID(
+                id: const <String>['3-5-80'],
+                size: size * 1.15,
+                styles: BlobStyles(
+                  color: Colors.black26, // Theme.of(context).primaryColor,
+                  fillType: BlobFillType.fill,
+                ),
+                child: const SizedBox.expand(),
+              ),
             ),
-            children: <Widget>[
-              if (widget.state.isNotAuthenticated)
-                ElevatedButton.icon(
-                  key: const ValueKey<String>('google_sign_in_button'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xffDF4A32),
-                    padding: const EdgeInsets.all(16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                  ),
-                  onPressed: widget.state.isProcessing ? null : widget.onGoogleSignIn,
-                  label: const Text('Login with Google'),
-                  icon: const Icon(FontAwesomeIcons.google),
-                ),
-              if (widget.state.isAuthenticated)
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    padding: const EdgeInsets.all(16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                  ),
-                  onPressed: widget.state.isProcessing ? null : widget.onLogOut,
-                  label: const Text('Sign out'),
-                  icon: const Icon(Icons.logout),
-                ),
-            ],
           ),
-        ),
+          Positioned.fill(
+            child: Center(
+              child: SizedBox.square(
+                dimension: size / 1.45,
+                child: Assets.logo.iconAlfa512.image(
+                  color: Colors.black26,
+                ),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+              child: Align(
+                alignment: const Alignment(-.14, -.24),
+                child: SizedBox.square(
+                  dimension: size / 1.5 + 2,
+                  child: Assets.logo.iconAlfa512.image(
+                    color: Colors.black26,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Align(
+              alignment: const Alignment(-.15, -.25),
+              child: SizedBox.square(
+                dimension: size / 1.5,
+                child: Assets.logo.iconAlfa512.image(),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Align(
+              alignment: const Alignment(0, .75),
+              child: Text(
+                'Authentication',
+                style: GoogleFonts.sofia(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: size / 10,
+                  height: 1,
+                  fontWeight: FontWeight.w600,
+                ).copyWith(
+                  shadows: [
+                    const Shadow(
+                      color: Colors.black26,
+                      offset: Offset(6, 8),
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       );
 }

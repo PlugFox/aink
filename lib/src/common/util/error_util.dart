@@ -1,6 +1,7 @@
 import 'dart:async';
 
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:l/l.dart';
 import 'package:meta/meta.dart';
@@ -81,8 +82,24 @@ abstract class ErrorUtil {
       return 'Not implemented yet';
     } else if (error is UnsupportedError) {
       return 'Unsupported operation';
+    } else if (error is FirebaseAuthException) {
+      if (error.code.contains('popup-closed-by-user')) {
+        return 'The user closed the authentication window';
+      } else if (error.code.contains('account-exists-with-different-credential')) {
+        return 'An account already exists with the same email address.\n'
+            'Try signing in with another social provider instead.';
+      }
+      return 'Firebase authentication exception occurred';
+    } else if (error is FirebaseException) {
+      return 'Firebase exception occurred';
     } else if (error is AuthenticationException) {
       return 'Authentication error';
+    } else if (error is AssertionError) {
+      return 'Assertion error';
+    } else if (error is Error) {
+      return 'An error has occurred';
+    } else if (error is Exception) {
+      return 'An exception has occurred';
     } else {
       return fallback;
     }

@@ -6,7 +6,9 @@ abstract class IAuthenticationRepository {
 
   Stream<UserEntity> get userChanges;
 
-  Future<UserEntity> googleSignIn();
+  Future<UserEntity> signInWithGoogle();
+
+  Future<UserEntity> signInWithGitHub();
 
   Future<void> logOut();
 }
@@ -18,13 +20,20 @@ class AuthenticationRepositoryImpl implements IAuthenticationRepository {
   final IAuthenticationProvider _authenticationProvider;
 
   @override
-  UserEntity get currentUser => _authenticationProvider.currentUser;
+  UserEntity get currentUser => UserEntity.fromFirebase(_authenticationProvider.currentUser);
 
   @override
-  Stream<UserEntity> get userChanges => _authenticationProvider.userChanges;
+  Stream<UserEntity> get userChanges => _authenticationProvider.userChanges.map<UserEntity>(UserEntity.fromFirebase);
 
   @override
-  Future<UserEntity> googleSignIn() => _authenticationProvider.googleSignIn();
+  Future<UserEntity> signInWithGoogle() => _authenticationProvider.signInWithGoogle().then<UserEntity>(
+        (userCredential) => UserEntity.fromFirebase(userCredential.user),
+      );
+
+  @override
+  Future<UserEntity> signInWithGitHub() => _authenticationProvider.signInWithGitHub().then<UserEntity>(
+        (userCredential) => UserEntity.fromFirebase(userCredential.user),
+      );
 
   @override
   Future<void> logOut() => _authenticationProvider.logOut();

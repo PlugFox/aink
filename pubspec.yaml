@@ -24,7 +24,10 @@ dependencies:
   firebase_remote_config: any
   cloud_firestore: any
   #flutterfire_ui: any
+
+  # Authentication providers
   google_sign_in: any
+  github_sign_in: ^0.0.5-dev.4
 
   # State manager
   stream_bloc: ^0.5.1
@@ -91,6 +94,7 @@ flutter:
   assets:
     - assets/image/sunflower_512x512.jpg
     - assets/font/
+    - assets/logo/icon_alfa_512.png
 
 flutter_intl:
   enabled: true
