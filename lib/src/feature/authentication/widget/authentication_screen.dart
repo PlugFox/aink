@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:blobs/blobs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -59,7 +60,13 @@ class _AuthenticationScreenBody extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final logoDimension = math.min(constraints.maxHeight - 48 - 48, constraints.maxWidth);
+            final logoDimension = math.min<double>(
+              math.min<double>(
+                constraints.maxHeight - 48 - 48,
+                constraints.maxWidth,
+              ),
+              512,
+            );
             return Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -76,39 +83,46 @@ class _AuthenticationScreenBody extends StatelessWidget {
                 SizedBox(
                   key: const Key('authentication_social_buttons'),
                   height: 48,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SocialLoginButton(
-                        key: const ValueKey<String>('social_login_button_google'),
-                        icon: const Icon(FontAwesomeIcons.google),
-                        onPressed: state.isProcessing || state.isAuthenticated
-                            ? null
-                            : () => AuthenticationScope.signInWithGoogle(context),
-                      ),
-                      const VerticalDivider(width: 24),
-                      SocialLoginButton(
-                        key: const ValueKey<String>('social_login_button_github'),
-                        icon: const Icon(FontAwesomeIcons.github),
-                        onPressed: state.isProcessing || state.isAuthenticated || !kIsWeb
-                            ? null
-                            : () => AuthenticationScope.signInWithGitHub(context),
-                      ),
-                      const VerticalDivider(width: 24),
-                      const SocialLoginButton(
-                        key: ValueKey<String>('social_login_button_twitter'),
-                        icon: Icon(FontAwesomeIcons.twitter),
-                        onPressed: null,
-                      ),
-                      const VerticalDivider(width: 24),
-                      const SocialLoginButton(
-                        key: ValueKey<String>('social_login_button_facebook'),
-                        icon: Icon(FontAwesomeIcons.facebookF),
-                        onPressed: null,
-                      ),
-                    ],
+                  child: Center(
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        SocialLoginButton(
+                          key: const ValueKey<String>('social_login_button_google'),
+                          icon: const Icon(FontAwesomeIcons.google),
+                          onPressed: state.isProcessing || state.isAuthenticated
+                              ? null
+                              : () {
+                                  AuthenticationScope.signInWithGoogle(context);
+                                  HapticFeedback.lightImpact().ignore();
+                                },
+                        ),
+                        const VerticalDivider(width: 24),
+                        SocialLoginButton(
+                          key: const ValueKey<String>('social_login_button_github'),
+                          icon: const Icon(FontAwesomeIcons.github),
+                          onPressed: state.isProcessing || state.isAuthenticated || !kIsWeb
+                              ? null
+                              : () {
+                                  AuthenticationScope.signInWithGitHub(context);
+                                  HapticFeedback.lightImpact().ignore();
+                                },
+                        ),
+                        const VerticalDivider(width: 24),
+                        const SocialLoginButton(
+                          key: ValueKey<String>('social_login_button_twitter'),
+                          icon: Icon(FontAwesomeIcons.twitter),
+                          onPressed: null,
+                        ),
+                        const VerticalDivider(width: 24),
+                        const SocialLoginButton(
+                          key: ValueKey<String>('social_login_button_facebook'),
+                          icon: Icon(FontAwesomeIcons.facebookF),
+                          onPressed: null,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -138,7 +152,7 @@ class _AuthenticationLogoWidget extends StatelessWidget {
                 id: const <String>['3-5-80'],
                 size: size * 1.15,
                 styles: BlobStyles(
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.black26, // Theme.of(context).primaryColor,
                   fillType: BlobFillType.fill,
                 ),
                 child: const SizedBox.expand(),
@@ -159,11 +173,22 @@ class _AuthenticationLogoWidget extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
               child: Align(
-                alignment: const Alignment(-.15, -.25),
+                alignment: const Alignment(-.14, -.24),
                 child: SizedBox.square(
-                  dimension: size / 1.5,
-                  child: Assets.logo.iconAlfa512.image(),
+                  dimension: size / 1.5 + 2,
+                  child: Assets.logo.iconAlfa512.image(
+                    color: Colors.black26,
+                  ),
                 ),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Align(
+              alignment: const Alignment(-.15, -.25),
+              child: SizedBox.square(
+                dimension: size / 1.5,
+                child: Assets.logo.iconAlfa512.image(),
               ),
             ),
           ),

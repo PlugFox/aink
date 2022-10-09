@@ -1,18 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../model/user_entity.dart';
 import 'authentication_provider_io.dart'
     // ignore: uri_does_not_exist
     if (dart.library.html) 'authentication_provider_web.dart';
 
 abstract class IAuthenticationProvider {
-  UserEntity get currentUser;
+  User? get currentUser;
 
-  Stream<UserEntity> get userChanges;
+  Stream<User?> get userChanges;
 
-  Future<UserEntity> signInWithGoogle();
+  Future<UserCredential> signInWithGoogle({String? loginHint});
 
-  Future<UserEntity> signInWithGitHub();
+  Future<UserCredential> signInWithGitHub();
 
   Future<void> logOut();
 }

@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:l/l.dart';
 
-import '../model/user_entity.dart';
 import 'authentication_provider.dart';
 
 const List<String> _kGoogleSignInScopes = <String>[
@@ -20,13 +19,13 @@ class AuthenticationProviderIO implements IAuthenticationProvider {
   final FirebaseAuth _firebaseAuth;
 
   @override
-  UserEntity get currentUser => UserEntity.fromFirebase(_firebaseAuth.currentUser);
+  User? get currentUser => _firebaseAuth.currentUser;
 
   @override
-  Stream<UserEntity> get userChanges => _firebaseAuth.userChanges().map<UserEntity>(UserEntity.fromFirebase);
+  Stream<User?> get userChanges => _firebaseAuth.userChanges();
 
   @override
-  Future<UserEntity> signInWithGoogle() async {
+  Future<UserCredential> signInWithGoogle({String? loginHint}) async {
     final googleSignIn = GoogleSignIn(
       scopes: _kGoogleSignInScopes,
       signInOption: SignInOption.standard,
@@ -37,7 +36,7 @@ class AuthenticationProviderIO implements IAuthenticationProvider {
     final googleUser = await googleSignIn.signIn();
 
     if (googleUser is! GoogleSignInAccount) {
-      return const UserEntity.unauthenticated();
+      throw Exception('Google sign in failed');
     }
 
     l.vvvvv('Getting google authentication credentials');
@@ -54,11 +53,11 @@ class AuthenticationProviderIO implements IAuthenticationProvider {
     // Once signed in, return the UserCredential
     final userCredential = await _firebaseAuth.signInWithCredential(credential);
 
-    return UserEntity.fromFirebase(userCredential.user);
+    return userCredential;
   }
 
   @override
-  Future<UserEntity> signInWithGitHub() async {
+  Future<UserCredential> signInWithGitHub() async {
     throw UnimplementedError();
     /* // Create a GitHubSignIn instance
     final gitHubSignIn = GitHubSignIn(

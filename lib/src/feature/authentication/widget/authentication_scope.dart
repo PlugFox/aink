@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../bloc/authentication_bloc.dart';
 import '../data/authentication_provider.dart';
@@ -83,6 +83,15 @@ class _AuthenticationScopeState extends State<AuthenticationScope> {
     _userChangesSubscription = _bloc.stream.listen(
       (state) {
         if (_state == state) return;
+        if (state.isError) {
+          ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
         setState(() => _state = state);
       },
       cancelOnError: false,
@@ -93,6 +102,7 @@ class _AuthenticationScopeState extends State<AuthenticationScope> {
   void dispose() {
     _userChangesSubscription.cancel();
     _bloc.close();
+
     super.dispose();
   }
 
