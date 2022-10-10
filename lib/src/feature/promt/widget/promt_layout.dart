@@ -31,50 +31,62 @@ class PromtLayout extends StatelessWidget {
   final Widget imageCard;
   final List<Widget> previewCards;
 
+  static PromtLayoutConstraints getPromtLayoutConstraints(BoxConstraints constraints, {int previewCardsCount = 4}) {
+    const maxImageSize = 512.0;
+    final padding = ScreenUtil.from(constraints.biggest).when<double>(
+      extraSmall: () => 16,
+      small: () => 24,
+      medium: () => 32,
+      large: () => 48,
+      extraLarge: () => 64,
+    );
+    const promtHeight = 48.0;
+    final size = Size(
+      constraints.biggest.width,
+      constraints.biggest.height - promtHeight - padding,
+    );
+    final cardsPadding = previewCardsCount < 1 ? .0 : padding;
+    final previewSize = math.min(
+      maxImageSize,
+      previewCardsCount < 1 ? .0 : (size.shortestSide - cardsPadding * (previewCardsCount - 1)) / previewCardsCount,
+    );
+    final cardSize = math.min(
+      maxImageSize,
+      math.min(
+        size.shortestSide,
+        size.longestSide - previewSize - cardsPadding,
+      ),
+    );
+    final promtWidth = size.aspectRatio > 1
+        ? previewSize + cardsPadding + cardSize
+        : math.max(cardSize, previewSize * previewCardsCount + cardsPadding * (previewCardsCount - 1));
+    return PromtLayoutConstraints(
+      size: size,
+      maxImageSize: maxImageSize,
+      padding: padding,
+      promtHeight: promtHeight,
+      promtWidth: promtWidth,
+      cardSize: cardSize,
+      previewSize: previewSize,
+      cardsPadding: cardsPadding,
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Center(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              const maxImageSize = 512.0;
-              final padding = ScreenUtil.from(constraints.biggest).when<double>(
-                extraSmall: () => 16,
-                small: () => 24,
-                medium: () => 32,
-                large: () => 48,
-                extraLarge: () => 64,
-              );
-              const promtHeight = 48.0;
-              final size = Size(
-                constraints.biggest.width,
-                constraints.biggest.height - promtHeight - padding,
-              );
-              final cardsPadding = previewCards.isEmpty ? .0 : padding;
-              final previewSize = math.min(
-                maxImageSize,
-                previewCards.isEmpty
-                    ? .0
-                    : (size.shortestSide - cardsPadding * (previewCards.length - 1)) / previewCards.length,
-              );
-              final cardSize = math.min(
-                maxImageSize,
-                math.min(
-                  size.shortestSide,
-                  size.longestSide - previewSize - cardsPadding,
-                ),
-              );
-              final promtWidth = size.aspectRatio > 1
-                  ? previewSize + cardsPadding + cardSize
-                  : math.max(cardSize, previewSize * previewCards.length + cardsPadding * (previewCards.length - 1));
+              final layoutConstraints = getPromtLayoutConstraints(constraints, previewCardsCount: previewCards.length);
               return Column(
                 mainAxisSize: _expanded ? MainAxisSize.max : MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-                    height: promtHeight,
-                    width: promtWidth,
+                    height: layoutConstraints.promtHeight,
+                    width: layoutConstraints.promtWidth,
                     child: Hero(
                       tag: 'Hero#promtInput',
                       child: Row(
@@ -92,10 +104,10 @@ class PromtLayout extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (_expanded) const Spacer() else SizedBox(height: padding),
+                  if (_expanded) const Spacer() else SizedBox(height: layoutConstraints.padding),
                   Align(
                     alignment: Alignment.topCenter,
-                    child: _PromtLayoutCards(
+                    child: PromtLayoutCards(
                       imageCard: Hero(
                         tag: 'Hero#imageCard',
                         child: imageCard,
@@ -107,10 +119,10 @@ class PromtLayout extends StatelessWidget {
                             child: previewCards[i],
                           ),
                       ],
-                      size: size,
-                      cardSize: cardSize,
-                      previewSize: previewSize,
-                      padding: cardsPadding,
+                      size: layoutConstraints.size,
+                      cardSize: layoutConstraints.cardSize,
+                      previewSize: layoutConstraints.previewSize,
+                      padding: layoutConstraints.cardsPadding,
                     ),
                   ),
                   if (_expanded) const Spacer(),
@@ -122,9 +134,9 @@ class PromtLayout extends StatelessWidget {
       );
 }
 
-class _PromtLayoutCards extends StatelessWidget {
+class PromtLayoutCards extends StatelessWidget {
   // ignore: unused_element
-  const _PromtLayoutCards({
+  const PromtLayoutCards({
     required this.imageCard,
     required this.previewCards,
     required this.size,
@@ -196,4 +208,27 @@ class _PromtLayoutCards extends StatelessWidget {
       ),
     );
   }
+}
+
+@immutable
+class PromtLayoutConstraints {
+  const PromtLayoutConstraints({
+    required this.size,
+    required this.maxImageSize,
+    required this.padding,
+    required this.promtHeight,
+    required this.promtWidth,
+    required this.cardSize,
+    required this.previewSize,
+    required this.cardsPadding,
+  });
+
+  final Size size;
+  final double maxImageSize;
+  final double padding;
+  final double promtHeight;
+  final double promtWidth;
+  final double cardSize;
+  final double previewSize;
+  final double cardsPadding;
 }
