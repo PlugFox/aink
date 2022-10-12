@@ -15,7 +15,7 @@ part 'promt_state.dart';
 class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
   PromtBLoC({required IPromtRepository repository})
       : _repository = repository,
-        super(PromtState.initial());
+        super(PromtState.initial(repository.getSuggestions()));
 
   final IPromtRepository _repository;
 
@@ -30,21 +30,22 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
     try {
       final data = _repository.getPromt();
       if (data == null) return;
-      yield PromtState.processing(data: data);
+      yield PromtState.processing(data: data, suggestions: state.suggestions);
       final taskId = data.task;
       if (taskId == null) return;
       final images = await _repository.fetchByTaskId(taskId).value;
-      yield PromtState.successful(data: state.data.copyWith(newImages: images));
+      yield PromtState.successful(data: state.data.copyWith(newImages: images), suggestions: state.suggestions);
       Analytics.logGenerateImagesComplete();
     } on Object catch (error) {
       yield PromtState.error(
         data: const PromtEntity.empty(),
+        suggestions: state.suggestions,
         message: ErrorUtil.formatMessage(error),
       );
       rethrow;
     } finally {
       _repository.clearPromt().ignore();
-      yield PromtState.idle(data: state.data);
+      yield PromtState.idle(data: state.data, suggestions: state.suggestions);
     }
   }
 
@@ -60,22 +61,24 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
       }
       final promt = data.promt ?? '';
       if (promt.isEmpty) return;
-      yield PromtState.processing(data: data);
+      await _repository.addSuggestion(promt);
+      yield PromtState.processing(data: data, suggestions: _repository.getSuggestions());
       final taskId = state.data.task ?? await _repository.generateImages(promt: promt).logicTimeout();
-      yield PromtState.processing(data: state.data.copyWith(newTask: taskId));
+      yield PromtState.processing(data: state.data.copyWith(newTask: taskId), suggestions: state.suggestions);
       await _repository.setPromt(state.data).logicTimeout();
       final images = await _repository.fetchByTaskId(taskId).value;
-      yield PromtState.successful(data: state.data.copyWith(newImages: images));
+      yield PromtState.successful(data: state.data.copyWith(newImages: images), suggestions: state.suggestions);
       Analytics.logGenerateImagesComplete();
     } on Object catch (error) {
       yield PromtState.error(
         data: const PromtEntity.empty(),
+        suggestions: state.suggestions,
         message: ErrorUtil.formatMessage(error),
       );
       rethrow;
     } finally {
       _repository.clearPromt().ignore();
-      yield PromtState.idle(data: state.data);
+      yield PromtState.idle(data: state.data, suggestions: state.suggestions);
     }
   }
 
@@ -94,11 +97,12 @@ class PromtBLoC extends StreamBloc<PromtEvent, PromtState> {
     } on Object catch (error) {
       yield PromtState.error(
         data: const PromtEntity.empty(),
+        suggestions: state.suggestions,
         message: ErrorUtil.formatMessage(error),
       );
       rethrow;
     } finally {
-      yield PromtState.idle(data: newData);
+      yield PromtState.idle(data: newData, suggestions: state.suggestions);
     }
   }
 }

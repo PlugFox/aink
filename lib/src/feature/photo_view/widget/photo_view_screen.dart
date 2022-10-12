@@ -97,7 +97,7 @@ class PhotoViewBackButton extends StatelessWidget {
                   },
                   customBorder: const CircleBorder(),
                   child: Icon(
-                    Icons.arrow_back,
+                    Icons.fullscreen_exit,
                     size: _isLarge ? 48 : 32,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),

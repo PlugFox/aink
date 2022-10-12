@@ -71,6 +71,10 @@ class _PromtImageFooterButtons extends StatelessWidget {
   Widget build(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          /* const IconButton(
+            onPressed: null,
+            icon: Icon(Icons.fullscreen),
+          ), */
           const IconButton(
             onPressed: null,
             icon: Icon(Icons.favorite),
@@ -87,7 +91,6 @@ class _PromtImageFooterButtons extends StatelessWidget {
       );
 
   void _saveImage(BuildContext context) {
-    print('!!!!!!!!!!!!!!!!!!');
     final data = Dependencies.instance.promtBLoC.state.data;
     final url = data.images?.firstOrNull?.url;
     if (url == null) return;
