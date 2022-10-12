@@ -71,17 +71,29 @@ class _PromtImageFooterButtons extends StatelessWidget {
   Widget build(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          /* const IconButton(
+            onPressed: null,
+            icon: Icon(Icons.fullscreen),
+          ), */
           const IconButton(
             onPressed: null,
             icon: Icon(Icons.favorite),
+            tooltip: 'Favorite',
+          ),
+          const IconButton(
+            onPressed: null,
+            icon: Icon(Icons.info),
+            tooltip: 'Info',
           ),
           const IconButton(
             onPressed: null,
             icon: Icon(Icons.share),
+            tooltip: 'Share',
           ),
           IconButton(
             onPressed: () => _saveImage(context),
             icon: const Icon(Icons.download),
+            tooltip: 'Download',
           ),
         ],
       );

@@ -11,6 +11,8 @@ abstract class IPromtRepository {
   Future<String> generateImages({required String promt});
   CancelableOperation<List<GeneratedImage>> fetchByTaskId(String taskId);
   Future<void> clearPromt();
+  Future<void> addSuggestion(String promt);
+  List<String> getSuggestions();
 }
 
 class PromtRepositoryImpl implements IPromtRepository {
@@ -37,4 +39,10 @@ class PromtRepositoryImpl implements IPromtRepository {
 
   @override
   Future<void> clearPromt() => _databaseProvider.clearPromt();
+
+  @override
+  Future<void> addSuggestion(String promt) => _databaseProvider.addSuggestion(promt);
+
+  @override
+  List<String> getSuggestions() => _databaseProvider.getSuggestions();
 }
