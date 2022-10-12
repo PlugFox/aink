@@ -87,6 +87,7 @@ class _PromtImageFooterButtons extends StatelessWidget {
       );
 
   void _saveImage(BuildContext context) {
+    print('!!!!!!!!!!!!!!!!!!');
     final data = Dependencies.instance.promtBLoC.state.data;
     final url = data.images?.firstOrNull?.url;
     if (url == null) return;

@@ -12,7 +12,6 @@ import '../../wheel/widget/colored_card.dart';
 import '../bloc/promt_bloc.dart';
 import 'promt_image_card.dart';
 import 'promt_image_layout.dart';
-import 'promt_layout.dart';
 import 'promt_send_button.dart';
 import 'promt_text_input.dart';
 
@@ -128,15 +127,14 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                       builder: (context, enabled, child) => AnimatedOpacity(
                         duration: const Duration(milliseconds: 450),
                         opacity: enabled ? 1 : 0,
-                        child: child,
-                      ),
-                      child: ModalBarrier(
-                        dismissible: true,
-                        color: Colors.black26,
-                        onDismiss: () {
-                          _focusNode.unfocus();
-                          disableBarrier();
-                        },
+                        child: ModalBarrier(
+                          dismissible: enabled,
+                          color: Colors.black26,
+                          onDismiss: () {
+                            _focusNode.unfocus();
+                            disableBarrier();
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -159,80 +157,10 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
         ),
       );
 
-  Widget _innerBuild(Orientation orientation) => SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            bottom: orientation == Orientation.landscape ? 16 : 48,
-          ),
-          child: Center(
-            child: SizedBox(
-              width: 1024,
-              child: Center(
-                child: BlocBuilder<PromtBLoC, PromtState>(
-                  bloc: Dependencies.instance.promtBLoC,
-                  builder: (context, state) => PromtLayout.expanded(
-                    promtInput: SizedBox.square(
-                      child: ColoredCard.expanded(
-                        color: Colors.red,
-                        animation: _animationController,
-                        child: PromtTextInput(
-                          focusNode: _focusNode,
-                          controller: _inputController,
-                          onSubmit: _onSubmit,
-                        ),
-                      ),
-                    ),
-                    promtSend: ColoredCard.expanded(
-                      color: Colors.green,
-                      animation: _animationController,
-                      child: PromtSendButton(
-                        controller: _inputController,
-                        onSubmit: _onSubmit,
-                      ),
-                    ),
-                    imageCard: ColoredCard.compact(
-                      color: Colors.blue,
-                      child: RepaintBoundary(
-                        key: const ValueKey('imageCard'),
-                        child: _buildImage(state, 0),
-                      ),
-                    ),
-                    previewCards: <Widget>[
-                      ColoredCard.expanded(
-                        animation: _animationController,
-                        color: Colors.orange,
-                        child: RepaintBoundary(
-                          key: const ValueKey('previewCards#1'),
-                          child: _buildImage(state, 1),
-                        ),
-                      ),
-                      ColoredCard.compact(
-                        color: Colors.pink,
-                        child: RepaintBoundary(
-                          key: const ValueKey('previewCards#2'),
-                          child: _buildImage(state, 2),
-                        ),
-                      ),
-                      ColoredCard.expanded(
-                        animation: _animationController,
-                        color: Colors.purple,
-                        child: RepaintBoundary(
-                          key: const ValueKey('previewCards#3'),
-                          child: _buildImage(state, 3),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-
   void _onSubmit() {
     if (Dependencies.instance.promtBLoC.state.isProcessing) return;
     _focusNode.unfocus();
+    disableBarrier();
     Dependencies.instance.promtBLoC.add(PromtEvent.generate(promt: _inputController.text));
     HapticFeedback.heavyImpact().ignore();
   }
@@ -353,4 +281,93 @@ class _PromtInputRow extends StatelessWidget {
           ),
         ),
       );
+}
+
+class _PromtBarrier extends StatefulWidget {
+  /// {@macro promt_barrier}
+  const _PromtBarrier({
+    required this.enabled,
+    required this.child,
+  });
+
+  /// The widget below this widget in the tree.
+  final Widget child;
+
+  /// The duration of the animation.
+  final Duration duration;
+
+  /// Is barrier is enabled?
+  final bool enabled;
+
+  @override
+  State<_PromtBarrier> createState() => __PromtBarrierState();
+}
+
+class __PromtBarrierState extends State<_PromtBarrier> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  /* #region Lifecycle */
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+      value: 0,
+    );
+  }
+
+  @override
+  void didUpdateWidget(_PromtBarrier oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.duration != _controller.duration) {
+      _controller.duration = widget.duration;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // The configuration of InheritedWidgets has changed
+    // Also called after initState but before build
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  /* #endregion */
+
+  @visibleForTesting
+  Future<void> forward() async {
+    if (_controller.isCompleted) return;
+    try {
+      await _controller.forward().orCancel;
+    } on TickerCanceled {
+      // the animation got canceled, probably because we were disposed
+    }
+  }
+
+  @visibleForTesting
+  Future<void> reverse() async {
+    if (_controller.isDismissed) return;
+    try {
+      await _controller.reverse().orCancel;
+    } on TickerCanceled {
+      // the animation got canceled, probably because we were disposed
+    }
+  }
+
+  @visibleForTesting
+  Future<void> repeat() async {
+    try {
+      await _controller.repeat().orCancel;
+    } on TickerCanceled {
+      // the animation got canceled, probably because we were disposed
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }
