@@ -123,31 +123,29 @@ class _PromtSuggestionsState extends State<PromtSuggestions> with SingleTickerPr
                         alignment: Alignment.topCenter,
                         child: ScrollConfiguration(
                           behavior: _RemoveGlow(),
-                          child: ValueListenableBuilder<TextEditingValue>(
-                            valueListenable: widget.inputController,
-                            builder: (context, value, child) => ListView.builder(
-                              shrinkWrap: true,
-                              physics: const ClampingScrollPhysics(),
-                              padding: const EdgeInsets.all(8),
-                              itemCount: state.suggestions.length,
-                              itemExtent: 64,
-                              itemBuilder: (context, index) {
-                                /* if (index == 0) {
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const ClampingScrollPhysics(),
+                            padding: const EdgeInsets.all(8),
+                            itemCount: state.suggestions.length,
+                            itemExtent: 64,
+                            itemBuilder: (context, index) {
+                              /* if (index == 0) {
                                   return const _SuggestionIcons();
                                 } */
-                                if (index >= state.suggestions.length) {
-                                  return const SizedBox.shrink();
-                                }
-                                return _SuggestionTile(
-                                  title: state.suggestions[index],
-                                  onTap: value.text == state.suggestions[index]
-                                      ? null
-                                      : () {
-                                          widget.onSuggestion(state.suggestions[index]);
-                                        },
-                                );
-                              },
-                            ),
+                              if (index >= state.suggestions.length) {
+                                return const SizedBox.shrink();
+                              }
+                              final suggestion = state.suggestions[index];
+                              return ValueListenableBuilder<TextEditingValue>(
+                                valueListenable: widget.inputController,
+                                builder: (context, value, child) => _SuggestionTile(
+                                  key: ValueKey<String>('promt-suggestion-$index'),
+                                  title: suggestion,
+                                  onTap: value.text == suggestion ? null : () => widget.onSuggestion(suggestion),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),

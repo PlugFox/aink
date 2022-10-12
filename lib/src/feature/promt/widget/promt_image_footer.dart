@@ -78,14 +78,22 @@ class _PromtImageFooterButtons extends StatelessWidget {
           const IconButton(
             onPressed: null,
             icon: Icon(Icons.favorite),
+            tooltip: 'Favorite',
+          ),
+          const IconButton(
+            onPressed: null,
+            icon: Icon(Icons.info),
+            tooltip: 'Info',
           ),
           const IconButton(
             onPressed: null,
             icon: Icon(Icons.share),
+            tooltip: 'Share',
           ),
           IconButton(
             onPressed: () => _saveImage(context),
             icon: const Icon(Icons.download),
+            tooltip: 'Download',
           ),
         ],
       );

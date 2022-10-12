@@ -85,6 +85,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                 : FloatingActionButtonLocation.centerFloat,
             floatingActionButton: ScreenUtil.screenSizeOf(context).maybeWhen<FloatingActionButton>(
               extraSmall: () => FloatingActionButton(
+                tooltip: 'Back to menu',
                 onPressed: () {
                   _focusNode.unfocus();
                   Navigator.pop<void>(context);
@@ -93,6 +94,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                 child: const Icon(Icons.menu),
               ),
               orElse: () => FloatingActionButton.large(
+                tooltip: 'Back to menu',
                 onPressed: () {
                   _focusNode.unfocus();
                   Navigator.pop<void>(context);
