@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -68,34 +70,52 @@ class _PromtImageFooterButtons extends StatelessWidget {
   const _PromtImageFooterButtons();
 
   @override
-  Widget build(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          /* const IconButton(
-            onPressed: null,
-            icon: Icon(Icons.fullscreen),
-          ), */
-          const IconButton(
-            onPressed: null,
-            icon: Icon(Icons.favorite),
-            tooltip: 'Favorite',
-          ),
-          const IconButton(
-            onPressed: null,
-            icon: Icon(Icons.info),
-            tooltip: 'Info',
-          ),
-          const IconButton(
-            onPressed: null,
-            icon: Icon(Icons.share),
-            tooltip: 'Share',
-          ),
-          IconButton(
-            onPressed: () => _saveImage(context),
-            icon: const Icon(Icons.download),
-            tooltip: 'Download',
-          ),
-        ],
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          const iconCount = 4;
+          final width = constraints.biggest.width;
+          final size = Size.square(
+            math.min<double>(
+              math.min<double>(kMinInteractiveDimension, width / iconCount),
+              constraints.biggest.height,
+            ),
+          );
+          final padding = ((width - size.width * iconCount) / ((iconCount - 1) * 2)).clamp(.0, 8.0);
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                onPressed: null,
+                constraints: BoxConstraints.loose(size),
+                padding: EdgeInsets.all(padding),
+                icon: const Icon(Icons.favorite),
+                tooltip: 'Favorite',
+              ),
+              if (width > 159)
+                IconButton(
+                  onPressed: null,
+                  constraints: BoxConstraints.loose(size),
+                  padding: EdgeInsets.all(padding),
+                  icon: const Icon(Icons.info),
+                  tooltip: 'Info',
+                ),
+              IconButton(
+                onPressed: null,
+                constraints: BoxConstraints.loose(size),
+                padding: EdgeInsets.all(padding),
+                icon: const Icon(Icons.share),
+                tooltip: 'Share',
+              ),
+              IconButton(
+                onPressed: () => _saveImage(context),
+                constraints: BoxConstraints.loose(size),
+                padding: EdgeInsets.all(padding),
+                icon: const Icon(Icons.download),
+                tooltip: 'Download',
+              ),
+            ],
+          );
+        },
       );
 
   void _saveImage(BuildContext context) {
