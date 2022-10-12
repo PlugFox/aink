@@ -109,13 +109,13 @@ class PromtLayout extends StatelessWidget {
                     alignment: Alignment.topCenter,
                     child: PromtLayoutCards(
                       imageCard: Hero(
-                        tag: 'Hero#imageCard',
+                        tag: 'Hero#imageCard#0',
                         child: imageCard,
                       ),
                       previewCards: <Widget>[
                         for (var i = 0; i < previewCards.length; i++)
                           Hero(
-                            tag: 'Hero#previewCards#$i',
+                            tag: 'Hero#imageCard#${i + 1}',
                             child: previewCards[i],
                           ),
                       ],

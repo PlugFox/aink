@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,10 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/initialization/dependencies.dart';
 import '../../../common/util/error_util.dart';
 import '../../../common/util/screen_util.dart';
-import '../../photo_view/widget/photo_view_screen.dart';
 import '../../wheel/widget/colored_card.dart';
 import '../bloc/promt_bloc.dart';
-import 'promt_image_card.dart';
 import 'promt_image_layout.dart';
 import 'promt_send_button.dart';
 import 'promt_text_input.dart';
@@ -122,20 +119,13 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                   ),
                   Positioned.fill(
                     key: const ValueKey<String>('PromtScreen#InputBarrier'),
-                    child: ValueListenableBuilder(
-                      valueListenable: barrierEnabled,
-                      builder: (context, enabled, child) => AnimatedOpacity(
-                        duration: const Duration(milliseconds: 450),
-                        opacity: enabled ? 1 : 0,
-                        child: ModalBarrier(
-                          dismissible: enabled,
-                          color: Colors.black26,
-                          onDismiss: () {
-                            _focusNode.unfocus();
-                            disableBarrier();
-                          },
-                        ),
-                      ),
+                    child: PromtBarrier(
+                      enabled: barrierEnabled,
+                      duration: const Duration(milliseconds: 450),
+                      onDismiss: () {
+                        _focusNode.unfocus();
+                        disableBarrier();
+                      },
                     ),
                   ),
                   Positioned.fill(
@@ -163,47 +153,6 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
     disableBarrier();
     Dependencies.instance.promtBLoC.add(PromtEvent.generate(promt: _inputController.text));
     HapticFeedback.heavyImpact().ignore();
-  }
-
-  Widget _buildImage(PromtState state, int index) {
-    final preview = index != 0;
-    if (state.isProcessing) return PromtImageCard.loading(preview: preview);
-    final image = state.data.images?.skip(index).firstOrNull;
-    if (image == null) return PromtImageCard.empty(preview: preview);
-    return PromtImageCard(
-      image: image,
-      preview: preview,
-      onTap: index == 0
-          ? () {
-              Navigator.push<void>(
-                context,
-                PageRouteBuilder<void>(
-                  pageBuilder: (context, _, __) => PhotoViewScreen(image: image),
-                  transitionsBuilder: (
-                    context,
-                    animation,
-                    secondayAnimation,
-                    child,
-                  ) =>
-                      ScaleTransition(
-                    scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
-                    child: FadeTransition(
-                      opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
-                      child: child,
-                    ),
-                  ),
-                  settings: const RouteSettings(name: 'photo_view'),
-                ),
-              );
-              _focusNode.unfocus();
-              HapticFeedback.lightImpact().ignore();
-            }
-          : () {
-              _focusNode.unfocus();
-              HapticFeedback.lightImpact().ignore();
-              Dependencies.instance.promtBLoC.add(PromtEvent.focus(index: index));
-            },
-    );
   }
 }
 
@@ -283,28 +232,32 @@ class _PromtInputRow extends StatelessWidget {
       );
 }
 
-class _PromtBarrier extends StatefulWidget {
+/// {@template promt_barrier}
+/// PromtBarrier
+/// {@endtemplate}
+class PromtBarrier extends StatefulWidget {
   /// {@macro promt_barrier}
-  const _PromtBarrier({
+  const PromtBarrier({
     required this.enabled,
-    required this.child,
+    required this.onDismiss,
+    this.duration = const Duration(milliseconds: 450),
   });
-
-  /// The widget below this widget in the tree.
-  final Widget child;
 
   /// The duration of the animation.
   final Duration duration;
 
   /// Is barrier is enabled?
-  final bool enabled;
+  final ValueListenable<bool> enabled;
+
+  final VoidCallback onDismiss;
 
   @override
-  State<_PromtBarrier> createState() => __PromtBarrierState();
+  State<PromtBarrier> createState() => _PromtBarrierState();
 }
 
-class __PromtBarrierState extends State<_PromtBarrier> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _PromtBarrierState extends State<PromtBarrier> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  final ValueNotifier<bool> _hide = ValueNotifier<bool>(true);
 
   /* #region Lifecycle */
   @override
@@ -314,11 +267,12 @@ class __PromtBarrierState extends State<_PromtBarrier> with SingleTickerProvider
       vsync: this,
       duration: widget.duration,
       value: 0,
-    );
+    )..addStatusListener((status) => _hide.value = status == AnimationStatus.dismissed);
+    widget.enabled.addListener(_onEnabledChanged);
   }
 
   @override
-  void didUpdateWidget(_PromtBarrier oldWidget) {
+  void didUpdateWidget(PromtBarrier oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.duration != _controller.duration) {
       _controller.duration = widget.duration;
@@ -326,18 +280,14 @@ class __PromtBarrierState extends State<_PromtBarrier> with SingleTickerProvider
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // The configuration of InheritedWidgets has changed
-    // Also called after initState but before build
-  }
-
-  @override
   void dispose() {
     _controller.dispose();
+    widget.enabled.removeListener(_onEnabledChanged);
     super.dispose();
   }
   /* #endregion */
+
+  void _onEnabledChanged() => widget.enabled.value ? _controller.forward() : _controller.reverse();
 
   @visibleForTesting
   Future<void> forward() async {
@@ -369,5 +319,19 @@ class __PromtBarrierState extends State<_PromtBarrier> with SingleTickerProvider
   }
 
   @override
-  Widget build(BuildContext context) => widget.child;
+  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
+        valueListenable: _hide,
+        builder: (context, value, child) => Offstage(
+          offstage: value,
+          child: child,
+        ),
+        child: AnimatedModalBarrier(
+          dismissible: true,
+          color: ColorTween(
+            begin: Colors.transparent,
+            end: Colors.black26,
+          ).animate(_controller),
+          onDismiss: widget.onDismiss,
+        ),
+      );
 }

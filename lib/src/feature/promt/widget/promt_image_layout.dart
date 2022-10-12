@@ -58,7 +58,6 @@ class PromtImageLayout extends StatelessWidget {
         ),
       );
 
-  // TODO: equal callbacks for all images
   // Matiunin Mikhail <plugfox@gmail.com>, 11 October 2022
   /// Build line layout
   Widget _buildLineLayout(BuildContext context, PromtState state, Size size) {
@@ -291,24 +290,23 @@ class PromtImageLayout extends StatelessWidget {
           );
   }
 
-  // TODO: Hero animation
-  // Matiunin Mikhail <plugfox@gmail.com>, 11 October 2022
-  static Widget _buildImage(BuildContext context, PromtState state, int index, bool preview) {
+  static Widget _buildImage(PromtState state, int index, bool preview) {
     if (state.isProcessing) return PromtImageCard.loading(preview: preview);
     final image = state.data.images?.skip(index).firstOrNull;
     if (image == null) return PromtImageCard.empty(preview: preview);
-    return PromtImageCard(
-      image: image,
-      preview: preview,
-      onTap: () => preview ? _focusImage(context, index) : _showFullScreenImage(context, image),
+    return Builder(
+      builder: (context) => PromtImageCard(
+        image: image,
+        preview: preview,
+        onTap: () => preview ? _focusImage(context, index) : _showFullScreenImage(context, image),
+      ),
     );
   }
 
-  static Widget _buildMainImage(BuildContext context, PromtState state, int index) =>
-      _buildImage(context, state, index, false);
+  static Widget _buildMainImage(BuildContext context, PromtState state, int index) => _buildImage(state, index, false);
 
   static Widget _buildPreviewImage(BuildContext context, PromtState state, int index) =>
-      _buildImage(context, state, index, true);
+      _buildImage(state, index, true);
 
   static void _showFullScreenImage(BuildContext context, GeneratedImage image) {
     Navigator.push<void>(
