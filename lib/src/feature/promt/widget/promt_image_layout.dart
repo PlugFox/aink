@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../common/initialization/dependencies.dart';
 import '../../photo_view/widget/photo_view_screen.dart';
 import '../bloc/promt_bloc.dart';
-import '../model/generated_image.dart';
 import 'promt_image_card.dart';
 
 /// {@template promt_image_layout}
@@ -39,10 +38,10 @@ class PromtImageLayout extends StatelessWidget {
               }
 
               // Can place all images in all available space
-              final isBigScreen = size.longestSide >= imageMaxSize * imageMaxCount + 8 * (imageMaxCount - 1);
+              final isBigScreen = size.longestSide >= imageMaxSize * imageMaxCount;
 
               // Can place effectivle all images in a line
-              final longScreen = size.shortestSide * .75 < (size.longestSide - 8 * (imageMaxCount - 1)) / imageMaxCount;
+              final longScreen = size.shortestSide * .75 < (size.longestSide) / imageMaxCount;
 
               // line layout
               if (isBigScreen || longScreen) {
@@ -71,15 +70,12 @@ class PromtImageLayout extends StatelessWidget {
             children: <Widget>[
               for (var i = 0; i < 4; i++)
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(i == 0 ? 0 : 4, 4, i == 3 ? 0 : 4, 4),
-                    child: Center(
-                      child: SizedBox.square(
-                        dimension: 512,
-                        child: RepaintBoundary(
-                          key: ValueKey<String>('imageCard#$i'),
-                          child: buildImage(0),
-                        ),
+                  child: Center(
+                    child: SizedBox.square(
+                      dimension: 512,
+                      child: RepaintBoundary(
+                        key: ValueKey<String>('imageCard#$i'),
+                        child: buildImage(i),
                       ),
                     ),
                   ),
@@ -94,15 +90,12 @@ class PromtImageLayout extends StatelessWidget {
             children: <Widget>[
               for (var i = 0; i < 4; i++)
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(4, i == 0 ? 0 : 4, 4, i == 3 ? 0 : 4),
-                    child: Center(
-                      child: SizedBox.square(
-                        dimension: 512,
-                        child: RepaintBoundary(
-                          key: ValueKey<String>('imageCard#$i'),
-                          child: buildImage(0),
-                        ),
+                  child: Center(
+                    child: SizedBox.square(
+                      dimension: 512,
+                      child: RepaintBoundary(
+                        key: ValueKey<String>('imageCard#$i'),
+                        child: buildImage(i),
                       ),
                     ),
                   ),
@@ -291,16 +284,20 @@ class PromtImageLayout extends StatelessWidget {
   }
 
   static Widget _buildImage(PromtState state, int index, bool preview) {
-    if (state.isProcessing) return PromtImageCard.loading(preview: preview);
-    final image = state.data.images?.skip(index).firstOrNull;
-    if (image == null) return PromtImageCard.empty(preview: preview);
-    return Builder(
-      builder: (context) => PromtImageCard(
-        image: image,
-        preview: preview,
-        onTap: () => preview ? _focusImage(context, index) : _showFullScreenImage(context, image),
-      ),
-    );
+    Widget buildImageState() {
+      if (state.isProcessing) return PromtImageCard.loading(preview: preview);
+      final image = state.data.images?.skip(index).firstOrNull;
+      if (image == null) return PromtImageCard.empty(preview: preview);
+      return Builder(
+        builder: (context) => PromtImageCard(
+          image: image,
+          preview: preview,
+          onTap: () => preview ? _focusImage(context, index) : _showFullScreenImage(context, index),
+        ),
+      );
+    }
+
+    return Hero(tag: 'Hero#imageCard#$index', child: buildImageState());
   }
 
   static Widget _buildMainImage(BuildContext context, PromtState state, int index) => _buildImage(state, index, false);
@@ -308,11 +305,11 @@ class PromtImageLayout extends StatelessWidget {
   static Widget _buildPreviewImage(BuildContext context, PromtState state, int index) =>
       _buildImage(state, index, true);
 
-  static void _showFullScreenImage(BuildContext context, GeneratedImage image) {
+  static void _showFullScreenImage(BuildContext context, int index) {
     Navigator.push<void>(
       context,
       PageRouteBuilder<void>(
-        pageBuilder: (context, _, __) => PhotoViewScreen(image: image),
+        pageBuilder: (context, _, __) => PhotoViewScreen(index: index),
         transitionsBuilder: (
           context,
           animation,
