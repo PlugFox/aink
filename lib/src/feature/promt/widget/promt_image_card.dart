@@ -38,6 +38,7 @@ class PromtImageCard extends StatelessWidget {
         _loading = true,
         _preview = preview;
 
+  GeneratedImage? get image => _image;
   final GeneratedImage? _image;
   final VoidCallback? _onTap;
   final bool _loading;

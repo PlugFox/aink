@@ -9,6 +9,7 @@ import '../../../common/initialization/dependencies.dart';
 import '../../../common/util/analytics.dart';
 import '../../../common/util/downloader.dart';
 import '../../../common/util/error_util.dart';
+import 'promt_image_card.dart';
 
 /// {@template promt_image_footer}
 /// PromtImageFooter widget
@@ -119,10 +120,10 @@ class _PromtImageFooterButtons extends StatelessWidget {
       );
 
   void _saveImage(BuildContext context) {
-    final data = Dependencies.instance.promtBLoC.state.data;
-    final url = data.images?.firstOrNull?.url;
+    final url = context.findAncestorWidgetOfExactType<PromtImageCard>()?.image?.url;
+    final promt = Dependencies.instance.promtBLoC.state.data.promt;
     if (url == null) return;
-    var name = data.promt?.replaceAll(RegExp('[^a-zA-Z0-9_-]'), '_') ?? 'image';
+    var name = promt?.replaceAll(RegExp('[^a-zA-Z0-9_-]'), '_') ?? 'image';
     while (name.contains('__')) {
       name = name.replaceAll('__', '_');
     }
