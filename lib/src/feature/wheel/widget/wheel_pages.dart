@@ -3,9 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../common/router/routes.dart';
 import '../../promt/widget/promt_layout.dart';
-import '../../promt/widget/promt_screen.dart';
-import '../../settings/widget/settings_screen.dart';
 import 'colored_card.dart';
 import 'gallery_layout.dart';
 import 'settings_layout.dart';
@@ -37,6 +36,7 @@ class WheelPages extends StatelessWidget {
                 children: <Widget>[
                   _WheelPageConstraints(
                     onTap: () {
+                      context.goGallery();
                       HapticFeedback.lightImpact().ignore();
                     },
                     child: GalleryLayout(
@@ -64,26 +64,7 @@ class WheelPages extends StatelessWidget {
                   ),
                   _WheelPageConstraints(
                     onTap: () {
-                      Navigator.push<void>(
-                        context,
-                        PageRouteBuilder<void>(
-                          pageBuilder: (context, _, __) => const PromtScreen(),
-                          transitionsBuilder: (
-                            context,
-                            animation,
-                            secondayAnimation,
-                            child,
-                          ) =>
-                              ScaleTransition(
-                            scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
-                            child: FadeTransition(
-                              opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
-                              child: child,
-                            ),
-                          ),
-                          settings: const RouteSettings(name: 'promt'),
-                        ),
-                      );
+                      context.goPromt();
                       HapticFeedback.lightImpact().ignore();
                     },
                     child: const PromtLayout.compact(
@@ -111,26 +92,7 @@ class WheelPages extends StatelessWidget {
                   ),
                   _WheelPageConstraints(
                     onTap: () {
-                      Navigator.push<void>(
-                        context,
-                        PageRouteBuilder<void>(
-                          pageBuilder: (context, _, __) => const SettingsScreen(),
-                          transitionsBuilder: (
-                            context,
-                            animation,
-                            secondayAnimation,
-                            child,
-                          ) =>
-                              ScaleTransition(
-                            scale: Tween<double>(begin: 1.25, end: 1).animate(animation),
-                            child: FadeTransition(
-                              opacity: animation.drive(CurveTween(curve: Curves.easeIn)),
-                              child: child,
-                            ),
-                          ),
-                          settings: const RouteSettings(name: 'settings'),
-                        ),
-                      );
+                      context.goSettings();
                       HapticFeedback.lightImpact().ignore();
                     },
                     child: SettingsLayout(

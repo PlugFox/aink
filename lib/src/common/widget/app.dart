@@ -6,10 +6,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../../feature/authentication/widget/authentication_scope.dart';
 import '../../feature/settings/bloc/settings_bloc.dart';
-import '../../feature/wheel/widget/wheel_screen.dart';
 import '../initialization/dependencies.dart';
 import '../localization/localization.dart';
-import '../router/modal_route_analytics_observer.dart';
+import '../router/router.dart';
 
 /// {@template app}
 /// App widget
@@ -25,7 +24,8 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final SettingsBLoC _settingsBLoC = Dependencies.instance.settingsBLoC;
   late final StreamSubscription<SettingsState> _settingsSubscription;
-  final ModalRouteAnalyticsObserver _routeObserver = ModalRouteAnalyticsObserver();
+
+  final AppRouter _router = AppRouter();
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _AppState extends State<App> {
   }
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
+  Widget build(BuildContext context) => MaterialApp.router(
         title: 'NeuroStocker',
         restorationScopeId: 'app',
         debugShowCheckedModeBanner: false,
@@ -55,13 +55,17 @@ class _AppState extends State<App> {
           Localization.delegate,
         ],
         supportedLocales: Localization.supportedLocales,
-        navigatorObservers: <NavigatorObserver>[
+        routerDelegate: _router.routerDelegate,
+        routeInformationParser: _router.routeInformationParser,
+        routeInformationProvider: _router.routeInformationProvider,
+        //routeInformationProvider: ,
+        /* navigatorObservers: <NavigatorObserver>[
           _routeObserver,
         ],
         home: const Scaffold(
           resizeToAvoidBottomInset: false,
           body: Center(child: WheelScreen()),
-        ),
+        ), */
         builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
           child: Banner(
