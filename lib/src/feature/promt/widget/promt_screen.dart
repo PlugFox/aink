@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/initialization/dependencies.dart';
+import '../../../common/router/routes.dart';
 import '../../../common/util/error_util.dart';
 import '../../../common/util/screen_util.dart';
 import '../../wheel/widget/colored_card.dart';
@@ -88,7 +89,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                 tooltip: 'Back to menu',
                 onPressed: () {
                   _focusNode.unfocus();
-                  Navigator.pop<void>(context);
+                  context.pop();
                   HapticFeedback.lightImpact().ignore();
                 },
                 child: const Icon(Icons.menu),
@@ -97,7 +98,7 @@ class _PromtScreenState extends State<PromtScreen> with SingleTickerProviderStat
                 tooltip: 'Back to menu',
                 onPressed: () {
                   _focusNode.unfocus();
-                  Navigator.pop<void>(context);
+                  context.pop();
                   HapticFeedback.lightImpact().ignore();
                 },
                 child: const Icon(Icons.menu),

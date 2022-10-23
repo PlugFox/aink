@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/initialization/dependencies.dart';
+import '../../../common/router/routes.dart';
 import '../../authentication/widget/authentication_scope.dart';
 import '../bloc/settings_bloc.dart';
 import '../model/settings_entity.dart';
@@ -70,7 +71,7 @@ class SettingsScreen extends StatelessWidget {
         actions: <Widget>[
           OutlinedButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
               HapticFeedback.lightImpact().ignore();
             },
             child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
