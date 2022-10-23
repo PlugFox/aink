@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../../feature/authentication/widget/authentication_scope.dart';
 import '../../feature/settings/bloc/settings_bloc.dart';
+import '../constant/environment.dart';
 import '../initialization/dependencies.dart';
 import '../localization/localization.dart';
 import '../router/router.dart';
@@ -43,7 +44,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-        title: 'NeuroStocker',
+        title: kTitle,
         restorationScopeId: 'app',
         debugShowCheckedModeBanner: false,
         theme: _settingsBLoC.state.data.theme?.themeData ??
